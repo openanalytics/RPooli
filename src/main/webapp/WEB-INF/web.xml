@@ -5,7 +5,12 @@
 
   <display-name>R Pooli</display-name>
 
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:META-INF/spring/*-beans.xml</param-value>
+  </context-param>
+
   <listener>
-    <listener-class>eu.openanalytics.rpooli.RPooliBootstrap</listener-class>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 </web-app>

@@ -1,6 +1,10 @@
 
 package eu.openanalytics.rpooli;
 
+import static org.apache.commons.lang3.StringUtils.removeStart;
+
+import javax.servlet.ServletContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,7 +22,13 @@ public class RPooliServer implements IDisposable
 
     private final JMPoolServer server;
 
-    public RPooliServer(final String id, final RPooliContext context)
+    public static RPooliServer create(final ServletContext servletContext, final RPooliContext context)
+    {
+        final String serverId = removeStart(servletContext.getContextPath(), "/");
+        return new RPooliServer(serverId, context);
+    }
+
+    private RPooliServer(final String id, final RPooliContext context)
     {
         LOGGER.info("Initializing with ID: " + id);
 

@@ -51,9 +51,9 @@ public class RPooliContext extends RJContext
     private final ServletContext servletContext;
     private final String propertiesDirPath;
 
-    public RPooliContext(final ServletContext context)
+    public RPooliContext(final ServletContext servletContext)
     {
-        servletContext = context;
+        this.servletContext = servletContext;
         propertiesDirPath = initializePropertiesDirPath();
     }
 
