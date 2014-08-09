@@ -1,6 +1,7 @@
 
 package eu.openanalytics.rpooli;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.io.File.separatorChar;
 import static java.util.Arrays.asList;
 import static java.util.regex.Pattern.compile;
@@ -53,7 +54,7 @@ public class RPooliContext extends RJContext
 
     public RPooliContext(final ServletContext servletContext)
     {
-        this.servletContext = servletContext;
+        this.servletContext = checkNotNull(servletContext, "servletContext can't be null");
         propertiesDirPath = initializePropertiesDirPath();
     }
 

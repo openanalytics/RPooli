@@ -23,7 +23,39 @@ schemas:
       "additionalProperties": false,
       "properties": {
         "id": {
+          "type": "integer",
+          "required": true
+        },
+        "client_id": {
+          "type": "integer",
+          "required": false
+        },
+        "creation_time": {
+          "type": "integer",
+          "required": true,
+          "format": "utc-millisec"
+        },
+        "destruction_time": {
+          "type": "integer",
+          "required": false,
+          "format": "utc-millisec"
+        },
+        "state": {
           "type": "string",
+          "required": true,
+          "enum": ["INITIALIZING", "IDLING", "LENT", "EVICTING", "EVICTED"]
+        },
+        "state_time": {
+          "type": "integer",
+          "required": true,
+          "format": "utc-millisec"
+        },
+        "lent_count": {
+          "type": "integer",
+          "required": true
+        },
+        "lent_duration": {
+          "type": "integer",
           "required": true
         }
       }

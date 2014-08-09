@@ -1,6 +1,7 @@
 
 package eu.openanalytics.rpooli;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 import java.net.URI;
@@ -11,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.walware.ecommons.IDisposable;
+import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.pool.JMPoolServer;
 
 /**
@@ -27,6 +29,9 @@ public class RPooliServer implements IDisposable
 
     public static RPooliServer create(final ServletContext servletContext, final RPooliContext context)
     {
+        checkNotNull(servletContext, "servletContext can't be null");
+        checkNotNull(context, "context can't be null");
+
         final String serverId = removeStart(servletContext.getContextPath(), "/");
         return new RPooliServer(serverId, context);
     }
@@ -55,6 +60,14 @@ public class RPooliServer implements IDisposable
     public URI getPoolAddress()
     {
         return poolAddress;
+    }
+
+    public void visitNodes(final Consumer<ObjectPoolItem> visitor)
+    {
+        for (final ObjectPoolItem opi : server.getManager().getPoolItemsData())
+        {
+            visitor.consume(opi);
+        }
     }
 
     @Override
