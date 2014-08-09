@@ -17,4 +17,7 @@
     <bean name="server" parent="disposable" class="eu.openanalytics.rpooli.RPooliServer"
         c:servletContext-ref="servletContext" c:context-ref="context"
         factory-method="create" />
+
+    <bean name="nodesResource" class="eu.openanalytics.rpooli.api.NodesResource"
+        c:server-ref="server" />
 </beans>

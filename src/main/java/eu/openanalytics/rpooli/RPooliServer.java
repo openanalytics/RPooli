@@ -3,6 +3,8 @@ package eu.openanalytics.rpooli;
 
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
+import java.net.URI;
+
 import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
@@ -21,6 +23,7 @@ public class RPooliServer implements IDisposable
     private static final Log LOGGER = LogFactory.getLog(RPooliServer.class);
 
     private final JMPoolServer server;
+    private final URI poolAddress;
 
     public static RPooliServer create(final ServletContext servletContext, final RPooliContext context)
     {
@@ -39,11 +42,19 @@ public class RPooliServer implements IDisposable
             server = new JMPoolServer(id, context);
             LOGGER.info("Starting: " + server);
             server.start();
+
+            poolAddress = URI.create(server.getPoolAddress());
+            LOGGER.info("Started with pool address: " + poolAddress);
         }
         catch (final Exception e)
         {
             throw new RuntimeException("Failed to start server", e);
         }
+    }
+
+    public URI getPoolAddress()
+    {
+        return poolAddress;
     }
 
     @Override

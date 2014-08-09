@@ -1,0 +1,59 @@
+#%RAML 0.8
+---
+title: RPooli API
+baseUri: ${baseUri}/api/{version}
+version: v1
+
+documentation:
+  - title: RPooli API
+    content: |
+      <pre>
+       ___ ___          _ _ 
+      | _ \ _ \___  ___| (_)
+      |   /  _/ _ \/ _ \ | |
+      |_|_\_| \___/\___/_|_|
+      </pre>
+      _A pool of R nodes, exposed over RMI and managed over HTTP_
+
+schemas:
+ - node: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+ - nodes: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "additionalProperties": false,
+      "properties": {
+        "pool_address": {
+          "type": "string",
+          "required": true,
+          "format" : "uri"
+        },
+        "nodes": {
+          "type": "array",
+          "required": true,
+          "items": { "$ref": "node" }
+        }
+      }
+    }
+
+/nodes:
+  get:
+    description: Retrieve the list of nodes
+    responses:
+      200:
+        body:
+          application/json:
+            schema: nodes
+
+# TODO add nodes actions: Debug on / off, stop, kill, get node, close all nodes
