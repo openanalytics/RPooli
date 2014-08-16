@@ -12,6 +12,10 @@
 
     mvn clean package
 
+## Integration test
+
+    mvn clean verify
+
 ## Start
 
     mvn jetty:run-war

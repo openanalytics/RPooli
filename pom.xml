@@ -28,7 +28,10 @@
         <jackson.version>2.4.1</jackson.version>
 
         <jetty-plugin.version>9.2.2.v20140723</jetty-plugin.version>
+
         <local.server.port>8889</local.server.port>
+        <local.server.path>/rpooli</local.server.path>
+        <local.server.stop-port>8899</local.server.stop-port>
     </properties>
 
     <repositories>
@@ -176,6 +179,26 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -220,12 +243,54 @@
                 <version>${jetty-plugin.version}</version>
                 <configuration>
                     <webApp>
-                        <contextPath>/rpooli</contextPath>
+                        <contextPath>${local.server.path}</contextPath>
                     </webApp>
                     <httpConnector>
                         <port>${local.server.port}</port>
                     </httpConnector>
+                    <stopKey>rpooli-jetty</stopKey>
+                    <stopPort>${local.server.stop-port}</stopPort>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>deploy-war</goal>
+                        </goals>
+                        <configuration>
+                            <daemon>true</daemon>
+                            <scanIntervalSeconds>0</scanIntervalSeconds>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <api.server.port>${local.server.port}</api.server.port>
+                        <api.server.path>${local.server.path}</api.server.path>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
