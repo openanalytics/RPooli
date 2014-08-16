@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "additionalProperties": false,
+  "properties": {
+    "address": {
+      "type": "string",
+      "required": true,
+      "format" : "uri"
+    },
+    "idling_count": {
+        "type": "integer",
+        "required": true
+    },
+    "idling_max": {
+        "type": "integer",
+        "required": true
+    },
+    "in_use_count": {
+        "type": "integer",
+        "required": true
+    },
+    "in_use_max": {
+        "type": "integer",
+        "required": true
+    },
+    "total_count": {
+        "type": "integer",
+        "required": true
+    },
+    "total_max": {
+        "type": "integer",
+        "required": true
+    }
+  }
+}

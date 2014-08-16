@@ -16,89 +16,18 @@ documentation:
       _A pool of R nodes, exposed over RMI and managed over HTTP_
 
 schemas:
- - node: |
-    {
-      "type": "object",
-      "$schema": "http://json-schema.org/draft-03/schema",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": "string",
-          "required": true
-        },
-        "client_id": {
-          "type": "integer",
-          "required": false
-        },
-        "client_label": {
-          "type": "string",
-          "required": false
-        },
-        "creation_time": {
-          "type": "integer",
-          "required": true,
-          "format": "utc-millisec"
-        },
-        "destruction_time": {
-          "type": "integer",
-          "required": false,
-          "format": "utc-millisec"
-        },
-        "state": {
-          "type": "string",
-          "required": true,
-          "enum": ["INITIALIZING", "IDLING", "LENT", "EVICTING", "EVICTED"]
-        },
-        "state_time": {
-          "type": "integer",
-          "required": true,
-          "format": "utc-millisec"
-        },
-        "lent_count": {
-          "type": "integer",
-          "required": true
-        },
-        "lent_duration": {
-          "type": "integer",
-          "required": true
-        },
-        "address": {
-          "type": "string",
-          "required": true,
-          "format" : "uri"
-        },
-        "console_enabled": {
-          "type": "boolean",
-          "required": true
-        }
-      }
-    }
- - nodes: |
-    {
-      "type": "object",
-      "$schema": "http://json-schema.org/draft-03/schema",
-      "additionalProperties": false,
-      "properties": {
-        "nodes": {
-          "type": "array",
-          "required": true,
-          "items": { "$ref": "node" }
-        }
-      }
-    }
- - pool: |
-    {
-      "type": "object",
-      "$schema": "http://json-schema.org/draft-03/schema",
-      "additionalProperties": false,
-      "properties": {
-         "address": {
-          "type": "string",
-          "required": true,
-          "format" : "uri"
-        }
-      }
-    }
+ - pool.json:  !include schema/pool.json
+ - node.json:  !include schema/node.json
+ - nodes.json: !include schema/nodes.json
+
+/pool:
+  get:
+    description: Retrieve information about the pool
+    responses:
+      200:
+        body:
+          application/json:
+            schema: pool.json
 
 /nodes:
   get:
@@ -107,6 +36,4 @@ schemas:
       200:
         body:
           application/json:
-            schema: nodes
-
-# TODO add nodes actions: Debug on / off, stop, kill, get node, close all nodes
+            schema: nodes.json

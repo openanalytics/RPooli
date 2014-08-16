@@ -18,6 +18,11 @@
         c:servletContext-ref="servletContext" c:context-ref="context"
         factory-method="create" />
 
-    <bean name="nodesResource" class="eu.openanalytics.rpooli.api.NodesResource"
-        c:server-ref="server" />
+    <bean name="abstractResource" abstract="true" c:server-ref="server" />
+
+    <bean name="nodesResource" parent="abstractResource"
+        class="eu.openanalytics.rpooli.api.NodesResource" />
+
+    <bean name="poolResource" parent="abstractResource"
+        class="eu.openanalytics.rpooli.api.PoolResource" />
 </beans>

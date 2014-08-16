@@ -14,6 +14,7 @@
     <jaxrs:server id="jaxrsRestServer" address="/v1/">
         <jaxrs:serviceBeans>
             <ref bean="nodesResource" />
+            <ref bean="poolResource" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <!-- Serialization -->

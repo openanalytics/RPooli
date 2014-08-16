@@ -11,21 +11,20 @@ import de.walware.rj.servi.internal.PoolObject;
 import eu.openanalytics.rpooli.Consumer;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.Node;
+import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 import eu.openanalytics.rpooli.api.spec.resource.Nodes;
 
-public class NodesResource implements Nodes
+public class NodesResource extends AbstractResource implements Nodes
 {
-    private final RPooliServer server;
-
     public NodesResource(final RPooliServer server)
     {
-        this.server = server;
+        super(server);
     }
 
     @Override
     public GetNodesResponse getNodes() throws Exception
     {
-        final eu.openanalytics.rpooli.api.spec.model.Nodes nodes = new eu.openanalytics.rpooli.api.spec.model.Nodes();
+        final NodesJson nodes = new NodesJson();
 
         server.visitNodes(new Consumer<ObjectPoolItem>()
         {
