@@ -23,11 +23,15 @@ schemas:
       "additionalProperties": false,
       "properties": {
         "id": {
-          "type": "integer",
+          "type": "string",
           "required": true
         },
         "client_id": {
           "type": "integer",
+          "required": false
+        },
+        "client_label": {
+          "type": "string",
           "required": false
         },
         "creation_time": {
@@ -57,6 +61,15 @@ schemas:
         "lent_duration": {
           "type": "integer",
           "required": true
+        },
+        "address": {
+          "type": "string",
+          "required": true,
+          "format" : "uri"
+        },
+        "console_enabled": {
+          "type": "boolean",
+          "required": true
         }
       }
     }
@@ -66,15 +79,23 @@ schemas:
       "$schema": "http://json-schema.org/draft-03/schema",
       "additionalProperties": false,
       "properties": {
-        "pool_address": {
-          "type": "string",
-          "required": true,
-          "format" : "uri"
-        },
         "nodes": {
           "type": "array",
           "required": true,
           "items": { "$ref": "node" }
+        }
+      }
+    }
+ - pool: |
+    {
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-03/schema",
+      "additionalProperties": false,
+      "properties": {
+         "address": {
+          "type": "string",
+          "required": true,
+          "format" : "uri"
         }
       }
     }

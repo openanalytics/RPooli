@@ -2,7 +2,12 @@
 package eu.openanalytics.rpooli.api;
 
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesResponse.jsonOK;
+import static org.apache.commons.lang3.StringUtils.strip;
+
+import java.net.URI;
+
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
+import de.walware.rj.servi.internal.PoolObject;
 import eu.openanalytics.rpooli.Consumer;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.Node;
@@ -21,21 +26,26 @@ public class NodesResource implements Nodes
     public GetNodesResponse getNodes() throws Exception
     {
         final eu.openanalytics.rpooli.api.spec.model.Nodes nodes = new eu.openanalytics.rpooli.api.spec.model.Nodes();
-        nodes.setPoolAddress(server.getPoolAddress());
 
         server.visitNodes(new Consumer<ObjectPoolItem>()
         {
             @Override
             public void consume(final ObjectPoolItem opi)
             {
-                final Node node = new Node().withId((long) opi.getObject().hashCode())
+                final PoolObject po = (PoolObject) opi.getObject();
+                final URI address = URI.create(po.getAddress().toString());
+
+                final Node node = new Node().withId(strip(address.getPath(), "/"))
+                    .withAddress(address)
                     .withClientId(nullIfNegativeOne(opi.getClientId()))
+                    .withClientLabel(po.getPoolItemData().getClientLabel())
                     .withCreationTime(opi.getCreationTime())
                     .withDestructionTime(nullIfNegativeOne(opi.getDestrutionTime()))
                     .withLentCount(opi.getLentCount())
                     .withLentDuration(opi.getLentDuration())
                     .withState(Node.State.fromValue(opi.getState().toString()))
-                    .withStateTime(opi.getStateTime());
+                    .withStateTime(opi.getStateTime())
+                    .withConsoleEnabled(po.isConsoleEnabled());
 
                 nodes.getNodes().add(node);
             }
