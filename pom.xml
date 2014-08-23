@@ -212,7 +212,7 @@
             <plugin>
                 <groupId>org.raml.plugins</groupId>
                 <artifactId>raml-jaxrs-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.OA-SNAPSHOT</version>
                 <configuration>
                     <removeOldOutput>true</removeOldOutput>
                     <sourceDirectory>${basedir}/src/main/webapp/raml</sourceDirectory>
