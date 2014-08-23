@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import de.walware.ecommons.IDisposable;
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.pool.JMPoolServer;
+import de.walware.rj.servi.pool.PoolConfig;
 
 /**
  * The actual server that bootstraps R nodes.
@@ -30,6 +31,7 @@ public class RPooliServer implements IDisposable
     private static final Log LOGGER = LogFactory.getLog(RPooliServer.class);
 
     private final JMPoolServer server;
+    private final PoolConfig config;
 
     public static RPooliServer create(final ServletContext servletContext, final RPooliContext context)
     {
@@ -51,6 +53,10 @@ public class RPooliServer implements IDisposable
             server = new JMPoolServer(id, context);
             LOGGER.info("Starting: " + server);
             server.start();
+
+            config = new PoolConfig();
+            server.getPoolConfig(config);
+
             LOGGER.info("Started with pool address: " + server.getPoolAddress());
         }
         catch (final Exception e)
@@ -74,6 +80,11 @@ public class RPooliServer implements IDisposable
         {
             LOGGER.error("Failed to shutdown server", e);
         }
+    }
+
+    public PoolConfig getConfig()
+    {
+        return config;
     }
 
     public JMPoolServer getServer()

@@ -19,20 +19,23 @@ import com.jayway.restassured.module.jsv.JsonSchemaValidationException;
 
 public class JsonSchemaMatcher extends TypeSafeMatcher<String>
 {
-    private final JsonSchemaFactory jsonSchemaFactory;
+    private static JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.byDefault();
     private final URI schemaUri;
     private ProcessingReport report;
 
-    private JsonSchemaMatcher(final JsonSchemaFactory jsonSchemaFactory, final URI schemaUri)
+    private JsonSchemaMatcher(final URI schemaUri)
     {
-        this.jsonSchemaFactory = jsonSchemaFactory;
         this.schemaUri = schemaUri;
     }
 
-    public static JsonSchemaMatcher matchesJsonSchema(final JsonSchemaFactory jsonSchemaFactory,
-                                                      final URI schemaUri)
+    public static void setJsonSchemaFactory(final JsonSchemaFactory jsonSchemaFactory)
     {
-        return new JsonSchemaMatcher(jsonSchemaFactory, schemaUri);
+        JsonSchemaMatcher.jsonSchemaFactory = jsonSchemaFactory;
+    }
+
+    public static JsonSchemaMatcher matchesJsonSchema(final URI schemaUri)
+    {
+        return new JsonSchemaMatcher(schemaUri);
     }
 
     @Override

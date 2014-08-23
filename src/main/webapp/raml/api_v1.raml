@@ -3,6 +3,7 @@
 title: RPooli API
 baseUri: ${baseUri}/api/{version}
 version: v1
+mediaType:  application/json
 
 documentation:
   - title: RPooli API
@@ -16,10 +17,10 @@ documentation:
       _A pool of R nodes, exposed over RMI and managed over HTTP_
 
 schemas:
- - pool.json:  !include schema/pool.json
- - node.json:  !include schema/node.json
- - nodes.json: !include schema/nodes.json
- - node_command.json:  !include schema/node_command.json
+ - pool.json:         !include schema/pool.json
+ - node.json:         !include schema/node.json
+ - nodes.json:        !include schema/nodes.json
+ - node_command.json: !include schema/node_command.json
 
 traits:
  - async-resource:
@@ -40,8 +41,7 @@ traits:
     responses:
       200:
         body:
-          application/json:
-            schema: nodes.json
+          schema: nodes.json
   /{nodeId}:
     uriParameters:
       nodeId:
@@ -52,6 +52,16 @@ traits:
       responses:
         200:
           body:
-            application/json:
-              schema: node.json
+            schema: node.json
         404:
+          description: The node ID doesn't exist
+    /command:
+      post:
+        description: Send a command to a node
+        body:
+          schema: node_command.json
+        responses:
+          204:
+            description: The command has been successfully executed.
+          404:
+            description: The node ID doesn't exist

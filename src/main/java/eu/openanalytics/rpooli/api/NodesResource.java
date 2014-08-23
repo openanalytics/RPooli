@@ -4,15 +4,23 @@ package eu.openanalytics.rpooli.api;
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.jsonOK;
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.notFound;
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesResponse.jsonOK;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
+import javax.ws.rs.WebApplicationException;
+
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import eu.openanalytics.rpooli.RPooliNode;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.Node;
+import eu.openanalytics.rpooli.api.spec.model.NodeCommandJson;
+import eu.openanalytics.rpooli.api.spec.model.NodeCommandJson.Command;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 import eu.openanalytics.rpooli.api.spec.resource.Nodes;
 
 public class NodesResource extends AbstractResource implements Nodes
 {
+    private static final String NO_AUTH_CONFIG = "none";
+
     public NodesResource(final RPooliServer server)
     {
         super(server);
@@ -36,6 +44,36 @@ public class NodesResource extends AbstractResource implements Nodes
     {
         final RPooliNode rpn = server.findNodeById(nodeId);
         return rpn == null ? notFound() : jsonOK(buildNode(rpn));
+    }
+
+    @Override
+    public void postNodesByNodeIdCommand(final String nodeId, final NodeCommandJson entity) throws Exception
+    {
+        final RPooliNode rpn = server.findNodeById(nodeId);
+        if (rpn == null)
+        {
+            throw new WebApplicationException(NOT_FOUND);
+        }
+
+        final Command command = entity.getCommand();
+
+        switch (command)
+        {
+            case ENABLE_CONSOLE :
+                rpn.getObject().enableConsole(NO_AUTH_CONFIG);
+                return;
+            case DISABLE_CONSOLE :
+                rpn.getObject().disableConsole();
+                return;
+            case STOP :
+                rpn.getObject().evict(server.getConfig().getEvictionTimeout());
+                return;
+            case KILL :
+                rpn.getObject().evict(0L);
+                return;
+            default :
+                throw new IllegalStateException("Unsupported command: " + command);
+        }
     }
 
     private static Node buildNode(final RPooliNode rpn)

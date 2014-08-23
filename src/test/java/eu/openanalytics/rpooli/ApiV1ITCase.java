@@ -3,8 +3,10 @@ package eu.openanalytics.rpooli;
 
 import static com.github.fge.jsonschema.SchemaVersion.DRAFTV3;
 import static com.jayway.restassured.RestAssured.expect;
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static eu.openanalytics.matchers.JsonSchemaMatcher.matchesJsonSchema;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -20,13 +22,12 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
+import eu.openanalytics.matchers.JsonSchemaMatcher;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 
 public class ApiV1ITCase
 {
     private static final String RMI_POOL_ADDRESS = "rmi://127.0.1.1/rpooli-pool";
-
-    private static JsonSchemaFactory jsonSchemaFactory;
 
     @BeforeClass
     public static void configureRestAssured() throws Exception
@@ -34,10 +35,10 @@ public class ApiV1ITCase
         RestAssured.port = Integer.getInteger("api.server.port");
         RestAssured.basePath = System.getProperty("api.server.path") + "/api/v1";
 
-        jsonSchemaFactory = JsonSchemaFactory.newBuilder()
+        JsonSchemaMatcher.setJsonSchemaFactory(JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(
                 ValidationConfiguration.newBuilder().setDefaultVersion(DRAFTV3).freeze())
-            .freeze();
+            .freeze());
     }
 
     @BeforeClass
@@ -55,41 +56,75 @@ public class ApiV1ITCase
             .get("/pool")
             .then()
             .assertThat()
-            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri(("pool"))))
+            .body(matchesJsonSchema(getSchemaUri(("pool"))))
             .and()
             .body("address", is(RMI_POOL_ADDRESS));
     }
 
     @Test
-    public void getNodesAndGetNodeById() throws Exception
+    public void getNodes() throws Exception
     {
-        final NodesJson nodes = expect().statusCode(200)
+        expect().statusCode(200)
             .contentType(JSON)
             .when()
             .get("/nodes")
             .then()
             .assertThat()
-            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri("nodes")))
-            .extract()
-            .as(NodesJson.class);
+            .body(matchesJsonSchema(getSchemaUri("nodes")));
+    }
 
-        assertThat(nodes.getNodes(), hasSize(1));
-
-        final String nodeId = nodes.getNodes().get(0).getId();
-
+    @Test
+    public void getNodeById() throws Exception
+    {
         expect().statusCode(200)
             .contentType(JSON)
             .when()
-            .get("/nodes/" + nodeId)
+            .get("/nodes/" + getActiveNodeId())
             .then()
             .assertThat()
-            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri("node")));
+            .body(matchesJsonSchema(getSchemaUri("node")));
     }
 
     @Test
     public void getNodeByIdNotFound() throws Exception
     {
         expect().statusCode(404).when().get("/nodes/_not_a_valid_id");
+    }
+
+    @Test
+    public void postNodeCommandNotFound() throws Exception
+    {
+        given().contentType(JSON)
+            .body("{\"command\":\"STOP\"}")
+            .expect()
+            .statusCode(404)
+            .when()
+            .post("/nodes/_not_a_valid_id/command");
+    }
+
+    @Test
+    public void postNodeCommandEnableConsole() throws Exception
+    {
+        given().contentType(JSON)
+            .body("{\"command\":\"ENABLE_CONSOLE\"}")
+            .expect()
+            .statusCode(204)
+            .when()
+            .post("/nodes/" + getActiveNodeId() + "/command");
+    }
+
+    private String getActiveNodeId()
+    {
+        final NodesJson nodes = expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/nodes")
+            .thenReturn()
+            .as(NodesJson.class);
+
+        assertThat(nodes.getNodes(), hasSize(greaterThan(0)));
+
+        return nodes.getNodes().get(0).getId();
     }
 
     private static URI getSchemaUri(final String schema)
