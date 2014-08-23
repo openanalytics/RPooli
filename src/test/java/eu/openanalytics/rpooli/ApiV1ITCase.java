@@ -96,25 +96,16 @@ public class ApiV1ITCase
     }
 
     @Test
-    public void postNodeCommandNotFound() throws Exception
+    public void postNodeConsoleFound() throws Exception
     {
-        given().contentType(JSON)
-            .body("{\"command\":\"STOP\"}")
-            .expect()
-            .statusCode(404)
-            .when()
-            .post("/nodes/_not_a_valid_id/command");
+        given().expect().statusCode(404).when().post("/nodes/_not_a_valid_id/console");
     }
 
     @Test
-    public void postNodeCommandEnableConsole() throws Exception
+    public void postNodeConsoleEnableAndDisable() throws Exception
     {
-        given().contentType(JSON)
-            .body("{\"command\":\"ENABLE_CONSOLE\"}")
-            .expect()
-            .statusCode(204)
-            .when()
-            .post("/nodes/" + getOneActiveNodeId() + "/command");
+        given().expect().statusCode(204).when().post("/nodes/" + getOneActiveNodeId() + "/console");
+        given().expect().statusCode(204).when().delete("/nodes/" + getOneActiveNodeId() + "/console");
     }
 
     @Test
@@ -133,12 +124,7 @@ public class ApiV1ITCase
         // the node should not be lent anymore
         assertThat(getOneLentNode(), is(nullValue()));
 
-        given().contentType(JSON)
-            .body("{\"command\":\"KILL\"}")
-            .expect()
-            .statusCode(204)
-            .when()
-            .post("/nodes/" + lent.getId() + "/command");
+        given().expect().statusCode(204).when().delete("/nodes/" + lent.getId());
 
         // the node should have been killed
         assertThat(getActiveNodesCount(), is(1));

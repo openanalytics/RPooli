@@ -20,7 +20,6 @@ schemas:
  - pool.json:         !include schema/pool.json
  - node.json:         !include schema/node.json
  - nodes.json:        !include schema/nodes.json
- - node_command.json: !include schema/node_command.json
 
 traits:
  - async-resource:
@@ -57,26 +56,37 @@ traits:
             schema: node.json
         404:
           description: The node ID doesn't exist
-    /command:
-      description: Allows running command on a node, for example to stop it or activate debug mode
+    delete:
+      description: Evict a node
+      queryParameters:
+        kill:
+          type: boolean
+          required: false
+          default: false
+      responses:
+        204:
+          description: The node has been evicted
+    /console:
+      description: Control the debug console
       post:
-        description: Send a command to a node
-        body:
-          schema: node_command.json
+        description: Enable the debug console
+        responses:
+          204:
+            description: The debug console is active
+      delete:
+        description: The debug console is inactive
         responses:
           204:
             description: The command has been successfully executed.
-          404:
-            description: The node ID doesn't exist
   /test:
     description: Simulate client actions
     post:
       description: Acquire a node from the pool
       responses:
         204:
-          description: The command has been successfully executed.
+          description: A node has been acquired
     delete:
-      description: Release all the aquired nodes to the pool
+      description: Release all the acquired nodes to the pool
       responses:
         204:
-          description: The command has been successfully executed.
+          description: All acquired nodes have been released
