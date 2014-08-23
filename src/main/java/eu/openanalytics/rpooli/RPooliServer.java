@@ -2,10 +2,17 @@
 package eu.openanalytics.rpooli;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
+import static org.apache.commons.collections4.CollectionUtils.collect;
+import static org.apache.commons.collections4.CollectionUtils.find;
 import static org.apache.commons.lang3.StringUtils.removeStart;
+
+import java.util.Collection;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,25 +51,11 @@ public class RPooliServer implements IDisposable
             server = new JMPoolServer(id, context);
             LOGGER.info("Starting: " + server);
             server.start();
-
             LOGGER.info("Started with pool address: " + server.getPoolAddress());
         }
         catch (final Exception e)
         {
             throw new RuntimeException("Failed to start server", e);
-        }
-    }
-
-    public void visitPool(final Consumer<JMPoolServer> visitor)
-    {
-        visitor.consume(server);
-    }
-
-    public void visitNodes(final Consumer<ObjectPoolItem> visitor)
-    {
-        for (final ObjectPoolItem opi : server.getManager().getPoolItemsData())
-        {
-            visitor.consume(opi);
         }
     }
 
@@ -81,5 +74,35 @@ public class RPooliServer implements IDisposable
         {
             LOGGER.error("Failed to shutdown server", e);
         }
+    }
+
+    public JMPoolServer getServer()
+    {
+        return server;
+    }
+
+    public Collection<RPooliNode> getNodes()
+    {
+        return collect(asList(server.getManager().getPoolItemsData()),
+            new Transformer<ObjectPoolItem, RPooliNode>()
+            {
+                @Override
+                public RPooliNode transform(final ObjectPoolItem item)
+                {
+                    return new RPooliNode(item);
+                }
+            });
+    }
+
+    public RPooliNode findNodeById(final String nodeId)
+    {
+        return find(getNodes(), new Predicate<RPooliNode>()
+        {
+            @Override
+            public boolean evaluate(final RPooliNode node)
+            {
+                return node.getId().equals(nodeId);
+            }
+        });
     }
 }

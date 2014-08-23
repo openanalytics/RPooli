@@ -1,26 +1,26 @@
 
 package eu.openanalytics.rpooli;
 
-import static com.github.fge.jackson.JsonLoader.fromString;
 import static com.github.fge.jsonschema.SchemaVersion.DRAFTV3;
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.http.ContentType.JSON;
+import static eu.openanalytics.matchers.JsonSchemaMatcher.matchesJsonSchema;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.net.URI;
 
-import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.module.jsv.JsonSchemaValidator;
 
 import de.walware.rj.servi.RServiUtil;
+import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 
 public class ApiV1ITCase
 {
@@ -55,32 +55,41 @@ public class ApiV1ITCase
             .get("/pool")
             .then()
             .assertThat()
-            .body(matchesJsonSchema("pool"))
+            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri(("pool"))))
             .and()
             .body("address", is(RMI_POOL_ADDRESS));
     }
 
     @Test
-    public void getNodes() throws Exception
+    public void getNodesAndGetNodeById() throws Exception
     {
-        final String json = expect().statusCode(200)
+        final NodesJson nodes = expect().statusCode(200)
             .contentType(JSON)
             .when()
             .get("/nodes")
             .then()
             .assertThat()
-            .body("nodes", hasSize(1))
+            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri("nodes")))
             .extract()
-            .asString();
+            .as(NodesJson.class);
 
-        // can't use matchesJsonSchema because of bug:
-        // https://code.google.com/p/rest-assured/issues/detail?id=346
-        jsonSchemaFactory.getJsonSchema(getSchemaUri("nodes").toString()).validate(fromString(json));
+        assertThat(nodes.getNodes(), hasSize(1));
+
+        final String nodeId = nodes.getNodes().get(0).getId();
+
+        expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/nodes/" + nodeId)
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(jsonSchemaFactory, getSchemaUri("node")));
     }
 
-    private static Matcher<?> matchesJsonSchema(final String schema)
+    @Test
+    public void getNodeByIdNotFound() throws Exception
     {
-        return JsonSchemaValidator.matchesJsonSchema(getSchemaUri(schema)).using(jsonSchemaFactory);
+        expect().statusCode(404).when().get("/nodes/_not_a_valid_id");
     }
 
     private static URI getSchemaUri(final String schema)

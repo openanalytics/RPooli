@@ -19,6 +19,11 @@ schemas:
  - pool.json:  !include schema/pool.json
  - node.json:  !include schema/node.json
  - nodes.json: !include schema/nodes.json
+ - node_command.json:  !include schema/node_command.json
+
+traits:
+ - async-resource:
+     usage: Apply this to any method that needs to be asynchronous
 
 /pool:
   get:
@@ -37,3 +42,16 @@ schemas:
         body:
           application/json:
             schema: nodes.json
+  /{nodeId}:
+    uriParameters:
+      nodeId:
+        type: string
+        required: true
+    get:
+      description: Retrieve a single node
+      responses:
+        200:
+          body:
+            application/json:
+              schema: node.json
+        404:
