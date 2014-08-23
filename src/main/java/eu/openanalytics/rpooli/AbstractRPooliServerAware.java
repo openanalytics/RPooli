@@ -1,15 +1,13 @@
 
-package eu.openanalytics.rpooli.api;
+package eu.openanalytics.rpooli;
 
 import org.apache.commons.lang3.Validate;
 
-import eu.openanalytics.rpooli.RPooliServer;
-
-public abstract class AbstractResource
+public abstract class AbstractRPooliServerAware
 {
     protected final RPooliServer server;
 
-    public AbstractResource(final RPooliServer server)
+    public AbstractRPooliServerAware(final RPooliServer server)
     {
         this.server = Validate.notNull(server, "RPooliServer can't be null");
     }

@@ -7,11 +7,12 @@ import java.net.URI;
 
 import de.walware.rj.servi.pool.JMPoolServer;
 import de.walware.rj.servi.pool.RServiPoolManager.Counter;
+import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.PoolJson;
 import eu.openanalytics.rpooli.api.spec.resource.Pool;
 
-public class PoolResource extends AbstractResource implements Pool
+public class PoolResource extends AbstractRPooliServerAware implements Pool
 {
     public PoolResource(final RPooliServer server)
     {

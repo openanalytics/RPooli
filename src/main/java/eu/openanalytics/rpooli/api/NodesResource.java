@@ -8,7 +8,11 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.commons.lang3.Validate;
+
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
+import eu.openanalytics.rpooli.AbstractRPooliServerAware;
+import eu.openanalytics.rpooli.ClientSimulator;
 import eu.openanalytics.rpooli.RPooliNode;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.Node;
@@ -17,13 +21,16 @@ import eu.openanalytics.rpooli.api.spec.model.NodeCommandJson.Command;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 import eu.openanalytics.rpooli.api.spec.resource.Nodes;
 
-public class NodesResource extends AbstractResource implements Nodes
+public class NodesResource extends AbstractRPooliServerAware implements Nodes
 {
     private static final String NO_AUTH_CONFIG = "none";
 
-    public NodesResource(final RPooliServer server)
+    private final ClientSimulator clientSimulator;
+
+    public NodesResource(final RPooliServer server, final ClientSimulator clientSimulator)
     {
         super(server);
+        this.clientSimulator = Validate.notNull(clientSimulator);
     }
 
     @Override
@@ -74,6 +81,18 @@ public class NodesResource extends AbstractResource implements Nodes
             default :
                 throw new IllegalStateException("Unsupported command: " + command);
         }
+    }
+
+    @Override
+    public void postNodesTest() throws Exception
+    {
+        clientSimulator.acquireNode();
+    }
+
+    @Override
+    public void deleteNodesTest() throws Exception
+    {
+        clientSimulator.releaseAllNodes();
     }
 
     private static Node buildNode(final RPooliNode rpn)

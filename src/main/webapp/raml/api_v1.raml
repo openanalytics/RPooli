@@ -27,6 +27,7 @@ traits:
      usage: Apply this to any method that needs to be asynchronous
 
 /pool:
+  description: Manage the pool of RServi nodes
   get:
     description: Retrieve information about the pool
     responses:
@@ -36,6 +37,7 @@ traits:
             schema: pool.json
 
 /nodes:
+  description: Manage the RServi nodes
   get:
     description: Retrieve the list of nodes
     responses:
@@ -56,6 +58,7 @@ traits:
         404:
           description: The node ID doesn't exist
     /command:
+      description: Allows running command on a node, for example to stop it or activate debug mode
       post:
         description: Send a command to a node
         body:
@@ -65,3 +68,15 @@ traits:
             description: The command has been successfully executed.
           404:
             description: The node ID doesn't exist
+  /test:
+    description: Simulate client actions
+    post:
+      description: Acquire a node from the pool
+      responses:
+        204:
+          description: The command has been successfully executed.
+    delete:
+      description: Release all the aquired nodes to the pool
+      responses:
+        204:
+          description: The command has been successfully executed.

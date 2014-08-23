@@ -18,11 +18,15 @@
         c:servletContext-ref="servletContext" c:context-ref="context"
         factory-method="create" />
 
-    <bean name="abstractResource" abstract="true" c:server-ref="server" />
+    <bean name="abstractRPooliServerAware" abstract="true" c:server-ref="server" />
 
-    <bean name="nodesResource" parent="abstractResource"
-        class="eu.openanalytics.rpooli.api.NodesResource" />
+    <bean name="clientSimulator" parent="abstractRPooliServerAware"
+        class="eu.openanalytics.rpooli.ClientSimulator" />
 
-    <bean name="poolResource" parent="abstractResource"
+    <bean name="nodesResource" parent="abstractRPooliServerAware"
+        class="eu.openanalytics.rpooli.api.NodesResource"
+        c:clientSimulator-ref="clientSimulator" />
+
+    <bean name="poolResource" parent="abstractRPooliServerAware"
         class="eu.openanalytics.rpooli.api.PoolResource" />
 </beans>

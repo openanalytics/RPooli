@@ -9,6 +9,8 @@ import static eu.openanalytics.matchers.JsonSchemaMatcher.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -23,6 +25,8 @@ import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
 import eu.openanalytics.matchers.JsonSchemaMatcher;
+import eu.openanalytics.rpooli.api.spec.model.Node;
+import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 
 public class ApiV1ITCase
@@ -79,7 +83,7 @@ public class ApiV1ITCase
         expect().statusCode(200)
             .contentType(JSON)
             .when()
-            .get("/nodes/" + getActiveNodeId())
+            .get("/nodes/" + getOneActiveNodeId())
             .then()
             .assertThat()
             .body(matchesJsonSchema(getSchemaUri("node")));
@@ -110,21 +114,68 @@ public class ApiV1ITCase
             .expect()
             .statusCode(204)
             .when()
-            .post("/nodes/" + getActiveNodeId() + "/command");
+            .post("/nodes/" + getOneActiveNodeId() + "/command");
     }
 
-    private String getActiveNodeId()
+    @Test
+    public void acquireReleaseAndKillTestNode() throws Exception
     {
-        final NodesJson nodes = expect().statusCode(200)
+        assertThat(getActiveNodesCount(), is(1));
+
+        expect().statusCode(204).when().post("/nodes/test");
+
+        // there should be one lent node
+        final Node lent = getOneLentNode();
+        assertThat(lent, is(notNullValue()));
+
+        expect().statusCode(204).when().delete("/nodes/test");
+
+        // the node should not be lent anymore
+        assertThat(getOneLentNode(), is(nullValue()));
+
+        given().contentType(JSON)
+            .body("{\"command\":\"KILL\"}")
+            .expect()
+            .statusCode(204)
+            .when()
+            .post("/nodes/" + lent.getId() + "/command");
+
+        // the node should have been killed
+        assertThat(getActiveNodesCount(), is(1));
+    }
+
+    private Node getOneLentNode()
+    {
+        for (final Node node : getActiveNodes().getNodes())
+        {
+            if (node.getState() == State.LENT)
+            {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private String getOneActiveNodeId()
+    {
+        final NodesJson nodes = getActiveNodes();
+        assertThat(nodes.getNodes(), hasSize(greaterThan(0)));
+        return nodes.getNodes().get(0).getId();
+    }
+
+    private int getActiveNodesCount()
+    {
+        return getActiveNodes().getNodes().size();
+    }
+
+    private NodesJson getActiveNodes()
+    {
+        return expect().statusCode(200)
             .contentType(JSON)
             .when()
             .get("/nodes")
             .thenReturn()
             .as(NodesJson.class);
-
-        assertThat(nodes.getNodes(), hasSize(greaterThan(0)));
-
-        return nodes.getNodes().get(0).getId();
     }
 
     private static URI getSchemaUri(final String schema)
