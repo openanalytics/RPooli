@@ -4,6 +4,7 @@ package eu.openanalytics.rpooli;
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
+import static com.jayway.restassured.http.ContentType.TEXT;
 import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
@@ -21,6 +22,7 @@ import org.junit.Test;
 import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
+import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
@@ -145,7 +147,47 @@ public class ApiV1ITCase
             .body(matchesJsonSchema(getSchemaUri("conf-r")));
     }
 
-    // TODO save invalid and valid RConfig
+    @Test
+    public void putInvalidRConfig() throws Exception
+    {
+        given().contentType(JSON)
+            .body("{\"start_stop_timeout\": -2}")
+            .expect()
+            .statusCode(400)
+            .contentType(TEXT)
+            .when()
+            .put("/config/r");
+    }
+
+    @Test
+    public void putValidRConfigApplyOnly() throws Exception
+    {
+        final ConfRJson currentRConfig = fetchCurrentRConfig();
+
+        currentRConfig.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
+
+        given().contentType(JSON).body(currentRConfig).expect().statusCode(204).when().put("/config/r");
+    }
+
+    @Test
+    public void putValidRConfigApplyAndSave() throws Exception
+    {
+        final ConfRJson currentRConfig = fetchCurrentRConfig();
+
+        currentRConfig.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
+
+        given().contentType(JSON)
+            .body(currentRConfig)
+            .expect()
+            .statusCode(204)
+            .when()
+            .put("/config/r?save=true");
+    }
+
+    private ConfRJson fetchCurrentRConfig()
+    {
+        return expect().statusCode(200).contentType(JSON).when().get("/config/r").body().as(ConfRJson.class);
+    }
 
     private Node getOneLentNode()
     {
