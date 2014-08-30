@@ -2,12 +2,18 @@
 package eu.openanalytics.rpooli;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.transform;
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.CollectionUtils.collect;
 import static org.apache.commons.collections4.CollectionUtils.find;
+import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 
@@ -16,10 +22,15 @@ import org.apache.commons.collections4.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.common.base.Function;
+
 import de.walware.ecommons.IDisposable;
+import de.walware.rj.RjInvalidConfigurationException;
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.pool.JMPoolServer;
 import de.walware.rj.servi.pool.PoolConfig;
+import de.walware.rj.servi.pool.PropertiesBean;
+import de.walware.rj.servi.pool.PropertiesBean.ValidationMessage;
 import de.walware.rj.servi.pool.RServiNodeConfig;
 
 /**
@@ -118,8 +129,67 @@ public class RPooliServer implements IDisposable
         });
     }
 
+    public RServiNodeConfig getCurrentConfig()
+    {
+        final RServiNodeConfig config = getDefaultConfig();
+        server.getNodeConfig(config);
+        return config;
+    }
+
     public RServiNodeConfig getDefaultConfig()
     {
         return new RServiNodeConfig();
+    }
+
+    public void applyConfiguration(final RServiNodeConfig config)
+    {
+        validate(config);
+
+        try
+        {
+            server.setNodeConfig(config);
+        }
+        catch (final RjInvalidConfigurationException rice)
+        {
+            throw new IllegalArgumentException("Invalid configuration for " + config.getBeanId() + ": "
+                                               + rice.getMessage(), rice);
+        }
+    }
+
+    public void applyAndSaveConfiguration(final RServiNodeConfig config) throws IOException
+    {
+        applyConfiguration(config);
+        saveProperties(config);
+    }
+
+    private void saveProperties(final PropertiesBean bean) throws IOException
+    {
+        final Properties properties = new Properties();
+        bean.save(properties);
+        server.getRJContext().saveProperties(bean.getBeanId(), properties);
+    }
+
+    private static void validate(final PropertiesBean bean)
+    {
+        final List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
+
+        if (bean.validate(messages))
+        {
+            return;
+        }
+        else
+        {
+            final String reason = join(transform(messages, new Function<ValidationMessage, String>()
+            {
+                @Override
+                public String apply(final ValidationMessage vm)
+                {
+                    return vm.getPropertyId() + ": " + vm.getMessage();
+                }
+            }), ", ");
+
+            throw new IllegalArgumentException("Invalid configuration for " + bean.getBeanId() + ": "
+                                               + reason);
+        }
     }
 }

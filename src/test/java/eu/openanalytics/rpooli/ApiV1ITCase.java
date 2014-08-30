@@ -122,6 +122,18 @@ public class ApiV1ITCase
     }
 
     @Test
+    public void getCurrentRConfig() throws Exception
+    {
+        expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/r")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("conf-r")));
+    }
+
+    @Test
     public void getDefaultRConfig() throws Exception
     {
         expect().statusCode(200)
@@ -132,6 +144,8 @@ public class ApiV1ITCase
             .assertThat()
             .body(matchesJsonSchema(getSchemaUri("conf-r")));
     }
+
+    // TODO save invalid and valid RConfig
 
     private Node getOneLentNode()
     {

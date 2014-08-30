@@ -33,6 +33,10 @@
             "type": "string",
             "required": false
         },
+        "node_arguments": {
+            "type": "string",
+            "required": false
+        },
         "startup_snippet": {
             "description": "R startup snippet (complete R command per line)",
             "type": "string",

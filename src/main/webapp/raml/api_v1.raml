@@ -97,9 +97,9 @@ traits:
 /config:
   description: Configure RPooli.
   /r:
-    description: The R-related configuration of RPooli.
+    description: R/Rj nodes configuration.
     get:
-      description: Retrieve the current R configuration.
+      description: Retrieve the current configuration.
       responses:
         200:
           body:
@@ -112,12 +112,15 @@ traits:
           type: boolean
           required: false
           default: false
+      body:
+        schema: conf-r.json
       responses:
         204:
           description: The configuration has been accepted.
     /default:
+      description: The default configuration.
       get:
-        description: Restore the default configuration.
+        description: Get the default configuration.
         responses:
           200:
             body:

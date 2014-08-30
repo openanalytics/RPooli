@@ -25,8 +25,16 @@ public class ThrowableExceptionMapper implements ExceptionMapper<Throwable>
         {
             return ((WebApplicationException) t).getResponse();
         }
+        else if (t instanceof IllegalArgumentException)
+        {
+            LOGGER.warn("Received an invalid request (" + t.getMessage() + ")");
+
+            return Response.status(BAD_REQUEST).type(TEXT_PLAIN).entity(t.getMessage()).build();
+        }
         else if (t instanceof JsonMappingException)
         {
+            LOGGER.warn("Received invalid JSON (" + t.getMessage() + ")");
+
             return Response.status(BAD_REQUEST).type(TEXT_PLAIN).entity("Invalid JSON entity").build();
         }
         else
