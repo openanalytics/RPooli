@@ -1,11 +1,10 @@
 
 package eu.openanalytics.rpooli;
 
-import static com.github.fge.jsonschema.SchemaVersion.DRAFTV3;
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static eu.openanalytics.matchers.JsonSchemaMatcher.matchesJsonSchema;
+import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -19,12 +18,9 @@ import java.net.URI;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.github.fge.jsonschema.cfg.ValidationConfiguration;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
-import eu.openanalytics.matchers.JsonSchemaMatcher;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
@@ -38,11 +34,6 @@ public class ApiV1ITCase
     {
         RestAssured.port = Integer.getInteger("api.server.port");
         RestAssured.basePath = System.getProperty("api.server.path") + "/api/v1";
-
-        JsonSchemaMatcher.setJsonSchemaFactory(JsonSchemaFactory.newBuilder()
-            .setValidationConfiguration(
-                ValidationConfiguration.newBuilder().setDefaultVersion(DRAFTV3).freeze())
-            .freeze());
     }
 
     @BeforeClass
