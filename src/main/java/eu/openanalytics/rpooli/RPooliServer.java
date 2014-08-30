@@ -20,6 +20,7 @@ import de.walware.ecommons.IDisposable;
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.pool.JMPoolServer;
 import de.walware.rj.servi.pool.PoolConfig;
+import de.walware.rj.servi.pool.RServiNodeConfig;
 
 /**
  * The actual server that bootstraps R nodes.
@@ -115,5 +116,10 @@ public class RPooliServer implements IDisposable
                 return node.getId().equals(nodeId);
             }
         });
+    }
+
+    public RServiNodeConfig getDefaultConfig()
+    {
+        return new RServiNodeConfig();
     }
 }

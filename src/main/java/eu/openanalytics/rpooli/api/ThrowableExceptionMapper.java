@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ThrowableExceptionMapper implements ExceptionMapper<Throwable>
 {
-    public static final String INTERNAL_SERVER_ERROR_PUBLIC_MESSAGE = "Server-side guru meditation :( The issue has been logged.";
     private static final Log LOGGER = LogFactory.getLog(ThrowableExceptionMapper.class);
 
     @Override
@@ -33,6 +32,7 @@ public class ThrowableExceptionMapper implements ExceptionMapper<Throwable>
         else
         {
             LOGGER.error(t.getMessage(), t);
+
             return Response.status(INTERNAL_SERVER_ERROR)
                 .type(TEXT_PLAIN)
                 .entity("Server-side guru meditation :( The issue has been logged.")

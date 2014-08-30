@@ -17,18 +17,19 @@ documentation:
       _A pool of R nodes, exposed over RMI and managed over HTTP_
 
 schemas:
- - pool.json:         !include schema/pool.json
- - node.json:         !include schema/node.json
- - nodes.json:        !include schema/nodes.json
+ - pool.json:   !include schema/pool.json
+ - node.json:   !include schema/node.json
+ - nodes.json:  !include schema/nodes.json
+ - conf-r.json: !include schema/conf-r.json
 
 traits:
  - async-resource:
-     usage: Apply this to any method that needs to be asynchronous
+     usage: Apply this to any method that needs to be asynchronous.
 
 /pool:
-  description: Manage the pool of RServi nodes
+  description: Manage the pool of RServi nodes.
   get:
-    description: Retrieve information about the pool
+    description: Retrieve information about the pool.
     responses:
       200:
         body:
@@ -36,58 +37,88 @@ traits:
             schema: pool.json
 
 /nodes:
-  description: Manage the RServi nodes
+  description: Manage the RServi nodes.
   get:
-    description: Retrieve the list of nodes
+    description: Retrieve the list of nodes.
     responses:
       200:
         body:
           schema: nodes.json
   /{nodeId}:
-    description: Manage a single RServi node
+    description: Manage a single RServi node.
     uriParameters:
       nodeId:
         type: string
         required: true
     get:
-      description: Retrieve a single node
+      description: Retrieve a single node.
       responses:
         200:
           body:
             schema: node.json
         404:
-          description: The node ID doesn't exist
+          description: The node ID doesn't exist.
     delete:
       description: Evict a node
       queryParameters:
         kill:
+          description: If true, the node is immediately evicted. 
           type: boolean
           required: false
           default: false
       responses:
         204:
-          description: The node has been evicted
+          description: The node has been evicted.
     /console:
-      description: Control the debug console
+      description: Control the debug console.
       post:
-        description: Enable the debug console
+        description: Enable the debug console.
         responses:
           204:
-            description: The debug console is active
+            description: The debug console is active.
       delete:
-        description: The debug console is inactive
+        description: The debug console is inactive.
         responses:
           204:
             description: The command has been successfully executed.
   /test:
-    description: Simulate client actions
+    description: Simulate client actions.
     post:
-      description: Acquire a node from the pool
+      description: Acquire a node from the pool.
       responses:
         204:
-          description: A node has been acquired
+          description: A node has been acquired.
     delete:
-      description: Release all the acquired nodes to the pool
+      description: Release all the acquired nodes to the pool.
       responses:
         204:
-          description: All acquired nodes have been released
+          description: All acquired nodes have been released.
+
+/config:
+  description: Configure RPooli.
+  /r:
+    description: The R-related configuration of RPooli.
+    get:
+      description: Retrieve the current R configuration.
+      responses:
+        200:
+          body:
+            schema: conf-r.json
+    put:
+      description: Configure the parameters to start R.
+      queryParameters:
+        save:
+          description: If true, the configuration will be applied and saved, otherwise it will only be applied.
+          type: boolean
+          required: false
+          default: false
+      responses:
+        204:
+          description: The configuration has been accepted.
+    /default:
+      get:
+        description: Restore the default configuration.
+        responses:
+          200:
+            body:
+              schema: conf-r.json
