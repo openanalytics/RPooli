@@ -15,6 +15,7 @@
         <jaxrs:serviceBeans>
             <ref bean="nodesResource" />
             <ref bean="poolResource" />
+            <ref bean="configResource" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <!-- Serialization -->

@@ -29,4 +29,7 @@
 
     <bean name="poolResource" parent="abstractRPooliServerAware"
         class="eu.openanalytics.rpooli.api.PoolResource" />
+
+    <bean name="configResource" parent="abstractRPooliServerAware"
+        class="eu.openanalytics.rpooli.api.ConfigResource" />
 </beans>

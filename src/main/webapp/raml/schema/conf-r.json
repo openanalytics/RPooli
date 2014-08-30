@@ -1,0 +1,81 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "additionalProperties": false,
+    "properties": {
+        "java_home": {
+            "description": "Empty means same as the server",
+            "type": "string",
+            "required": false
+        },
+        "java_arguments": {
+            "description": "Arguments of the JVM VM",
+            "type": "string",
+            "required": false
+        },
+        "r_home": {
+            "description": "R home path",
+            "type": "string",
+            "required": false
+        },
+        "r_architecture": {
+            "description": "Architecture of binaries, empty means autodetection",
+            "type": "string",
+            "required": false
+        },
+        "r_libraries": {
+            "description": "R libraries path",
+            "type": "string",
+            "required": false
+        },
+        "working_directory": {
+            "description": "Working directory path, empty means default temp directory",
+            "type": "string",
+            "required": false
+        },
+        "startup_snippet": {
+            "description": "R startup snippet (complete R command per line)",
+            "type": "string",
+            "required": false
+        },
+        "enable_debug_console": {
+            "description": "Enables debug console automatically at startup (use only for development!)",
+            "type": "boolean",
+            "required": true,
+            "default": false
+        },
+        "enable_verbose_logging": {
+            "description": "Enables verbose logging and prevents deletion of the node directory",
+            "type": "boolean",
+            "required": true,
+            "default": false
+        },
+        "start_stop_timeout": {
+            "description": "Timeout of start/stop of nodes in milliseconds",
+            "type": "integer",
+            "required": true
+        },
+        "environment_variables": {
+            "description": "Additional environment variables for the R process",
+            "type": "array",
+            "required": false,
+            "items": {
+                "type": "object",
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "description": "Name of the environment variable",
+                        "type": "string",
+                        "required": true
+                    },
+                    "value": {
+                        "description": "Value of the environment variable",
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            }
+        }
+    }
+}

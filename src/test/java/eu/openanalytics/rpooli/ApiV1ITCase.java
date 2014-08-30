@@ -121,6 +121,18 @@ public class ApiV1ITCase
         assertThat(getActiveNodesCount(), is(1));
     }
 
+    @Test
+    public void getDefaultRConfig() throws Exception
+    {
+        expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/r/default")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("conf-r")));
+    }
+
     private Node getOneLentNode()
     {
         for (final Node node : getActiveNodes().getNodes())
