@@ -1,8 +1,8 @@
 
 package eu.openanalytics.rpooli.api;
 
+import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.jsonNotFound;
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.jsonOK;
-import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.notFound;
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesResponse.jsonOK;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
@@ -15,6 +15,7 @@ import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.ClientSimulator;
 import eu.openanalytics.rpooli.RPooliNode;
 import eu.openanalytics.rpooli.RPooliServer;
+import eu.openanalytics.rpooli.api.spec.model.ErrorJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 import eu.openanalytics.rpooli.api.spec.resource.Nodes;
@@ -48,7 +49,9 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     public GetNodesByNodeIdResponse getNodesByNodeId(final String nodeId) throws Exception
     {
         final RPooliNode rpn = server.findNodeById(nodeId);
-        return rpn == null ? notFound() : jsonOK(buildNode(rpn));
+        return rpn == null
+                          ? jsonNotFound(new ErrorJson().withError("Node not found: " + nodeId))
+                          : jsonOK(buildNode(rpn));
     }
 
     @Override

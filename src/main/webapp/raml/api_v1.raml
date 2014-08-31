@@ -17,26 +17,35 @@ documentation:
       _A pool of R nodes, exposed over RMI and managed over HTTP_
 
 schemas:
+ - error.json:  !include schema/error.json
  - pool.json:   !include schema/pool.json
  - node.json:   !include schema/node.json
  - nodes.json:  !include schema/nodes.json
  - conf-r.json: !include schema/conf-r.json
 
 traits:
- - async-resource:
-     usage: Apply this to any method that needs to be asynchronous.
+ - erroring:
+     usage: Defines errors that yield a JSON response body.
+     responses:
+       400:
+         body:
+           schema: error.json
+       500:
+         body:
+           schema: error.json
 
 /pool:
+  is: [ erroring ]
   description: Manage the pool of RServi nodes.
   get:
     description: Retrieve information about the pool.
     responses:
       200:
         body:
-          application/json:
-            schema: pool.json
+          schema: pool.json
 
 /nodes:
+  is: [ erroring ]
   description: Manage the RServi nodes.
   get:
     description: Retrieve the list of nodes.
@@ -58,6 +67,8 @@ traits:
             schema: node.json
         404:
           description: The node ID doesn't exist.
+          body:
+            schema: error.json
     delete:
       description: Evict a node
       queryParameters:
@@ -95,6 +106,7 @@ traits:
           description: All acquired nodes have been released.
 
 /config:
+  is: [ erroring ]
   description: Configure RPooli.
   /r:
     description: R/Rj nodes configuration.

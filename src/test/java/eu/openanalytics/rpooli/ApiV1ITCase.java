@@ -4,7 +4,6 @@ package eu.openanalytics.rpooli;
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static com.jayway.restassured.http.ContentType.TEXT;
 import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
@@ -85,7 +84,12 @@ public class ApiV1ITCase
     @Test
     public void getNodeByIdNotFound() throws Exception
     {
-        expect().statusCode(404).when().get("/nodes/_not_a_valid_id");
+        expect().statusCode(404)
+            .when()
+            .get("/nodes/_not_a_valid_id")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("error")));;
     }
 
     @Test
@@ -154,9 +158,12 @@ public class ApiV1ITCase
             .body("{\"start_stop_timeout\": -2}")
             .expect()
             .statusCode(400)
-            .contentType(TEXT)
+            .contentType(JSON)
             .when()
-            .put("/config/r");
+            .put("/config/r")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("error")));
     }
 
     @Test
