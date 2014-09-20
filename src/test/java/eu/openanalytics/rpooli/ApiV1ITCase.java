@@ -26,6 +26,9 @@ import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 
+/**
+ * Run with: <code>mvn clean verify</code>
+ */
 public class ApiV1ITCase
 {
     private static final String RMI_POOL_ADDRESS = "rmi://127.0.1.1/rpooli-pool";

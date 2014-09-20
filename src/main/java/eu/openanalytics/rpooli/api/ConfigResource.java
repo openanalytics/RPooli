@@ -70,7 +70,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
                 var.getValue()));
         }
 
-        final ConfRJson confRJson = new ConfRJson().withEnableDebugConsole(config.getEnableConsole())
+        return new ConfRJson().withEnableDebugConsole(config.getEnableConsole())
             .withEnableVerboseLogging(config.getEnableVerbose())
             .withEnvironmentVariables(environmentVariables)
             .withJavaArguments(config.getJavaArgs())
@@ -82,6 +82,5 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
             .withStartStopTimeout(config.getStartStopTimeout())
             .withStartupSnippet(config.getRStartupSnippet())
             .withWorkingDirectory(config.getBaseWorkingDirectory());
-        return confRJson;
     }
 }
