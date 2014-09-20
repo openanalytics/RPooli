@@ -177,6 +177,18 @@ public class RPooliServer implements IDisposable
         return validate(new PoolConfig());
     }
 
+    public void setConfiguration(final PoolConfig config, final ConfigAction action) throws IOException
+    {
+        applyConfiguration(config, new ConfigurationApplier<PoolConfig>()
+        {
+            @Override
+            public void apply(final PoolConfig config) throws RjInvalidConfigurationException
+            {
+                server.setPoolConfig(config);
+            }
+        }, action);
+    }
+
     public NetConfig getCurrentNetConfig()
     {
         final NetConfig config = getDefaultNetConfig();
@@ -189,14 +201,14 @@ public class RPooliServer implements IDisposable
         return validate(new NetConfig());
     }
 
-    public void setConfiguration(final PoolConfig config, final ConfigAction action) throws IOException
+    public void setConfiguration(final NetConfig config, final ConfigAction action) throws IOException
     {
-        applyConfiguration(config, new ConfigurationApplier<PoolConfig>()
+        applyConfiguration(config, new ConfigurationApplier<NetConfig>()
         {
             @Override
-            public void apply(final PoolConfig config) throws RjInvalidConfigurationException
+            public void apply(final NetConfig config) throws RjInvalidConfigurationException
             {
-                server.setPoolConfig(config);
+                server.setNetConfig(config);
             }
         }, action);
     }
@@ -238,7 +250,7 @@ public class RPooliServer implements IDisposable
                 @Override
                 public String apply(final ValidationMessage vm)
                 {
-                    return vm.getPropertyId() + ": " + vm.getMessage();
+                    return vm == null ? "n/a" : vm.getPropertyId() + ": " + vm.getMessage();
                 }
             }), ", ");
 

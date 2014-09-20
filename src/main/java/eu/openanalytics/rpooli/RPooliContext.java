@@ -180,7 +180,10 @@ public class RPooliContext extends RJContext
         {
             if (!file.exists())
             {
-                file.createNewFile();
+                if (!file.createNewFile())
+                {
+                    throw new IOException("Failed to create file: " + file);
+                }
             }
 
             return new FileOutputStream(file, false);

@@ -25,6 +25,7 @@ import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
+import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
 import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
@@ -294,6 +295,41 @@ public class ApiV1ITCase
         validateNetConfig(config);
     }
 
+    @Test
+    public void putInvalidNetConfig() throws Exception
+    {
+        final ConfNetResolvedJsonParent config = asPutableNetConfig(fetchCurrentNetConfig());
+
+        config.setHost("not a valid host name");
+
+        given().contentType(JSON)
+            .body(config)
+            .expect()
+            .statusCode(400)
+            .contentType(JSON)
+            .when()
+            .put("/config/net")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("error")));
+    }
+
+    @Test
+    public void putValidNetConfigApplyOnly() throws Exception
+    {
+        final ConfNetResolvedJsonParent config = asPutableNetConfig(fetchCurrentNetConfig());
+
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/net");
+    }
+
+    @Test
+    public void putValidNetConfigApplyAndSave() throws Exception
+    {
+        final ConfNetResolvedJsonParent config = asPutableNetConfig(fetchCurrentNetConfig());
+
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/net?save=true");
+    }
+
     private ConfNetResolvedJson fetchCurrentNetConfig()
     {
         return expect().statusCode(200)
@@ -311,6 +347,14 @@ public class ApiV1ITCase
         assertThat(config, is(instanceOf(ConfNetResolvedJson.class)));
         assertThat(config.getEffectiveHost(), not(isEmptyOrNullString()));
         assertThat(config.getStartEmbeddedRegistry(), is(true));
+    }
+
+    private ConfNetResolvedJsonParent asPutableNetConfig(final ConfNetResolvedJson config)
+    {
+        return new ConfNetResolvedJsonParent().withEnabledSsl(config.getEnabledSsl())
+            .withHost(config.getHost())
+            .withPort(config.getPort())
+            .withStartEmbeddedRegistry(config.getStartEmbeddedRegistry());
     }
 
     private Node getOneLentNode()

@@ -136,26 +136,28 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     // Net Configuration
     //
 
-    // TODO integration test
     @Override
     public GetConfigNetResponse getConfigNet() throws Exception
     {
         return GetConfigNetResponse.jsonOK(buildNetConfig(server.getCurrentNetConfig()));
     }
 
-    // TODO integration test
     @Override
     public GetConfigNetDefaultResponse getConfigNetDefault() throws Exception
     {
         return GetConfigNetDefaultResponse.jsonOK(buildNetConfig(server.getDefaultNetConfig()));
     }
 
-    // TODO integration test
     @Override
-    public void putConfigNet(final boolean save, final ConfNetResolvedJsonParent entity) throws Exception
+    public void putConfigNet(final boolean save, final ConfNetResolvedJsonParent config) throws Exception
     {
-        // TODO Auto-generated method stub
+        final NetConfig netConfig = new NetConfig();
+        netConfig.setHostAddress(config.getHost());
+        netConfig.setRegistryEmbed(config.getStartEmbeddedRegistry());
+        netConfig.setRegistryPort(config.getPort().intValue());
+        netConfig.setSSLEnabled(config.getEnabledSsl());
 
+        server.setConfiguration(netConfig, asAction(save));
     }
 
     private ConfNetResolvedJson buildNetConfig(final NetConfig config)
