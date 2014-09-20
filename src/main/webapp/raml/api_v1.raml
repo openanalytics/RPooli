@@ -54,7 +54,6 @@ traits:
         body:
           schema: nodes.json
   /{nodeId}:
-    is: [ erroring ]
     description: Manage a single RServi node.
     uriParameters:
       nodeId:
@@ -82,7 +81,6 @@ traits:
         204:
           description: The node has been evicted.
     /console:
-      is: [ erroring ]
       description: Control the debug console.
       post:
         description: Enable the debug console.
@@ -95,7 +93,6 @@ traits:
           204:
             description: The command has been successfully executed.
   /test:
-    is: [ erroring ]
     description: Simulate client actions.
     post:
       description: Acquire a node from the pool.
@@ -112,7 +109,6 @@ traits:
   is: [ erroring ]
   description: Configure RPooli.
   /r:
-    is: [ erroring ]
     description: R/Rj nodes configuration.
     get:
       description: Retrieve the current configuration.
@@ -134,7 +130,6 @@ traits:
         204:
           description: The configuration has been accepted.
     /default:
-      is: [ erroring ]
       description: The default configuration.
       get:
         description: Get the default configuration.
