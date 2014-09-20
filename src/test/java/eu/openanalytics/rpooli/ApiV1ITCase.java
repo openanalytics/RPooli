@@ -194,6 +194,30 @@ public class ApiV1ITCase
             .put("/config/r?save=true");
     }
 
+    @Test
+    public void getCurrentPoolConfig() throws Exception
+    {
+        expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/pool")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("conf-pool")));
+    }
+
+    @Test
+    public void getDefaultPoolConfig() throws Exception
+    {
+        expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/pool/default")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("conf-pool")));
+    }
+
     private ConfRJson fetchCurrentRConfig()
     {
         return expect().statusCode(200).contentType(JSON).when().get("/config/r").body().as(ConfRJson.class);

@@ -1,0 +1,42 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "additionalProperties": false,
+    "properties": {
+        "max_total_nodes": {
+            "description": "Startup new nodes if total count smaller than this value and...",
+            "type": "integer",
+            "required": true
+        },
+        "min_idle_nodes": {
+            "description": "... idle count smaller than this value.",
+            "type": "integer",
+            "required": true
+        },
+        "max_idle_nodes": {
+            "description": "Evict idling nodes if idle count greater than this value or...",
+            "type": "integer",
+            "required": true
+        },
+        "min_node_idle_time_millis": {
+            "description": "... idle count greater than min_idle_nodes count and idle time greater than this time.",
+            "type": "integer",
+            "required": true
+        },
+        "max_wait_time_millis": {
+            "description": "When node is requested and max_total_nodes is in use, wait for a free node until this timeout.",
+            "type": "integer",
+            "required": true
+        },
+        "max_node_reuse": {
+            "description": "Maximum number of times a node can be recycled, to keep the pool healthy.",
+            "type": "integer",
+            "required": true
+        },
+        "node_evition_timeout_millis": {
+            "description": "Maximum time to wait when stopping the pool or single nodes before forcing the termination.",
+            "type": "integer",
+            "required": true
+        }
+    }
+}

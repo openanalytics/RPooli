@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import de.walware.rj.servi.pool.PoolConfig;
 import de.walware.rj.servi.pool.RServiNodeConfig;
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
+import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.EnvironmentVariable;
 import eu.openanalytics.rpooli.api.spec.resource.Config;
@@ -19,16 +21,20 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
         super(server);
     }
 
+    //
+    // R Configuration
+    //
+
     @Override
     public GetConfigRDefaultResponse getConfigRDefault() throws Exception
     {
-        return GetConfigRDefaultResponse.jsonOK(buildRConfig(server.getDefaultConfig()));
+        return GetConfigRDefaultResponse.jsonOK(buildRConfig(server.getDefaultRConfig()));
     }
 
     @Override
     public GetConfigRResponse getConfigR() throws Exception
     {
-        return GetConfigRResponse.jsonOK(buildRConfig(server.getCurrentConfig()));
+        return GetConfigRResponse.jsonOK(buildRConfig(server.getCurrentRConfig()));
     }
 
     @Override
@@ -82,5 +88,42 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
             .withStartStopTimeout(config.getStartStopTimeout())
             .withStartupSnippet(config.getRStartupSnippet())
             .withWorkingDirectory(config.getBaseWorkingDirectory());
+    }
+
+    //
+    // Pool Configuration
+    //
+
+    // TODO integration test
+    @Override
+    public GetConfigPoolResponse getConfigPool() throws Exception
+    {
+        return GetConfigPoolResponse.jsonOK(buildPoolConfig(server.getCurrentPoolConfig()));
+    }
+
+    // TODO integration test
+    @Override
+    public GetConfigPoolDefaultResponse getConfigPoolDefault() throws Exception
+    {
+        return GetConfigPoolDefaultResponse.jsonOK(buildPoolConfig(server.getDefaultPoolConfig()));
+    }
+
+    // TODO integration test
+    @Override
+    public void putConfigPool(final boolean save, final ConfPoolJson entity) throws Exception
+    {
+        // TODO implement
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    private ConfPoolJson buildPoolConfig(final PoolConfig config)
+    {
+        return new ConfPoolJson().withMaxIdleNodes((long) config.getMaxIdleCount())
+            .withMaxNodeReuse((long) config.getMaxUsageCount())
+            .withMaxTotalNodes((long) config.getMaxTotalCount())
+            .withMaxWaitTimeMillis(config.getMaxWaitTime())
+            .withMinIdleNodes((long) config.getMinIdleCount())
+            .withMinNodeIdleTimeMillis(config.getMinIdleTime())
+            .withNodeEvitionTimeoutMillis(config.getEvictionTimeout());
     }
 }

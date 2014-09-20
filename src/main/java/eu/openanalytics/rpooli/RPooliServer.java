@@ -66,7 +66,7 @@ public class RPooliServer implements IDisposable
             LOGGER.info("Starting: " + server);
             server.start();
 
-            config = new PoolConfig();
+            config = getDefaultPoolConfig();
             server.getPoolConfig(config);
 
             LOGGER.info("Started with pool address: " + server.getPoolAddress());
@@ -129,16 +129,28 @@ public class RPooliServer implements IDisposable
         });
     }
 
-    public RServiNodeConfig getCurrentConfig()
+    public RServiNodeConfig getCurrentRConfig()
     {
-        final RServiNodeConfig config = getDefaultConfig();
+        final RServiNodeConfig config = getDefaultRConfig();
         server.getNodeConfig(config);
         return config;
     }
 
-    public RServiNodeConfig getDefaultConfig()
+    public RServiNodeConfig getDefaultRConfig()
     {
         return new RServiNodeConfig();
+    }
+
+    public PoolConfig getCurrentPoolConfig()
+    {
+        final PoolConfig config = getDefaultPoolConfig();
+        server.getPoolConfig(config);
+        return config;
+    }
+
+    public PoolConfig getDefaultPoolConfig()
+    {
+        return new PoolConfig();
     }
 
     public void applyConfiguration(final RServiNodeConfig config)
