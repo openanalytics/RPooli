@@ -23,6 +23,8 @@ schemas:
  - nodes.json:     !include schema/nodes.json
  - conf-r.json:    !include schema/conf-r.json
  - conf-pool.json: !include schema/conf-pool.json
+ - conf-net.json: !include schema/conf-net.json
+ - conf-net-resolved.json: !include schema/conf-net-resolved.json
 
 /pool:
   description: Manage the pool of RServi nodes.
@@ -153,3 +155,32 @@ schemas:
           200:
             body:
               schema: conf-pool.json
+  /net:
+    description: RMI configuration.
+    get:
+      description: Retrieve the current configuration.
+      responses:
+        200:
+          body:
+            schema: conf-net-resolved.json
+    put:
+      description: Configure RMI parameters.
+      queryParameters:
+        save:
+          description: If true, the configuration will be applied and saved, otherwise it will only be applied.
+          type: boolean
+          required: false
+          default: false
+      body:
+        schema: conf-net.json
+      responses:
+        204:
+          description: The configuration has been accepted.
+    /default:
+      description: The default configuration.
+      get:
+        description: Get the default configuration.
+        responses:
+          200:
+            body:
+              schema: conf-net-resolved.json

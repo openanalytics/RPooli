@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import de.walware.rj.servi.pool.NetConfig;
 import de.walware.rj.servi.pool.PoolConfig;
 import de.walware.rj.servi.pool.RServiNodeConfig;
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.RPooliServer.ConfigAction;
+import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
+import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
 import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.EnvironmentVariable;
@@ -127,6 +130,43 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
             .withMinIdleNodes((long) config.getMinIdleCount())
             .withMinNodeIdleTimeMillis(config.getMinIdleTime())
             .withNodeEvitionTimeoutMillis(config.getEvictionTimeout());
+    }
+
+    //
+    // Net Configuration
+    //
+
+    // TODO integration test
+    @Override
+    public GetConfigNetResponse getConfigNet() throws Exception
+    {
+        return GetConfigNetResponse.jsonOK(buildNetConfig(server.getCurrentNetConfig()));
+    }
+
+    // TODO integration test
+    @Override
+    public GetConfigNetDefaultResponse getConfigNetDefault() throws Exception
+    {
+        return GetConfigNetDefaultResponse.jsonOK(buildNetConfig(server.getDefaultNetConfig()));
+    }
+
+    // TODO integration test
+    @Override
+    public void putConfigNet(final boolean save, final ConfNetResolvedJsonParent entity) throws Exception
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    private ConfNetResolvedJson buildNetConfig(final NetConfig config)
+    {
+        return (ConfNetResolvedJson) new ConfNetResolvedJson().withEffectiveHost(
+            config.getEffectiveHostaddress())
+            .withEffectivePort((long) config.getEffectiveRegistryPort())
+            .withEnabledSsl(config.isSSLEnabled())
+            .withHost(config.getHostAddress())
+            .withPort((long) config.getRegistryPort())
+            .withStartEmbeddedRegistry(config.getRegistryEmbed());
     }
 
     private ConfigAction asAction(final boolean save)

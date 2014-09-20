@@ -7,7 +7,10 @@ import static com.jayway.restassured.http.ContentType.JSON;
 import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -21,6 +24,7 @@ import org.junit.Test;
 import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
+import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
@@ -266,6 +270,47 @@ public class ApiV1ITCase
             .get("/config/pool")
             .body()
             .as(ConfPoolJson.class);
+    }
+
+    @Test
+    public void getCurrentNetConfig() throws Exception
+    {
+        final ConfNetResolvedJson config = fetchCurrentNetConfig();
+
+        validateNetConfig(config);
+    }
+
+    @Test
+    public void getDefaultNetConfig() throws Exception
+    {
+        // same issue
+        final ConfNetResolvedJson config = expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/net/default")
+            .body()
+            .as(ConfNetResolvedJson.class);
+
+        validateNetConfig(config);
+    }
+
+    private ConfNetResolvedJson fetchCurrentNetConfig()
+    {
+        return expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/net")
+            .body()
+            .as(ConfNetResolvedJson.class);
+    }
+
+    private void validateNetConfig(final ConfNetResolvedJson config)
+    {
+        // the schema validator doesn't understand extension so all we can check is that the config
+        // object has been deserialized and some expected values are there
+        assertThat(config, is(instanceOf(ConfNetResolvedJson.class)));
+        assertThat(config.getEffectiveHost(), not(isEmptyOrNullString()));
+        assertThat(config.getStartEmbeddedRegistry(), is(true));
     }
 
     private Node getOneLentNode()

@@ -1,0 +1,28 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "additionalProperties": false,
+    "properties": {
+        "host": {
+            "description": "Host address (IP/name). This setting is synchronized with the global Java property 'java.rmi.server.hostname'",
+            "type": "string",
+            "required": false
+        },
+        "port": {
+            "description": "RMI registry port",
+            "type": "integer",
+            "required": false,
+            "default": -1
+        },
+        "start_embedded_registry": {
+            "description": "Start embedded registry",
+            "type": "boolean",
+            "required": true
+        },
+        "enabled_ssl": {
+            "description": "Enable SSL",
+            "type": "boolean",
+            "required": true
+        }
+    }
+}

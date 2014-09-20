@@ -29,6 +29,7 @@ import de.walware.ecommons.IDisposable;
 import de.walware.rj.RjInvalidConfigurationException;
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.pool.JMPoolServer;
+import de.walware.rj.servi.pool.NetConfig;
 import de.walware.rj.servi.pool.PoolConfig;
 import de.walware.rj.servi.pool.PropertiesBean;
 import de.walware.rj.servi.pool.PropertiesBean.ValidationMessage;
@@ -144,12 +145,12 @@ public class RPooliServer implements IDisposable
     {
         final RServiNodeConfig config = getDefaultRConfig();
         server.getNodeConfig(config);
-        return config;
+        return validate(config);
     }
 
     public RServiNodeConfig getDefaultRConfig()
     {
-        return new RServiNodeConfig();
+        return validate(new RServiNodeConfig());
     }
 
     public void setConfiguration(final RServiNodeConfig config, final ConfigAction action) throws IOException
@@ -168,12 +169,24 @@ public class RPooliServer implements IDisposable
     {
         final PoolConfig config = getDefaultPoolConfig();
         server.getPoolConfig(config);
-        return config;
+        return validate(config);
     }
 
     public PoolConfig getDefaultPoolConfig()
     {
-        return new PoolConfig();
+        return validate(new PoolConfig());
+    }
+
+    public NetConfig getCurrentNetConfig()
+    {
+        final NetConfig config = getDefaultNetConfig();
+        server.getNetConfig(config);
+        return validate(config);
+    }
+
+    public NetConfig getDefaultNetConfig()
+    {
+        return validate(new NetConfig());
     }
 
     public void setConfiguration(final PoolConfig config, final ConfigAction action) throws IOException
@@ -210,20 +223,13 @@ public class RPooliServer implements IDisposable
         }
     }
 
-    private void saveProperties(final PropertiesBean bean) throws IOException
-    {
-        final Properties properties = new Properties();
-        bean.save(properties);
-        server.getRJContext().saveProperties(bean.getBeanId(), properties);
-    }
-
-    private static void validate(final PropertiesBean bean)
+    private static <T extends PropertiesBean> T validate(final T config)
     {
         final List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
 
-        if (bean.validate(messages))
+        if (config.validate(messages))
         {
-            return;
+            return config;
         }
         else
         {
@@ -236,8 +242,15 @@ public class RPooliServer implements IDisposable
                 }
             }), ", ");
 
-            throw new IllegalArgumentException("Invalid configuration for " + bean.getBeanId() + ": "
+            throw new IllegalArgumentException("Invalid configuration for " + config.getBeanId() + ": "
                                                + reason);
         }
+    }
+
+    private void saveProperties(final PropertiesBean bean) throws IOException
+    {
+        final Properties properties = new Properties();
+        bean.save(properties);
+        server.getRJContext().saveProperties(bean.getBeanId(), properties);
     }
 }

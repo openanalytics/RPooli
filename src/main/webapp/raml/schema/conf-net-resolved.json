@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "extends": {
+        "$ref": "conf-net.json"
+    },
+    "additionalProperties": false,
+    "properties": {
+        "effective_host": {
+            "description": "Resolved IP",
+            "type": "string",
+            "required": false
+        },
+        "effective_port": {
+            "description": "Effective RMI registry port",
+            "type": "integer",
+            "required": true
+        }
+    }
+}
