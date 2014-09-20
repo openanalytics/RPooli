@@ -1,6 +1,9 @@
 
 package eu.openanalytics.rpooli.api;
 
+import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
+import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_ONLY;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -9,6 +12,7 @@ import de.walware.rj.servi.pool.PoolConfig;
 import de.walware.rj.servi.pool.RServiNodeConfig;
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
+import eu.openanalytics.rpooli.RPooliServer.ConfigAction;
 import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.EnvironmentVariable;
@@ -40,31 +44,24 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     @Override
     public void putConfigR(final boolean save, final ConfRJson config) throws Exception
     {
-        final RServiNodeConfig nodeConfig = new RServiNodeConfig();
-        nodeConfig.setBaseWorkingDirectory(config.getWorkingDirectory());
-        nodeConfig.setEnableConsole(config.getEnableDebugConsole());
-        nodeConfig.setEnableVerbose(config.getEnableVerboseLogging());
-        nodeConfig.setJavaArgs(config.getJavaArguments());
-        nodeConfig.setJavaHome(config.getJavaHome());
-        nodeConfig.setNodeArgs(config.getNodeArguments());
-        nodeConfig.setRArch(config.getRArchitecture());
-        nodeConfig.setRHome(config.getRHome());
-        nodeConfig.setRStartupSnippet(config.getStartupSnippet());
-        nodeConfig.setStartStopTimeout(config.getStartStopTimeout());
+        final RServiNodeConfig rConfig = new RServiNodeConfig();
+        rConfig.setBaseWorkingDirectory(config.getWorkingDirectory());
+        rConfig.setEnableConsole(config.getEnableDebugConsole());
+        rConfig.setEnableVerbose(config.getEnableVerboseLogging());
+        rConfig.setJavaArgs(config.getJavaArguments());
+        rConfig.setJavaHome(config.getJavaHome());
+        rConfig.setNodeArgs(config.getNodeArguments());
+        rConfig.setRArch(config.getRArchitecture());
+        rConfig.setRHome(config.getRHome());
+        rConfig.setRStartupSnippet(config.getStartupSnippet());
+        rConfig.setStartStopTimeout(config.getStartStopTimeout());
 
         for (final EnvironmentVariable var : config.getEnvironmentVariables())
         {
-            nodeConfig.getEnvironmentVariables().put(var.getName(), var.getValue());
+            rConfig.getEnvironmentVariables().put(var.getName(), var.getValue());
         }
 
-        if (save)
-        {
-            server.applyAndSaveConfiguration(nodeConfig);
-        }
-        else
-        {
-            server.applyConfiguration(nodeConfig);
-        }
+        server.setConfiguration(rConfig, asAction(save));
     }
 
     private ConfRJson buildRConfig(final RServiNodeConfig config)
@@ -94,26 +91,31 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     // Pool Configuration
     //
 
-    // TODO integration test
     @Override
     public GetConfigPoolResponse getConfigPool() throws Exception
     {
         return GetConfigPoolResponse.jsonOK(buildPoolConfig(server.getCurrentPoolConfig()));
     }
 
-    // TODO integration test
     @Override
     public GetConfigPoolDefaultResponse getConfigPoolDefault() throws Exception
     {
         return GetConfigPoolDefaultResponse.jsonOK(buildPoolConfig(server.getDefaultPoolConfig()));
     }
 
-    // TODO integration test
     @Override
-    public void putConfigPool(final boolean save, final ConfPoolJson entity) throws Exception
+    public void putConfigPool(final boolean save, final ConfPoolJson config) throws Exception
     {
-        // TODO implement
-        throw new UnsupportedOperationException("not yet implemented");
+        final PoolConfig poolConfig = new PoolConfig();
+        poolConfig.setEvictionTimeout(config.getNodeEvitionTimeoutMillis());
+        poolConfig.setMaxIdleCount(config.getMaxIdleNodes().intValue());
+        poolConfig.setMaxTotalCount(config.getMaxTotalNodes().intValue());
+        poolConfig.setMaxUsageCount(config.getMaxNodeReuse().intValue());
+        poolConfig.setMaxWaitTime(config.getMaxWaitTimeMillis());
+        poolConfig.setMinIdleCount(config.getMinIdleNodes().intValue());
+        poolConfig.setMinIdleTime(config.getMinNodeIdleTimeMillis());
+
+        server.setConfiguration(poolConfig, asAction(save));
     }
 
     private ConfPoolJson buildPoolConfig(final PoolConfig config)
@@ -125,5 +127,10 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
             .withMinIdleNodes((long) config.getMinIdleCount())
             .withMinNodeIdleTimeMillis(config.getMinIdleTime())
             .withNodeEvitionTimeoutMillis(config.getEvictionTimeout());
+    }
+
+    private ConfigAction asAction(final boolean save)
+    {
+        return save ? APPLY_AND_SAVE : APPLY_ONLY;
     }
 }

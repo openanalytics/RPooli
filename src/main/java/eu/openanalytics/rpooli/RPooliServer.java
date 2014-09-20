@@ -3,6 +3,7 @@ package eu.openanalytics.rpooli;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.transform;
+import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.CollectionUtils.collect;
 import static org.apache.commons.collections4.CollectionUtils.find;
@@ -40,6 +41,16 @@ import de.walware.rj.servi.pool.RServiNodeConfig;
  */
 public class RPooliServer implements IDisposable
 {
+    public enum ConfigAction
+    {
+        APPLY_ONLY, APPLY_AND_SAVE
+    }
+
+    private interface ConfigurationApplier<T extends PropertiesBean>
+    {
+        void apply(T config) throws RjInvalidConfigurationException;
+    }
+
     private static final Log LOGGER = LogFactory.getLog(RPooliServer.class);
 
     private final JMPoolServer server;
@@ -141,6 +152,18 @@ public class RPooliServer implements IDisposable
         return new RServiNodeConfig();
     }
 
+    public void setConfiguration(final RServiNodeConfig config, final ConfigAction action) throws IOException
+    {
+        applyConfiguration(config, new ConfigurationApplier<RServiNodeConfig>()
+        {
+            @Override
+            public void apply(final RServiNodeConfig config) throws RjInvalidConfigurationException
+            {
+                server.setNodeConfig(config);
+            }
+        }, action);
+    }
+
     public PoolConfig getCurrentPoolConfig()
     {
         final PoolConfig config = getDefaultPoolConfig();
@@ -153,25 +176,38 @@ public class RPooliServer implements IDisposable
         return new PoolConfig();
     }
 
-    public void applyConfiguration(final RServiNodeConfig config)
+    public void setConfiguration(final PoolConfig config, final ConfigAction action) throws IOException
+    {
+        applyConfiguration(config, new ConfigurationApplier<PoolConfig>()
+        {
+            @Override
+            public void apply(final PoolConfig config) throws RjInvalidConfigurationException
+            {
+                server.setPoolConfig(config);
+            }
+        }, action);
+    }
+
+    private <T extends PropertiesBean> void applyConfiguration(final T config,
+                                                               final ConfigurationApplier<T> applier,
+                                                               final ConfigAction action) throws IOException
     {
         validate(config);
 
         try
         {
-            server.setNodeConfig(config);
+            applier.apply(config);
         }
         catch (final RjInvalidConfigurationException rice)
         {
             throw new IllegalArgumentException("Invalid configuration for " + config.getBeanId() + ": "
                                                + rice.getMessage(), rice);
         }
-    }
 
-    public void applyAndSaveConfiguration(final RServiNodeConfig config) throws IOException
-    {
-        applyConfiguration(config);
-        saveProperties(config);
+        if (action == APPLY_AND_SAVE)
+        {
+            saveProperties(config);
+        }
     }
 
     private void saveProperties(final PropertiesBean bean) throws IOException

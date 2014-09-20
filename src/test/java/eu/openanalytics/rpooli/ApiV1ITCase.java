@@ -21,6 +21,7 @@ import org.junit.Test;
 import com.jayway.restassured.RestAssured;
 
 import de.walware.rj.servi.RServiUtil;
+import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
@@ -172,26 +173,21 @@ public class ApiV1ITCase
     @Test
     public void putValidRConfigApplyOnly() throws Exception
     {
-        final ConfRJson currentRConfig = fetchCurrentRConfig();
+        final ConfRJson config = fetchCurrentRConfig();
 
-        currentRConfig.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
+        config.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
 
-        given().contentType(JSON).body(currentRConfig).expect().statusCode(204).when().put("/config/r");
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/r");
     }
 
     @Test
     public void putValidRConfigApplyAndSave() throws Exception
     {
-        final ConfRJson currentRConfig = fetchCurrentRConfig();
+        final ConfRJson config = fetchCurrentRConfig();
 
-        currentRConfig.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
+        config.setStartupSnippet("library(RSBXml)\r\nlibrary(RSBJson)");
 
-        given().contentType(JSON)
-            .body(currentRConfig)
-            .expect()
-            .statusCode(204)
-            .when()
-            .put("/config/r?save=true");
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/r?save=true");
     }
 
     @Test
@@ -206,6 +202,11 @@ public class ApiV1ITCase
             .body(matchesJsonSchema(getSchemaUri("conf-pool")));
     }
 
+    private ConfRJson fetchCurrentRConfig()
+    {
+        return expect().statusCode(200).contentType(JSON).when().get("/config/r").body().as(ConfRJson.class);
+    }
+
     @Test
     public void getDefaultPoolConfig() throws Exception
     {
@@ -218,9 +219,53 @@ public class ApiV1ITCase
             .body(matchesJsonSchema(getSchemaUri("conf-pool")));
     }
 
-    private ConfRJson fetchCurrentRConfig()
+    @Test
+    public void putInvalidPoolConfig() throws Exception
     {
-        return expect().statusCode(200).contentType(JSON).when().get("/config/r").body().as(ConfRJson.class);
+        final ConfPoolJson config = fetchCurrentPoolConfig();
+
+        config.setMaxTotalNodes(-1L);
+
+        given().contentType(JSON)
+            .body(config)
+            .expect()
+            .statusCode(400)
+            .contentType(JSON)
+            .when()
+            .put("/config/pool")
+            .then()
+            .assertThat()
+            .body(matchesJsonSchema(getSchemaUri("error")));
+    }
+
+    @Test
+    public void putValidPoolConfigApplyOnly() throws Exception
+    {
+        final ConfPoolJson config = fetchCurrentPoolConfig();
+
+        config.setMaxNodeReuse(100L);
+
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/pool");
+    }
+
+    @Test
+    public void putValidPoolConfigApplyAndSave() throws Exception
+    {
+        final ConfPoolJson config = fetchCurrentPoolConfig();
+
+        config.setMaxNodeReuse(100L);
+
+        given().contentType(JSON).body(config).expect().statusCode(204).when().put("/config/pool?save=true");
+    }
+
+    private ConfPoolJson fetchCurrentPoolConfig()
+    {
+        return expect().statusCode(200)
+            .contentType(JSON)
+            .when()
+            .get("/config/pool")
+            .body()
+            .as(ConfPoolJson.class);
     }
 
     private Node getOneLentNode()
