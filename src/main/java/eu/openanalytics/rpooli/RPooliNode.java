@@ -1,3 +1,20 @@
+/**
+ * This file is part of RPooli.
+ *
+ * RPooli is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RPooli is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with RPooli.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package eu.openanalytics.rpooli;
 
 import static org.apache.commons.lang3.StringUtils.strip;
@@ -11,6 +28,9 @@ import org.apache.commons.lang3.Validate;
 import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import de.walware.rj.servi.internal.PoolObject;
 
+/**
+ * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ */
 public class RPooliNode
 {
     private final ObjectPoolItem item;
