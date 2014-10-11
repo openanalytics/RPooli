@@ -20,6 +20,7 @@ _A pool of R nodes, exposed over RMI and managed over a RESTful API._
 
 ## Start
 
+    cd webapp
     mvn jetty:run-war
 
 This starts servers on:
