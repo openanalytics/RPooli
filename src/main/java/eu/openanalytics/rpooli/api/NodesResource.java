@@ -55,33 +55,45 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     }
 
     @Override
-    public void deleteNodesByNodeId(final String nodeId, final boolean kill) throws Exception
+    public DeleteNodesByNodeIdResponse deleteNodesByNodeId(final String nodeId, final boolean kill)
+        throws Exception
     {
         getNodeOrDie(nodeId).getObject().evict(kill ? 0L : server.getConfig().getEvictionTimeout());
+
+        return DeleteNodesByNodeIdResponse.withoutContent();
     }
 
     @Override
-    public void postNodesByNodeIdConsole(final String nodeId) throws Exception
+    public PostNodesByNodeIdConsoleResponse postNodesByNodeIdConsole(final String nodeId) throws Exception
     {
         getNodeOrDie(nodeId).getObject().enableConsole(NO_AUTH_CONFIG);
+
+        return PostNodesByNodeIdConsoleResponse.withoutContent();
     }
 
     @Override
-    public void deleteNodesByNodeIdConsole(final String nodeId) throws Exception
+    public DeleteNodesByNodeIdConsoleResponse deleteNodesByNodeIdConsole(final String nodeId)
+        throws Exception
     {
         getNodeOrDie(nodeId).getObject().disableConsole();
+
+        return DeleteNodesByNodeIdConsoleResponse.withoutContent();
     }
 
     @Override
-    public void postNodesTest() throws Exception
+    public PostNodesTestResponse postNodesTest() throws Exception
     {
         clientSimulator.acquireNode();
+
+        return PostNodesTestResponse.withoutContent();
     }
 
     @Override
-    public void deleteNodesTest() throws Exception
+    public DeleteNodesTestResponse deleteNodesTest() throws Exception
     {
         clientSimulator.releaseAllNodes();
+
+        return DeleteNodesTestResponse.withoutContent();
     }
 
     private RPooliNode getNodeOrDie(final String nodeId)

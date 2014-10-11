@@ -45,7 +45,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     }
 
     @Override
-    public void putConfigR(final boolean save, final ConfRJson config) throws Exception
+    public PutConfigRResponse putConfigR(final boolean save, final ConfRJson config) throws Exception
     {
         final RServiNodeConfig rConfig = new RServiNodeConfig();
         rConfig.setBaseWorkingDirectory(config.getWorkingDirectory());
@@ -65,6 +65,8 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
         }
 
         server.setConfiguration(rConfig, asAction(save));
+
+        return PutConfigRResponse.withoutContent();
     }
 
     private ConfRJson buildRConfig(final RServiNodeConfig config)
@@ -107,7 +109,8 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     }
 
     @Override
-    public void putConfigPool(final boolean save, final ConfPoolJson config) throws Exception
+    public PutConfigPoolResponse putConfigPool(final boolean save, final ConfPoolJson config)
+        throws Exception
     {
         final PoolConfig poolConfig = new PoolConfig();
         poolConfig.setEvictionTimeout(config.getNodeEvitionTimeoutMillis());
@@ -119,6 +122,8 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
         poolConfig.setMinIdleTime(config.getMinNodeIdleTimeMillis());
 
         server.setConfiguration(poolConfig, asAction(save));
+
+        return PutConfigPoolResponse.withoutContent();
     }
 
     private ConfPoolJson buildPoolConfig(final PoolConfig config)
@@ -149,7 +154,8 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     }
 
     @Override
-    public void putConfigNet(final boolean save, final ConfNetResolvedJsonParent config) throws Exception
+    public PutConfigNetResponse putConfigNet(final boolean save, final ConfNetResolvedJsonParent config)
+        throws Exception
     {
         final NetConfig netConfig = new NetConfig();
         netConfig.setHostAddress(config.getHost());
@@ -158,6 +164,8 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
         netConfig.setSSLEnabled(config.getEnabledSsl());
 
         server.setConfiguration(netConfig, asAction(save));
+
+        return PutConfigNetResponse.withoutContent();
     }
 
     private ConfNetResolvedJson buildNetConfig(final NetConfig config)
