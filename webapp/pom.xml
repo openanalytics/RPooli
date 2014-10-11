@@ -46,12 +46,6 @@
     </organization>
 
     <properties>
-        <rj-server.version>2.0.2.b201408021330</rj-server.version>
-        <rj-data.version>2.0.0.b201408021330</rj-data.version>
-        <rj-client.version>2.0.1.b201408021330</rj-client.version>
-        <rj-servi.version>2.0.0.b201408021330</rj-servi.version>
-        <rj-services-eruntime.version>1.4.0.b201406211200</rj-services-eruntime.version>
-
         <java.version>1.7</java.version>
 
         <spring.version>3.2.10.RELEASE</spring.version>
@@ -66,59 +60,27 @@
         <local.server.stop-port>8899</local.server.stop-port>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>oa-public</id>
-            <name>OpenAnalytics Public Repository</name>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <url>http://nexus.openanalytics.eu/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>oa-nexus-snapshots</id>
-            <name>OpenAnalytics Snapshots Repository</name>
-            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>oa-nexus-releases</id>
-            <name>OpenAnalytics Releases Repository</name>
-            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/releases</url>
-        </repository>
-    </distributionManagement>
-
     <dependencies>
         <!-- Rj -->
         <dependency>
             <groupId>de.walware.rj</groupId>
             <artifactId>de.walware.rj.server</artifactId>
-            <version>${rj-server.version}</version>
         </dependency>
         <dependency>
             <groupId>de.walware.rj</groupId>
             <artifactId>de.walware.rj.data</artifactId>
-            <version>${rj-data.version}</version>
         </dependency>
         <dependency>
             <groupId>de.walware.rj</groupId>
             <artifactId>de.walware.rj.client</artifactId>
-            <version>${rj-client.version}</version>
         </dependency>
         <dependency>
             <groupId>de.walware.rj</groupId>
             <artifactId>de.walware.rj.servi</artifactId>
-            <version>${rj-servi.version}</version>
         </dependency>
         <dependency>
             <groupId>de.walware.rj</groupId>
             <artifactId>de.walware.rj.services.eruntime</artifactId>
-            <version>${rj-services-eruntime.version}</version>
         </dependency>
 
         <!-- Spring -->

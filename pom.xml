@@ -51,6 +51,19 @@
         <rj-services-eruntime.version>1.4.0.b201406211200</rj-services-eruntime.version>
     </properties>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>oa-nexus-snapshots</id>
+            <name>OpenAnalytics Snapshots Repository</name>
+            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>oa-nexus-releases</id>
+            <name>OpenAnalytics Releases Repository</name>
+            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>oa-public</id>
