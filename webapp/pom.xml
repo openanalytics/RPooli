@@ -41,7 +41,7 @@
     </licenses>
 
     <organization>
-        <name>OpenAnalytics BVBA</name>
+        <name>Open Analytics NV</name>
         <url>http://openanalytics.eu</url>
     </organization>
 
@@ -224,7 +224,7 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/AGPL-3.txt</header>
                     <properties>
-                        <owner>OpenAnalytics BVBA</owner>
+                        <owner>Open Analytics NV</owner>
                         <email>rsb.development@openanalytics.eu</email>
                     </properties>
                     <excludes>
