@@ -17,9 +17,7 @@
 
 package eu.openanalytics.rpooli.api;
 
-import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.jsonNotFound;
-import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.jsonOK;
-import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesResponse.jsonOK;
+import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.withJsonOK;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import javax.ws.rs.WebApplicationException;
@@ -61,7 +59,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
             nodes.getNodes().add(buildNode(rpn));
         }
 
-        return jsonOK(nodes);
+        return GetNodesResponse.withJsonOK(nodes);
     }
 
     @Override
@@ -69,8 +67,9 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         final RPooliNode rpn = server.findNodeById(nodeId);
         return rpn == null
-                          ? jsonNotFound(new ErrorJson().withError("Node not found: " + nodeId))
-                          : jsonOK(buildNode(rpn));
+                          ? GetNodesByNodeIdResponse.withJsonNotFound(new ErrorJson().withError("Node not found: "
+                                                                                                + nodeId))
+                          : withJsonOK(buildNode(rpn));
     }
 
     @Override
@@ -79,7 +78,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         getNodeOrDie(nodeId).getObject().evict(kill ? 0L : server.getConfig().getEvictionTimeout());
 
-        return DeleteNodesByNodeIdResponse.withoutContent();
+        return DeleteNodesByNodeIdResponse.withNoContent();
     }
 
     @Override
@@ -87,7 +86,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         getNodeOrDie(nodeId).getObject().enableConsole(NO_AUTH_CONFIG);
 
-        return PostNodesByNodeIdConsoleResponse.withoutContent();
+        return PostNodesByNodeIdConsoleResponse.withNoContent();
     }
 
     @Override
@@ -96,7 +95,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         getNodeOrDie(nodeId).getObject().disableConsole();
 
-        return DeleteNodesByNodeIdConsoleResponse.withoutContent();
+        return DeleteNodesByNodeIdConsoleResponse.withNoContent();
     }
 
     @Override
@@ -104,7 +103,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         clientSimulator.acquireNode();
 
-        return PostNodesTestResponse.withoutContent();
+        return PostNodesTestResponse.withNoContent();
     }
 
     @Override
@@ -112,7 +111,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         clientSimulator.releaseAllNodes();
 
-        return DeleteNodesTestResponse.withoutContent();
+        return DeleteNodesTestResponse.withNoContent();
     }
 
     private RPooliNode getNodeOrDie(final String nodeId)

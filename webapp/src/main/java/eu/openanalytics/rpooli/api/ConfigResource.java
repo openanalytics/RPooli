@@ -54,13 +54,13 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     @Override
     public GetConfigRDefaultResponse getConfigRDefault() throws Exception
     {
-        return GetConfigRDefaultResponse.jsonOK(buildRConfig(server.getDefaultRConfig()));
+        return GetConfigRDefaultResponse.withJsonOK(buildRConfig(server.getDefaultRConfig()));
     }
 
     @Override
     public GetConfigRResponse getConfigR() throws Exception
     {
-        return GetConfigRResponse.jsonOK(buildRConfig(server.getCurrentRConfig()));
+        return GetConfigRResponse.withJsonOK(buildRConfig(server.getCurrentRConfig()));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
 
         server.setConfiguration(rConfig, asAction(save));
 
-        return PutConfigRResponse.withoutContent();
+        return PutConfigRResponse.withNoContent();
     }
 
     private ConfRJson buildRConfig(final RServiNodeConfig config)
@@ -118,13 +118,13 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     @Override
     public GetConfigPoolResponse getConfigPool() throws Exception
     {
-        return GetConfigPoolResponse.jsonOK(buildPoolConfig(server.getCurrentPoolConfig()));
+        return GetConfigPoolResponse.withJsonOK(buildPoolConfig(server.getCurrentPoolConfig()));
     }
 
     @Override
     public GetConfigPoolDefaultResponse getConfigPoolDefault() throws Exception
     {
-        return GetConfigPoolDefaultResponse.jsonOK(buildPoolConfig(server.getDefaultPoolConfig()));
+        return GetConfigPoolDefaultResponse.withJsonOK(buildPoolConfig(server.getDefaultPoolConfig()));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
 
         server.setConfiguration(poolConfig, asAction(save));
 
-        return PutConfigPoolResponse.withoutContent();
+        return PutConfigPoolResponse.withNoContent();
     }
 
     private ConfPoolJson buildPoolConfig(final PoolConfig config)
@@ -163,13 +163,13 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     @Override
     public GetConfigNetResponse getConfigNet() throws Exception
     {
-        return GetConfigNetResponse.jsonOK(buildNetConfig(server.getCurrentNetConfig()));
+        return GetConfigNetResponse.withJsonOK(buildNetConfig(server.getCurrentNetConfig()));
     }
 
     @Override
     public GetConfigNetDefaultResponse getConfigNetDefault() throws Exception
     {
-        return GetConfigNetDefaultResponse.jsonOK(buildNetConfig(server.getDefaultNetConfig()));
+        return GetConfigNetDefaultResponse.withJsonOK(buildNetConfig(server.getDefaultNetConfig()));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
 
         server.setConfiguration(netConfig, asAction(save));
 
-        return PutConfigNetResponse.withoutContent();
+        return PutConfigNetResponse.withNoContent();
     }
 
     private ConfNetResolvedJson buildNetConfig(final NetConfig config)

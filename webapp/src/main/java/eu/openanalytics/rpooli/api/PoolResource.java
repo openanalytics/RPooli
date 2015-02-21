@@ -17,8 +17,6 @@
 
 package eu.openanalytics.rpooli.api;
 
-import static eu.openanalytics.rpooli.api.spec.resource.Pool.GetPoolResponse.jsonOK;
-
 import java.net.URI;
 
 import de.walware.rj.servi.pool.JMPoolServer;
@@ -52,6 +50,6 @@ public class PoolResource extends AbstractRPooliServerAware implements Pool
             .withTotalCount((long) counter.numTotal)
             .withTotalMax((long) counter.maxTotal);
 
-        return jsonOK(poolJson);
+        return GetPoolResponse.withJsonOK(poolJson);
     }
 }
