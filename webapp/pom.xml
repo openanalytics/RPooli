@@ -315,24 +315,20 @@
                                 <reportSet>
                                     <reports>
                                         <report>summary</report>
-                                        <!--  FIXME reactivate
                                         <report>license</report>
                                         <report>scm</report>
                                         <report>dependencies</report>
                                         <report>plugins</report>
                                         <report>plugin-management</report>
-                                         -->
                                     </reports>
                                 </reportSet>
                             </reportSets>
                         </plugin>
-                        <!--  FIXME reactivate
                         <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>findbugs-maven-plugin</artifactId>
                             <version>3.0.0</version>
                         </plugin>
-                        -->
                     </reportPlugins>
                 </configuration>
                 <dependencies>
