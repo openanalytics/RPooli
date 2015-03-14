@@ -63,7 +63,7 @@
             <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/releases</url>
         </repository>
         <site>
-            <id>docs</id>
+            <id>oa-nexus-docs</id>
             <name>OpenAnalytics Maven Docs Repository</name>
             <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs</url>
         </site>
