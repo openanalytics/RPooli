@@ -62,12 +62,11 @@
             <name>OpenAnalytics Releases Repository</name>
             <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/releases</url>
         </repository>
-        <distributionManagement>
-            <site>
-                <id>docs</id>
-                <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs</url>
-            </site>
-        </distributionManagement>
+        <site>
+            <id>docs</id>
+            <name>OpenAnalytics Maven Docs Repository</name>
+            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs</url>
+        </site>
     </distributionManagement>
 
     <repositories>
