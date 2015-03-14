@@ -14,9 +14,14 @@ _A pool of R nodes, exposed over RMI and managed over a RESTful API._
 
     mvn clean package
 
+To produce a war that can be deployed on application servers, run:
+
+    mvn -P-javax-dependencies clean package
+
+
 ## Integration test
 
-    mvn clean verify
+    mvn -Pit clean verify
 
 ## Start
 
