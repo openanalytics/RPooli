@@ -27,6 +27,8 @@
     <name>RPooli Parent</name>
     <url>http://openanalytics.eu</url>
 
+    <description>Parent project for RPooli API and RSB.</description>
+
     <modules>
         <module>webapp</module>
     </modules>
@@ -65,7 +67,7 @@
         <site>
             <id>oa-nexus-docs</id>
             <name>OpenAnalytics Maven Docs Repository</name>
-            <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs/rpooli/${version}</url>
+            <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs/rpooli-parent/${version}</url>
         </site>
     </distributionManagement>
 

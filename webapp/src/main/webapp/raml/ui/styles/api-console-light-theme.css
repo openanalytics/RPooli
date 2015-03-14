@@ -1520,7 +1520,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -40px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1536,7 +1536,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -40px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1552,7 +1552,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -28px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1568,7 +1568,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -36px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1584,7 +1584,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -32px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1600,7 +1600,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -19px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1616,7 +1616,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -34px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1632,7 +1632,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -21px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1648,7 +1648,7 @@ th {
   -ms-transform: perspective(45px) rotateX(30deg);
   width: 108px;
   position: absolute;
-  margin-left: -31px;
+  right: 0;
   z-index: -1;
   top: 0px;
 }
@@ -1699,7 +1699,7 @@ th {
 }
 
 .raml-console-tab.raml-console-is-active {
-  z-index: 1;
+  z-index: 5;
   color: #333;
 }
 
@@ -1747,6 +1747,19 @@ ol.raml-console-resources-container-no-title {
 
 ol.raml-console-resources-container {
   margin-top: 0px;
+}
+
+.raml-console-resource-level-description {
+  font-size: 12px;
+  color: #878787;
+  font-weight: normal;
+  display: block;
+  margin-top: 5px;
+  width: 98%;
+}
+
+.raml-console-resource-with-description {
+  margin-bottom: 9px;
 }
 
 .raml-console-resource-response-jump {
@@ -2096,10 +2109,6 @@ ol.raml-console-resources-container {
   }
 }
 
-span.raml-console-resource-path-active {
-  cursor: default;
-}
-
 a.raml-console-resource-path-active {
   cursor: pointer;
 }
@@ -2288,9 +2297,10 @@ a.raml-console-resource-path-active {
 }
 
 .raml-console-resource-panel-primary {
-  flex: 2;
+  -ms-flex: 1 auto;
+  flex: 1 auto;
+  -webkit-flex: 1 auto;
   overflow: hidden;
-  width: 100%;
   font-size: 16px;
 }
 
@@ -3242,6 +3252,15 @@ a.raml-console-resource-path-active {
   font-weight: 700;
 }
 
+.raml-console-sidebar-security-label {
+  display: inline;
+  float: right;
+  font-size: 11px;
+  font-weight: normal;
+  margin-right: 5px;
+  margin-top: 9px;
+}
+
 .raml-console-sidebar-input {
   display: block;
   width: 100%;
@@ -4111,6 +4130,56 @@ span.raml-console-side-bar-required-field {
   cursor: pointer;
 }
 
+.raml-console-documentation-schemes p {
+  font-size: 13px;
+}
+
+.raml-console-documentation-schemes .raml-console-scheme-headers,
+.raml-console-documentation-schemes .raml-console-scheme-query-parameters,
+.raml-console-documentation-schemes .raml-console-scheme-settings,
+.raml-console-documentation-schemes .raml-console-scheme-responses {
+  margin-top: 0;
+}
+
+.raml-console-documentation-schemes .raml-console-scheme-headers h4,
+.raml-console-documentation-schemes .raml-console-scheme-query-parameters h4,
+.raml-console-documentation-schemes .raml-console-scheme-settings h4,
+.raml-console-documentation-schemes .raml-console-scheme-responses h4 {
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.raml-console-documentation-security-scheme {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 18px;
+}
+
+.raml-console-documentation-security-scheme .raml-console-documentation-scheme {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid #d5d7d9;
+  border-radius: 5px;
+  background: #e3e4e6;
+  color: #333;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.raml-console-documentation-security-scheme .raml-console-documentation-scheme:hover {
+  background: #d6d7da;
+}
+
+.raml-console-documentation-security-scheme .raml-console-is-active {
+  background: #bbbbbb;
+  color: #333;
+}
+
+.raml-console-document-heading {
+  cursor: pointer;
+}
+
 .raml-console-documentation-content {
   display: none;
 }
@@ -4150,6 +4219,10 @@ span.raml-console-side-bar-required-field {
   .raml-console-documentation-active .raml-console-document-header {
     border-radius: 5px 5px 0 0;
   }
+}
+
+.raml-console-documentation-heading:hover {
+  cursor: pointer;
 }
 
 .raml-console-documentation-header {
