@@ -21,6 +21,7 @@ To produce a war that can be deployed on application servers, run:
 
 ## Integration test
 
+    rm /tmp/*.properties
     mvn -Pit clean verify
 
 
