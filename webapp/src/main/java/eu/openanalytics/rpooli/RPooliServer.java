@@ -53,10 +53,10 @@ import de.walware.rj.servi.pool.RServiNodeConfig;
 
 /**
  * The actual server that bootstraps R nodes.
- * 
+ *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
-public class RPooliServer implements IDisposable
+public final class RPooliServer implements IDisposable
 {
     public enum ConfigAction
     {
