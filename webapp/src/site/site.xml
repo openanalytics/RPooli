@@ -22,6 +22,7 @@
         <menu name="Reference">
             <item name="Home" href="index.html" />
             <item name="Configuration" href="config.html" />
+            <item name="API" href="api.html" />
         </menu>
         <menu ref="reports" />
     </body>

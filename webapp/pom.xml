@@ -244,6 +244,7 @@
                         <exclude>README.md</exclude>
                         <exclude>LICENSE</exclude>
                         <exclude>src/main/webapp/raml/ui/**</exclude>
+                        <exclude>misc/config-examples/**</exclude>
                     </excludes>
                     <mapping>
                         <raml>SCRIPT_STYLE</raml>
@@ -335,16 +336,16 @@
                 <version>2.6</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-config-examples</id>
                         <phase>pre-site</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/site/config-examples</outputDirectory>
+                            <outputDirectory>${project.build.directory}/site/config-examples</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/test/resources/config-examples</directory>
+                                    <directory>misc/config-examples</directory>
                                     <includes>
                                         <include>*.properties</include>
                                     </includes>
@@ -352,8 +353,62 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-node-config</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>misc</directory>
+                                    <includes>
+                                        <include>package.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>install-raml2html</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-raml2html-v1</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.build.directory}/node_modules/.bin/raml2html</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <commandlineArgs>-s -i ${basedir}/src/main/webapp/raml/api_v1.raml -o
+                                ${project.build.directory}/site/api_v1.html</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>

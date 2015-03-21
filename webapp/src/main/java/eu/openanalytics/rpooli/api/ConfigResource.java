@@ -132,7 +132,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
         throws Exception
     {
         final PoolConfig poolConfig = new PoolConfig();
-        poolConfig.setEvictionTimeout(config.getNodeEvitionTimeoutMillis());
+        poolConfig.setEvictionTimeout(config.getNodeEvictionTimeoutMillis());
         poolConfig.setMaxIdleCount(config.getMaxIdleNodes().intValue());
         poolConfig.setMaxTotalCount(config.getMaxTotalNodes().intValue());
         poolConfig.setMaxUsageCount(config.getMaxNodeReuse().intValue());
@@ -153,7 +153,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
             .withMaxWaitTimeMillis(config.getMaxWaitTime())
             .withMinIdleNodes((long) config.getMinIdleCount())
             .withMinNodeIdleTimeMillis(config.getMinIdleTime())
-            .withNodeEvitionTimeoutMillis(config.getEvictionTimeout());
+            .withNodeEvictionTimeoutMillis(config.getEvictionTimeout());
     }
 
     //

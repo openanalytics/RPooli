@@ -1,0 +1,8 @@
+{
+    "name": "rpooli-raml-doc",
+    "license": "AGPL-3",
+    "version": "1.0.0",
+    "devDependencies": {
+        "raml2html": "*"
+    }
+}

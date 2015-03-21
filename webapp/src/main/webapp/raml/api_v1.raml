@@ -22,39 +22,6 @@ baseUri: ${baseUri}/api/{version}
 version: v1
 mediaType: application/json
 
-documentation:
-  - title: Home
-    content: |
-      **RPooli** is pool of R nodes, exposed over RMI and managed over a RESTful API.
-
-  - title: Development
-    content: |
-      ## Build
-
-          mvn clean package
-
-      To produce a war that can be deployed on application servers, run:
-
-          mvn -P-javax-dependencies clean package
-
-      ## Integration test
-
-          mvn -Pit clean verify
-
-      ## Start
-
-          cd webapp
-          mvn jetty:run-war
-
-      This starts servers on:
-
-      - web: http://localhost:8889/rpooli
-      - R pool: rmi://127.0.0.1/rpooli-pool
-
-  - title: Configuration
-    content: |
-      test
-
 schemas:
  - error.json:     !include schema/error.json
  - pool.json:      !include schema/pool.json

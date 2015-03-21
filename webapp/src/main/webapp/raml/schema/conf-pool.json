@@ -33,7 +33,7 @@
             "type": "integer",
             "required": true
         },
-        "node_evition_timeout_millis": {
+        "node_eviction_timeout_millis": {
             "description": "Maximum time to wait when stopping the pool or single nodes before forcing the termination.",
             "type": "integer",
             "required": true
