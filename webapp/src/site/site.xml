@@ -18,7 +18,11 @@
 
 -->
 <project>
-  <body>
-    <menu ref="reports" />
-  </body>
+    <body>
+        <menu name="Reference">
+            <item name="Home" href="index.html" />
+            <item name="Configuration" href="config.html" />
+        </menu>
+        <menu ref="reports" />
+    </body>
 </project>

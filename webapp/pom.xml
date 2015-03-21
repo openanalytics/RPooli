@@ -331,6 +331,30 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/site/config-examples</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/resources/config-examples</directory>
+                                    <includes>
+                                        <include>*.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.4</version>
@@ -344,15 +368,18 @@
                                 <reportSet>
                                     <reports>
                                         <report>summary</report>
+                                        <!-- FIXME reactivate
                                         <report>license</report>
                                         <report>scm</report>
                                         <report>dependencies</report>
                                         <report>plugins</report>
                                         <report>plugin-management</report>
+                                         -->
                                     </reports>
                                 </reportSet>
                             </reportSets>
                         </plugin>
+                        <!-- FIXME reactivate
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
@@ -373,6 +400,7 @@
                             <artifactId>maven-jxr-plugin</artifactId>
                             <version>2.5</version>
                         </plugin>
+                        -->
                     </reportPlugins>
                 </configuration>
                 <dependencies>

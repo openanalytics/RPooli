@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    This file is part of RPooli.
+
+    RPooli is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPooli is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with RPooli.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>RPooli | Configuration</title>
+    </properties>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <section name="Configuration">
+            <p>TBD describe the 3 config files and their locations</p>
+            <p>
+                RPooli configuration files follow the
+                <code>.properties</code>
+                file format.
+                You can read more information about the format
+                <a href="https://en.wikipedia.org/wiki/.properties">here</a>
+                .
+            </p>
+        </section>
+        <section name="Examples">
+            <p>Here are a examples of the three configuration files:</p>
+            <ul>
+                <li>
+                    <a href="config-examples/rconfig.properties">R/Rj nodes configuration.</a>
+                    <pre id="rconfig"></pre>
+                </li>
+                <li>
+                    <a href="config-examples/poolconfig.properties">Pool configuration.</a>
+                    <pre id="poolconfig"></pre>
+                </li>
+                <li>
+                    <a href="config-examples/netconfig.properties">Network configuration</a>
+                    <pre id="netconfig"></pre>
+                </li>
+            </ul>
+        </section>
+        <script type="text/javascript">
+            //<![CDATA[
+        $('pre#rconfig').load('config-examples/rconfig.properties');
+        $('pre#poolconfig').load('config-examples/poolconfig.properties');
+        $('pre#netconfig').load('config-examples/netconfig.properties');
+        //]]>
+        </script>
+    </body>
+</document>
