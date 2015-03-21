@@ -27,7 +27,6 @@
     </head>
     <body>
         <section name="Configuration">
-            <p>TBD describe the 3 config files and their locations</p>
             <p>
                 RPooli configuration files follow the
                 <code>.properties</code>
@@ -35,6 +34,40 @@
                 You can read more information about the format
                 <a href="https://en.wikipedia.org/wiki/.properties">here</a>
                 .
+            </p>
+            <p>
+                RPooli is configured by three distinct configuration files that represent three configuration domains:
+                <ul>
+                    <li><b>R/Rj nodes configuration</b>, including the R code snippet to be run for each new node that is created,</li>
+                    <li><b>Pool configuration</b>, including size and time-outs,</li>
+                    <li><b>Network configuration</b>, including the host and port of the RMI registry.</li>
+                </ul>
+            </p>
+            <p>
+                RPooli loads these files from a detected configuration directory, which is the first file system path
+                that exists and is a directory in the following list:
+                <ul>
+                    <li>
+                        <code>/etc/rpooli</code>
+                    </li>
+                    <li>
+                        <code>~/.rpooli</code>
+                    </li>
+                    <li>
+                        <code>/WEB-INF</code>
+                        , in the web-app work dir
+                    </li>
+                    <li>the OS temporary directory</li>
+                </ul>
+                The last option is obviously a non-production grade fallback.
+            </p>
+            <p>If any of these configuration files is missing, RPooli will use default values and will be able to start
+                anyway.
+            </p>
+            <p>All the configuration domains of RPooli can be modified via its API. When a configuration domain is
+                modified via the API, the corresponding `.properties` file is generated and persisted in the file
+                system, at the location where they were initially loaded from or, if none pre-existed, at the detected
+                configuration directory.
             </p>
         </section>
         <section name="Examples">

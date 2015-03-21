@@ -50,20 +50,22 @@ import de.walware.rj.server.srvext.RJContext;
 /**
  * Variant of <code>de.walware.rj.servi.webapp.ServletRJContext</code> that can locate RJ JARs in
  * the classpath and that supports Maven-versioned JARs.
- * 
+ *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class RPooliContext extends RJContext
 {
     private static final Log LOGGER = LogFactory.getLog(RPooliContext.class);
 
-    private static final String[] POOLI_CONFIGURATION_DIRECTORIES = {
+    private static final String[] POOLI_CONFIGURATION_DIRECTORIES =
+    {
         // *nix specific
         "/etc/rpooli",
         // any platform
-        System.getProperty("user.home") + separatorChar + "rpooli",
+        System.getProperty("user.home") + separatorChar + ".rpooli",
         // web-app embedded
-        "/WEB-INF/"};
+        "/WEB-INF/"
+    };
 
     private final ServletContext servletContext;
     private final String propertiesDirPath;
