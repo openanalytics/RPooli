@@ -23,6 +23,16 @@ To produce a war that can be deployed on application servers, run:
 
     mvn -Pit clean verify
 
+
+## Site generation
+
+A recent version of `Node.js` must be installed and on path when generating the site.
+
+If this pre-requisite is met, run:
+
+    mvn site
+
+
 ## Start
 
     cd webapp
