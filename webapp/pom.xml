@@ -70,7 +70,7 @@
         <site>
             <id>oa-nexus-docs</id>
             <name>OpenAnalytics Maven Docs Repository</name>
-            <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs/rpooli/${version}</url>
+            <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs/rpooli/${project.version}</url>
         </site>
     </distributionManagement>
 
