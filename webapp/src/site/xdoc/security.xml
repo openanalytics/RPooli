@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    This file is part of RPooli.
+
+    RPooli is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    RPooli is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with RPooli.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+    <properties>
+        <title>RPooli | Security</title>
+    </properties>
+    <body>
+        <p>It is possible to run RPooli in secure mode where only authorized users can use certain applications</p>
+        <p>This is done by doing the following:</p>
+        <ul>
+            <li>
+                Activate security by uncommenting the blocks titled "Uncomment to enable security" in
+                <b>web.xml</b>
+                and
+                <b>security-beans.xml</b>
+            </li>
+            <li>
+                Configure a Spring Security authentication provider in
+                <b>security-beans.xml</b>
+                to retrieve users from LDAP, Database...
+            </li>
+            <li>
+                Adapt the
+                <code>hasRole</code>
+                expression in the
+                <code>intercept-url</code>
+                element of
+                <b>security-beans.xml</b>
+            </li>
+        </ul>
+    </body>
+</document>

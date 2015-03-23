@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     This file is part of RPooli.
@@ -17,14 +16,23 @@
     along with RPooli.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<project>
-    <body>
-        <menu name="Reference">
-            <item name="Home" href="index.html" />
-            <item name="Configuration" href="config.html" />
-            <item name="API" href="api.html" />
-            <item name="Security" href="security.html" />
-        </menu>
-        <menu ref="reports" />
-    </body>
-</project>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>RPooli - Logout</title>
+ 
+ <link rel="stylesheet" href="<c:url value='/css/rsb.css'/>" />
+ 
+</head>
+
+ <body>
+  <ul>
+   <h1><img src="css/images/open_analytics_logo.jpg" style="vertical-align:middle;" title="OpenAnalytics" />&nbsp;RPooli</span></h1>
+   
+   <p>You have been logged out. You should close your browser for security reasons.</p>
+   
+   <p><a href="index.html">Log in RPooli again</a>.</p>
+  </ul> 
+ </body>
+</html>
