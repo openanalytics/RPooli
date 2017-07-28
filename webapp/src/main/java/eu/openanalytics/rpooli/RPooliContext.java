@@ -76,13 +76,21 @@ public class RPooliContext extends RJContext
         propertiesDirPath = initializePropertiesDirPath();
     }
 
-    private static String initializePropertiesDirPath()
+    private String initializePropertiesDirPath()
     {
         for (final String confDir : POOLI_CONFIGURATION_DIRECTORIES)
         {
             if (new File(confDir).isDirectory())
             {
                 return confDir;
+            }
+            else
+            {
+            	String contextRelativePath = servletContext.getRealPath(confDir);
+            	if (contextRelativePath != null && new File(contextRelativePath).isDirectory())
+            	{
+            		return confDir;
+            	}
             }
         }
 
