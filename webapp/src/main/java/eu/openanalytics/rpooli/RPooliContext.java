@@ -86,11 +86,11 @@ public class RPooliContext extends RJContext
             }
             else
             {
-            	String contextRelativePath = servletContext.getRealPath(confDir);
-            	if (contextRelativePath != null && new File(contextRelativePath).isDirectory())
-            	{
-            		return confDir;
-            	}
+                String contextRelativePath = servletContext.getRealPath(confDir);
+                if (contextRelativePath != null && new File(contextRelativePath).isDirectory())
+                {
+                    return confDir;
+                }
             }
         }
 
