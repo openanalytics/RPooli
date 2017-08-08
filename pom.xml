@@ -41,7 +41,7 @@
     </licenses>
 
     <organization>
-        <name>OpenAnalytics BVBA</name>
+        <name>Open Analytics NV</name>
         <url>http://openanalytics.eu</url>
     </organization>
 
@@ -57,17 +57,17 @@
         <snapshotRepository>
             <id>oa-nexus-snapshots</id>
             <name>OpenAnalytics Snapshots Repository</name>
-            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/snapshots</url>
+            <url>http://nexus.openanalytics.eu:8080/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>oa-nexus-releases</id>
             <name>OpenAnalytics Releases Repository</name>
-            <url>http://nexus.internal.openanalytics.eu:8080/nexus/content/repositories/releases</url>
+            <url>http://nexus.openanalytics.eu:8080/nexus/content/repositories/releases</url>
         </repository>
         <site>
             <id>oa-nexus-docs</id>
             <name>OpenAnalytics Maven Docs Repository</name>
-            <url>dav:http://nexus.internal.openanalytics.eu:8080/nexus/content/sites/docs/rpooli-parent/${project.version}</url>
+            <url>dav:http://nexus.openanalytics.eu:8080/nexus/content/sites/docs/rpooli-parent/${project.version}</url>
         </site>
     </distributionManagement>
 
