@@ -40,7 +40,7 @@ import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
 
 
 /**
- * The {@link IAppEnvironment} implementation specific for RPooli.
+ * The {@link AppEnvironment} implementation specific for RPooli.
  * 
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
