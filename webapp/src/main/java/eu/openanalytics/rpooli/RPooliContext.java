@@ -43,9 +43,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import de.walware.rj.RjInvalidConfigurationException;
-import de.walware.rj.server.srvext.RJContext;
+import org.eclipse.statet.rj.RjInvalidConfigurationException;
+import org.eclipse.statet.rj.server.util.RJContext;
 
 /**
  * Variant of <code>de.walware.rj.servi.webapp.ServletRJContext</code> that can locate RJ JARs in

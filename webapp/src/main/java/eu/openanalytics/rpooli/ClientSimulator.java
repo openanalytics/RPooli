@@ -24,10 +24,9 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
-
-import de.walware.rj.RjException;
-import de.walware.rj.server.ServerLogin;
-import de.walware.rj.servi.RServi;
+import org.eclipse.statet.rj.RjException;
+import org.eclipse.statet.rj.server.ServerLogin;
+import org.eclipse.statet.rj.servi.RServi;
 
 /**
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"

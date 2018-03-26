@@ -20,7 +20,6 @@ package eu.openanalytics.rpooli;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.transform;
 import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
-import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.CollectionUtils.collect;
 import static org.apache.commons.collections4.CollectionUtils.find;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -38,25 +37,25 @@ import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.statet.jcommons.lang.Disposable;
+import org.eclipse.statet.rj.RjInvalidConfigurationException;
+import org.eclipse.statet.rj.servi.node.PropertiesBean;
+import org.eclipse.statet.rj.servi.node.PropertiesBean.ValidationMessage;
+import org.eclipse.statet.rj.servi.node.RServiNodeConfig;
+import org.eclipse.statet.rj.servi.pool.JMPoolServer;
+import org.eclipse.statet.rj.servi.pool.NetConfig;
+import org.eclipse.statet.rj.servi.pool.PoolConfig;
+import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
 
 import com.google.common.base.Function;
 
-import de.walware.ecommons.IDisposable;
-import de.walware.rj.RjInvalidConfigurationException;
-import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
-import de.walware.rj.servi.pool.JMPoolServer;
-import de.walware.rj.servi.pool.NetConfig;
-import de.walware.rj.servi.pool.PoolConfig;
-import de.walware.rj.servi.pool.PropertiesBean;
-import de.walware.rj.servi.pool.PropertiesBean.ValidationMessage;
-import de.walware.rj.servi.pool.RServiNodeConfig;
 
 /**
  * The actual server that bootstraps R nodes.
  *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
-public final class RPooliServer implements IDisposable
+public final class RPooliServer implements Disposable
 {
     public enum ConfigAction
     {
@@ -134,13 +133,13 @@ public final class RPooliServer implements IDisposable
 
     public Collection<RPooliNode> getNodes()
     {
-        return collect(asList(server.getManager().getPoolItemsData()),
-            new Transformer<ObjectPoolItem, RPooliNode>()
+        return collect(new ArrayList<>(server.getManager().getPoolNodeObjects()),
+            new Transformer<PoolNodeObject, RPooliNode>()
             {
                 @Override
-                public RPooliNode transform(final ObjectPoolItem item)
+                public RPooliNode transform(final PoolNodeObject object)
                 {
-                    return new RPooliNode(item);
+                    return new RPooliNode(object);
                 }
             });
     }

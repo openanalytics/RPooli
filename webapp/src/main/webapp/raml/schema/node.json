@@ -28,7 +28,7 @@
     "state": {
       "type": "string",
       "required": true,
-      "enum": ["INITIALIZING", "IDLING", "LENT", "EVICTING", "EVICTED"]
+      "enum": ["INITIALIZING", "CHECKING", "IDLING", "ALLOCATED", "EVICTING", "DISPOSED"]
     },
     "state_time": {
       "type": "integer",

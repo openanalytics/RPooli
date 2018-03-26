@@ -19,8 +19,9 @@ package eu.openanalytics.rpooli.api;
 
 import java.net.URI;
 
-import de.walware.rj.servi.pool.JMPoolServer;
-import de.walware.rj.servi.pool.RServiPoolManager.Counter;
+import org.eclipse.statet.rj.servi.pool.JMPoolServer;
+import org.eclipse.statet.rj.servi.pool.RServiPoolManager.Counter;
+
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.api.spec.model.PoolJson;

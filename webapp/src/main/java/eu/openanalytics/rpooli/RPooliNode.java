@@ -24,29 +24,28 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 import java.net.URI;
 
 import org.apache.commons.lang3.Validate;
-
-import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
-import de.walware.rj.servi.internal.PoolObject;
+import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
+import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
 
 /**
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class RPooliNode
 {
-    private final ObjectPoolItem item;
+    private final PoolNodeItem item;
     private final String id;
     private final URI address;
-    private final PoolObject object;
+    private final PoolNodeObject object;
 
-    public RPooliNode(final ObjectPoolItem item)
+    public RPooliNode(final PoolNodeObject object)
     {
-        this.item = Validate.notNull(item, "item can't be null");
-        this.object = (PoolObject) item.getObject();
-        this.address = URI.create(this.object.getAddress().toString());
+    	this.object = Validate.notNull(object, "object can't be null");;
+        this.item = new PoolNodeItem(object, 0); Validate.notNull(item, "item can't be null");
+        this.address = URI.create(this.item.getAddress().toString());
         this.id = strip(address.getPath(), "/");
     }
 
-    public ObjectPoolItem getItem()
+    public PoolNodeItem getItem()
     {
         return item;
     }
@@ -61,7 +60,7 @@ public class RPooliNode
         return address;
     }
 
-    public PoolObject getObject()
+    public PoolNodeObject getObject()
     {
         return object;
     }

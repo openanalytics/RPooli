@@ -24,7 +24,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang3.Validate;
 
-import de.walware.rj.servi.acommons.pool.ObjectPoolItem;
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.ClientSimulator;
 import eu.openanalytics.rpooli.RPooliNode;
@@ -84,7 +83,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     @Override
     public PostNodesByNodeIdConsoleResponse postNodesByNodeIdConsole(final String nodeId) throws Exception
     {
-        getNodeOrDie(nodeId).getObject().enableConsole(NO_AUTH_CONFIG);
+        getNodeOrDie(nodeId).getObject().getNodeHandler().enableConsole(NO_AUTH_CONFIG);
 
         return PostNodesByNodeIdConsoleResponse.withNoContent();
     }
@@ -93,7 +92,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     public DeleteNodesByNodeIdConsoleResponse deleteNodesByNodeIdConsole(final String nodeId)
         throws Exception
     {
-        getNodeOrDie(nodeId).getObject().disableConsole();
+        getNodeOrDie(nodeId).getObject().getNodeHandler().disableConsole();
 
         return DeleteNodesByNodeIdConsoleResponse.withNoContent();
     }
@@ -126,23 +125,27 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
 
     private static Node buildNode(final RPooliNode rpn)
     {
-        final ObjectPoolItem opi = rpn.getItem();
-
         return new Node().withId(rpn.getId())
             .withAddress(rpn.getAddress())
-            .withClientId(nullIfNegativeOne(opi.getClientId()))
-            .withClientLabel(rpn.getObject().getPoolItemData().getClientLabel())
-            .withCreationTime(opi.getCreationTime())
-            .withDestructionTime(nullIfNegativeOne(opi.getDestrutionTime()))
-            .withLentCount(opi.getLentCount())
-            .withLentDuration(opi.getLentDuration())
-            .withState(Node.State.fromValue(opi.getState().toString()))
-            .withStateTime(opi.getStateTime())
-            .withConsoleEnabled(rpn.getObject().isConsoleEnabled());
+            .withClientId(nullIfNegativeOne(rpn.getItem().getCurrentClientId()))
+            .withClientLabel(rpn.getObject().getClientLabel())
+            .withCreationTime(rpn.getItem().getCreationTime())
+            //TODO Is this value still available?
+//            .withDestructionTime(nullIfNegativeOne(rpn.getItem().getDestrutionTime()))
+            .withLentCount(rpn.getItem().getUsageCount())
+            .withLentDuration(rpn.getItem().getUsageDuration())
+            .withState(Node.State.fromValue(rpn.getItem().getState().toString()))
+            .withStateTime(rpn.getItem().getStateTime())
+            .withConsoleEnabled(rpn.getObject().getNodeHandler().isConsoleEnabled());
     }
 
-    private static Long nullIfNegativeOne(final Long l)
+    private static Long nullIfNegativeOne(final String value)
     {
-        return l == -1 ? null : l;
+        if (value == null) return null;
+        try {
+    	    long lValue = Long.parseLong(value);
+    	    return lValue == -1 ? null : lValue;
+        } catch (Exception e) {}
+        return null;
     }
 }

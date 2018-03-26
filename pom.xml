@@ -46,11 +46,10 @@
     </organization>
 
     <properties>
-        <rj-server.version>2.0.2.b201408021330</rj-server.version>
-        <rj-data.version>2.0.0.b201408021330</rj-data.version>
-        <rj-client.version>2.0.1.b201408021330</rj-client.version>
-        <rj-servi.version>2.0.0.b201408021330</rj-servi.version>
-        <rj-services-eruntime.version>1.4.0.b201406211200</rj-services-eruntime.version>
+        <rj.version>3.0.0.b201803071210E47sw</rj.version>
+        <ecommons.runtime.version>1.1.0.b201803071210E47sw</ecommons.runtime.version>
+        <ecommons.rmi.version>1.5.0.b201803071210E47sw</ecommons.rmi.version>
+        <jcommons.util.version>1.0.0.b201803071210E47sw</jcommons.util.version>
     </properties>
 
     <distributionManagement>
@@ -88,30 +87,55 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>de.walware.rj</groupId>
-                <artifactId>de.walware.rj.server</artifactId>
-                <version>${rj-server.version}</version>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.server</artifactId>
+                <version>${rj.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.walware.rj</groupId>
-                <artifactId>de.walware.rj.data</artifactId>
-                <version>${rj-data.version}</version>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.data</artifactId>
+                <version>${rj.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.walware.rj</groupId>
-                <artifactId>de.walware.rj.client</artifactId>
-                <version>${rj-client.version}</version>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.client</artifactId>
+                <version>${rj.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.walware.rj</groupId>
-                <artifactId>de.walware.rj.servi</artifactId>
-                <version>${rj-servi.version}</version>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.servi</artifactId>
+                <version>${rj.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.walware.rj</groupId>
-                <artifactId>de.walware.rj.services.eruntime</artifactId>
-                <version>${rj-services-eruntime.version}</version>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.servi</artifactId>
+                <version>${rj.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.statet.rj</groupId>
+                <artifactId>org.eclipse.statet.rj.services.core</artifactId>
+                <version>${rj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.statet.ecommons</groupId>
+                <artifactId>org.eclipse.statet.ecommons.runtime.core</artifactId>
+                <version>${ecommons.runtime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.statet.ecommons</groupId>
+                <artifactId>org.eclipse.statet.ecommons.rmi.core</artifactId>
+                <version>${ecommons.rmi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.statet.ecommons</groupId>
+                <artifactId>org.eclipse.statet.jcommons.util</artifactId>
+                <version>${jcommons.util.version}</version>
+            </dependency>
+            <dependency>
+    			<groupId>org.eclipse.core</groupId>
+    			<artifactId>org.eclipse.core.runtime</artifactId>
+    			<version>3.7.0</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 

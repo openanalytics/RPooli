@@ -28,31 +28,31 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.statet.ecommons.runtime.core.ECommonsRuntime;
+import org.eclipse.statet.ecommons.runtime.core.ECommonsRuntime.AppEnvironment;
+import org.eclipse.statet.jcommons.lang.Disposable;
+import org.eclipse.statet.rj.server.RjsComConfig;
+import org.eclipse.statet.rj.server.client.RClientGraphic;
+import org.eclipse.statet.rj.server.client.RClientGraphic.InitConfig;
+import org.eclipse.statet.rj.server.client.RClientGraphicActions;
+import org.eclipse.statet.rj.server.client.RClientGraphicDummy;
+import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
 
-import de.walware.ecommons.ECommons;
-import de.walware.ecommons.ECommons.IAppEnvironment;
-import de.walware.ecommons.IDisposable;
-import de.walware.rj.server.RjsComConfig;
-import de.walware.rj.server.client.RClientGraphic;
-import de.walware.rj.server.client.RClientGraphic.InitConfig;
-import de.walware.rj.server.client.RClientGraphicActions;
-import de.walware.rj.server.client.RClientGraphicDummy;
-import de.walware.rj.server.client.RClientGraphicFactory;
 
 /**
  * The {@link IAppEnvironment} implementation specific for RPooli.
  * 
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
-public class RPooliAppEnvironment implements IAppEnvironment, IDisposable
+public class RPooliAppEnvironment implements AppEnvironment, Disposable
 {
     private static final Log LOGGER = LogFactory.getLog(RPooliAppEnvironment.class);
 
-    private final Set<IDisposable> stopListeners = new CopyOnWriteArraySet<>();
+    private final Set<Disposable> stopListeners = new CopyOnWriteArraySet<>();
 
     public RPooliAppEnvironment()
     {
-        ECommons.init("de.walware.rj.services.eruntime", this);
+        ECommonsRuntime.init(ECommonsRuntime.BUNDLE_ID, this);
 
         RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicFactory()
         {
@@ -85,7 +85,7 @@ public class RPooliAppEnvironment implements IAppEnvironment, IDisposable
     @Override
     public void dispose()
     {
-        for (final IDisposable listener : this.stopListeners)
+        for (final Disposable listener : this.stopListeners)
         {
             try
             {
@@ -99,13 +99,13 @@ public class RPooliAppEnvironment implements IAppEnvironment, IDisposable
     }
 
     @Override
-    public void addStoppingListener(final IDisposable listener)
+    public void addStoppingListener(final Disposable listener)
     {
         stopListeners.add(listener);
     }
 
     @Override
-    public void removeStoppingListener(final IDisposable listener)
+    public void removeStoppingListener(final Disposable listener)
     {
         stopListeners.remove(listener);
     }

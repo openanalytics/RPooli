@@ -34,12 +34,12 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.net.URI;
 
+import org.eclipse.statet.rj.servi.RServiUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.jayway.restassured.RestAssured;
 
-import de.walware.rj.servi.RServiUtil;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
 import eu.openanalytics.rpooli.api.spec.model.ConfPoolJson;
@@ -379,7 +379,7 @@ public class ApiV1ITCase
     {
         for (final Node node : getActiveNodes().getNodes())
         {
-            if (node.getState() == State.LENT)
+            if (node.getState() == State.ALLOCATED)
             {
                 return node;
             }

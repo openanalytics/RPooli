@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.walware.rj.servi.pool.NetConfig;
-import de.walware.rj.servi.pool.PoolConfig;
-import de.walware.rj.servi.pool.RServiNodeConfig;
+import org.eclipse.statet.rj.servi.node.RServiNodeConfig;
+import org.eclipse.statet.rj.servi.pool.NetConfig;
+import org.eclipse.statet.rj.servi.pool.PoolConfig;
+
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.RPooliServer;
 import eu.openanalytics.rpooli.RPooliServer.ConfigAction;
