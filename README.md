@@ -45,6 +45,6 @@ This starts servers on:
 - R pool: rmi://127.0.0.1/rpooli-pool
 
 
-#### Copyright (c) Copyright of OpenAnalytics BVBA, 2014-2015
+#### Copyright (c) Copyright of Open Analytics NV, 2014-2019
 
 Licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE, Version 3 (AGPL-3.0)](http://opensource.org/licenses/AGPL-3.0)
