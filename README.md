@@ -47,4 +47,4 @@ This starts servers on:
 
 #### Copyright (c) Copyright of Open Analytics NV, 2014-2019
 
-Licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE, Version 3 (AGPL-3.0)](http://opensource.org/licenses/AGPL-3.0)
+Licensed under the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0)

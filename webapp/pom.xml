@@ -3,18 +3,18 @@
 
     This file is part of RPooli.
 
-    RPooli is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	RPooli is free software: you can redistribute it and/or modify
+	it under the terms of the Apache License as published by
+	The Apache Software Foundation, either version 2 of the License, or
+	(at your option) any later version.
 
-    RPooli is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	Apache License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with RPooli.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the Apache License
+	along with RPooli.  If not, see <http://www.apache.org/licenses/>.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -31,18 +31,18 @@
     <packaging>war</packaging>
     <name>RPooli</name>
     <description>A pool of R nodes, exposed over RMI and managed over a RESTful API.</description>
-    <url>http://openanalytics.eu</url>
+    <url>https://www.openanalytics.eu</url>
 
     <licenses>
         <license>
-            <name>GNU AFFERO GENERAL PUBLIC LICENSE, Version 3 (AGPL-3.0)</name>
-            <url>http://opensource.org/licenses/AGPL-3.0</url>
+            <name>Apache License 2.0 (Apache-2.0)</name>
+            <url>https://opensource.org/licenses/Apache-2.0</url>
         </license>
     </licenses>
 
     <organization>
         <name>Open Analytics NV</name>
-        <url>http://openanalytics.eu</url>
+        <url>https://www.openanalytics.eu</url>
     </organization>
 
     <issueManagement>
