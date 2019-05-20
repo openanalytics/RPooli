@@ -3,18 +3,18 @@
 
     This file is part of RPooli.
 
-	RPooli is free software: you can redistribute it and/or modify
-	it under the terms of the Apache License as published by
-	The Apache Software Foundation, either version 2 of the License, or
-	(at your option) any later version.
+    RPooli is free software: you can redistribute it and/or modify
+    it under the terms of the Apache License as published by
+    The Apache Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	Apache License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    Apache License for more details.
 
-	You should have received a copy of the Apache License
-	along with RPooli.  If not, see <http://www.apache.org/licenses/>.
+    You should have received a copy of the Apache License
+    along with RPooli.  If not, see <http://www.apache.org/licenses/>.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -263,7 +263,7 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>2.10</version>
+                <version>3.0</version>
                 <executions>
                     <execution>
                         <id>verify-license-headers</id>
@@ -274,7 +274,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <header>com/mycila/maven/plugin/license/templates/AGPL-3.txt</header>
+                    <header>../LICENSE_HEADER</header>
                     <properties>
                         <owner>Open Analytics NV</owner>
                         <email>rsb.development@openanalytics.eu</email>
@@ -354,12 +354,20 @@
 			-->
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.11</version>
+                <dependencies>
+                    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+                    <dependency>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs</artifactId>
+                    <version>3.1.12</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
-                        <id>findbugs-check</id>
+                        <id>spotbugs-check</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>check</goal>
