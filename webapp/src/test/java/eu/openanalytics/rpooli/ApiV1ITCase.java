@@ -34,11 +34,11 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.URI;
 
-import org.eclipse.statet.rj.servi.RServiUtil;
+import com.jayway.restassured.RestAssured;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.jayway.restassured.RestAssured;
+import org.eclipse.statet.rj.servi.RServiUtils;
 
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
@@ -50,7 +50,7 @@ import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 
 /**
  * Run with: <code>mvn clean verify</code>
- * 
+ *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class ApiV1ITCase
@@ -69,7 +69,7 @@ public class ApiV1ITCase
     @BeforeClass
     public static void ensureRpooliRmiRunning() throws Exception
     {
-        RServiUtil.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();
+        RServiUtils.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();
     }
 
     @Test
@@ -118,7 +118,7 @@ public class ApiV1ITCase
             .get("/nodes/_not_a_valid_id")
             .then()
             .assertThat()
-            .body(matchesJsonSchema(getSchemaUri("error")));;
+            .body(matchesJsonSchema(getSchemaUri("error")));
     }
 
     @Test

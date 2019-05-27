@@ -16,20 +16,20 @@
  */
 package eu.openanalytics.rpooli;
 
-import static org.eclipse.core.runtime.IStatus.ERROR;
-import static org.eclipse.core.runtime.IStatus.INFO;
-import static org.eclipse.core.runtime.IStatus.WARNING;
+import static org.eclipse.statet.jcommons.status.Status.ERROR;
+import static org.eclipse.statet.jcommons.status.Status.INFO;
+import static org.eclipse.statet.jcommons.status.Status.WARNING;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.statet.ecommons.runtime.core.ECommonsRuntime;
-import org.eclipse.statet.ecommons.runtime.core.ECommonsRuntime.AppEnvironment;
+
 import org.eclipse.statet.jcommons.lang.Disposable;
+import org.eclipse.statet.jcommons.runtime.AppEnvironment;
+import org.eclipse.statet.jcommons.runtime.BasicAppEnvironment;
+import org.eclipse.statet.jcommons.runtime.CommonsRuntime;
+import org.eclipse.statet.jcommons.status.Status;
 import org.eclipse.statet.rj.server.RjsComConfig;
 import org.eclipse.statet.rj.server.client.RClientGraphic;
 import org.eclipse.statet.rj.server.client.RClientGraphic.InitConfig;
@@ -37,21 +37,18 @@ import org.eclipse.statet.rj.server.client.RClientGraphicActions;
 import org.eclipse.statet.rj.server.client.RClientGraphicDummy;
 import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
 
-
 /**
  * The {@link AppEnvironment} implementation specific for RPooli.
  * 
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
-public class RPooliAppEnvironment implements AppEnvironment, Disposable
+public class RPooliAppEnvironment extends BasicAppEnvironment implements Disposable
 {
     private static final Log LOGGER = LogFactory.getLog(RPooliAppEnvironment.class);
 
-    private final Set<Disposable> stopListeners = new CopyOnWriteArraySet<>();
-
     public RPooliAppEnvironment()
     {
-        ECommonsRuntime.init(ECommonsRuntime.BUNDLE_ID, this);
+        CommonsRuntime.init(this);
 
         RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicFactory()
         {
@@ -81,36 +78,21 @@ public class RPooliAppEnvironment implements AppEnvironment, Disposable
         });
     }
 
+
+    @Override
+    public String getBundleId()
+    {
+        return "eu.openanalytics.rpooli";
+    }
+
     @Override
     public void dispose()
     {
-        for (final Disposable listener : this.stopListeners)
-        {
-            try
-            {
-                listener.dispose();
-            }
-            catch (final Exception e)
-            {
-                LOGGER.error("Failed to dispose: " + listener, e);
-            }
-        }
+        onAppStopping();
     }
 
     @Override
-    public void addStoppingListener(final Disposable listener)
-    {
-        stopListeners.add(listener);
-    }
-
-    @Override
-    public void removeStoppingListener(final Disposable listener)
-    {
-        stopListeners.remove(listener);
-    }
-
-    @Override
-    public void log(final IStatus status)
+    public void log(final Status status)
     {
         switch (status.getSeverity())
         {
@@ -130,4 +112,5 @@ public class RPooliAppEnvironment implements AppEnvironment, Disposable
                 LOGGER.debug(status.getMessage(), status.getException());
         }
     }
+
 }

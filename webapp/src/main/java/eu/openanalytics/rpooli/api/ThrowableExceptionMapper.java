@@ -25,11 +25,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import eu.openanalytics.rpooli.api.spec.model.ErrorJson;
 

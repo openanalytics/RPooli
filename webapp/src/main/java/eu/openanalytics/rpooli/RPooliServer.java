@@ -32,10 +32,12 @@ import java.util.Properties;
 
 import javax.servlet.ServletContext;
 
+import com.google.common.base.Function;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.eclipse.statet.jcommons.lang.Disposable;
 import org.eclipse.statet.rj.RjInvalidConfigurationException;
 import org.eclipse.statet.rj.servi.node.PropertiesBean;
@@ -45,9 +47,6 @@ import org.eclipse.statet.rj.servi.pool.JMPoolServer;
 import org.eclipse.statet.rj.servi.pool.NetConfig;
 import org.eclipse.statet.rj.servi.pool.PoolConfig;
 import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
-
-import com.google.common.base.Function;
-
 
 /**
  * The actual server that bootstraps R nodes.
@@ -112,6 +111,7 @@ public final class RPooliServer implements Disposable
             {
                 LOGGER.info("Shutting down server: " + server);
                 server.shutdown();
+                server.waitForDisposal(0);
             }
         }
         catch (final Exception e)
@@ -132,13 +132,13 @@ public final class RPooliServer implements Disposable
 
     public Collection<RPooliNode> getNodes()
     {
-        return collect(new ArrayList<>(server.getManager().getPoolNodeObjects()),
+        return collect(server.getManager().getPoolNodeObjects(),
             new Transformer<PoolNodeObject, RPooliNode>()
             {
                 @Override
-                public RPooliNode transform(final PoolNodeObject object)
+                public RPooliNode transform(final PoolNodeObject nodeObj)
                 {
-                    return new RPooliNode(object);
+                    return new RPooliNode(nodeObj);
                 }
             });
     }
@@ -251,7 +251,7 @@ public final class RPooliServer implements Disposable
 
     private static <T extends PropertiesBean> T validate(final T config)
     {
-        final List<ValidationMessage> messages = new ArrayList<ValidationMessage>();
+        final List<ValidationMessage> messages = new ArrayList<>();
 
         if (config.validate(messages))
         {

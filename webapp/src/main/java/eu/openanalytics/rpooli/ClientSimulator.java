@@ -22,7 +22,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.CoreException;
+
+import org.eclipse.statet.jcommons.status.StatusException;
 import org.eclipse.statet.rj.RjException;
 import org.eclipse.statet.rj.server.ServerLogin;
 import org.eclipse.statet.rj.servi.RServi;
@@ -61,7 +62,7 @@ public class ClientSimulator extends AbstractRPooliServerAware
                 rServi.close();
                 i.remove();
             }
-            catch (final CoreException ce)
+            catch (final StatusException ce)
             {
                 LOGGER.error("Failed to close: " + rServi, ce);
             }

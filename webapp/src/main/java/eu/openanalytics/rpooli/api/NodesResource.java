@@ -23,6 +23,8 @@ import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang3.Validate;
 
+import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
+
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.ClientSimulator;
 import eu.openanalytics.rpooli.RPooliNode;
@@ -124,27 +126,17 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
 
     private static Node buildNode(final RPooliNode rpn)
     {
+        final PoolNodeItem pni = rpn.getItem();
+
         return new Node().withId(rpn.getId())
             .withAddress(rpn.getAddress())
-            .withClientId(nullIfNegativeOne(rpn.getItem().getCurrentClientId()))
-            .withClientLabel(rpn.getObject().getClientLabel())
-            .withCreationTime(rpn.getItem().getCreationTime())
-            //TODO Is this value still available?
-//            .withDestructionTime(nullIfNegativeOne(rpn.getItem().getDestrutionTime()))
-            .withLentCount(rpn.getItem().getUsageCount())
-            .withLentDuration(rpn.getItem().getUsageDuration())
+            .withClientLabel(pni.getCurrentClientLabel())
+            .withCreationTime(pni.getCreationTime())
+            .withLentCount(pni.getUsageCount())
+            .withLentDuration(pni.getUsageDuration())
             .withState(Node.State.fromValue(rpn.getItem().getState().toString()))
-            .withStateTime(rpn.getItem().getStateTime())
-            .withConsoleEnabled(rpn.getObject().getNodeHandler().isConsoleEnabled());
+            .withStateTime(pni.getStateTime())
+            .withConsoleEnabled(pni.isConsoleEnabled());
     }
 
-    private static Long nullIfNegativeOne(final String value)
-    {
-        if (value == null) return null;
-        try {
-    	    long lValue = Long.parseLong(value);
-    	    return lValue == -1 ? null : lValue;
-        } catch (Exception e) {}
-        return null;
-    }
 }

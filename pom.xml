@@ -46,10 +46,7 @@
     </organization>
 
     <properties>
-        <rj.version>3.0.0.b201803071210E47sw</rj.version>
-        <ecommons.runtime.version>1.1.0.b201803071210E47sw</ecommons.runtime.version>
-        <ecommons.rmi.version>1.5.0.b201803071210E47sw</ecommons.rmi.version>
-        <jcommons.util.version>1.0.0.b201803071210E47sw</jcommons.util.version>
+        <rj.version>4.0.0-SNAPSHOT</rj.version>
     </properties>
 
     <distributionManagement>
@@ -72,15 +69,15 @@
 
     <repositories>
         <repository>
-            <id>oa-public</id>
-            <name>Open Analytics Public Repository</name>
+            <id>eclipse-statet</id>
+            <name>Eclipse StatET Repository</name>
             <releases>
                 <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <url>http://nexus.openanalytics.eu/nexus/content/groups/public</url>
+            <url>https://repo.eclipse.org/content/repositories/statet</url>
         </repository>
     </repositories>
 
@@ -88,49 +85,9 @@
         <dependencies>
             <dependency>
                 <groupId>org.eclipse.statet.rj</groupId>
-                <artifactId>org.eclipse.statet.rj.server</artifactId>
-                <version>${rj.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.rj</groupId>
-                <artifactId>org.eclipse.statet.rj.data</artifactId>
-                <version>${rj.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.rj</groupId>
-                <artifactId>org.eclipse.statet.rj.client</artifactId>
-                <version>${rj.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.rj</groupId>
                 <artifactId>org.eclipse.statet.rj.servi</artifactId>
                 <version>${rj.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.rj</groupId>
-                <artifactId>org.eclipse.statet.rj.services.core</artifactId>
-                <version>${rj.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.ecommons</groupId>
-                <artifactId>org.eclipse.statet.ecommons.runtime.core</artifactId>
-                <version>${ecommons.runtime.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.ecommons</groupId>
-                <artifactId>org.eclipse.statet.ecommons.rmi.core</artifactId>
-                <version>${ecommons.rmi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.statet.ecommons</groupId>
-                <artifactId>org.eclipse.statet.jcommons.util</artifactId>
-                <version>${jcommons.util.version}</version>
-            </dependency>
-            <dependency>
-    			<groupId>org.eclipse.core</groupId>
-    			<artifactId>org.eclipse.core.runtime</artifactId>
-    			<version>3.7.0</version>
-			</dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -23,6 +23,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 import java.net.URI;
 
 import org.apache.commons.lang3.Validate;
+
 import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
 import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
 
@@ -31,22 +32,20 @@ import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
  */
 public class RPooliNode
 {
-    private final PoolNodeItem item;
+    private final PoolNodeObject object;
     private final String id;
     private final URI address;
-    private final PoolNodeObject object;
 
-    public RPooliNode(final PoolNodeObject object)
+    public RPooliNode(final PoolNodeObject nodeObj)
     {
-    	this.object = Validate.notNull(object, "object can't be null");;
-        this.item = new PoolNodeItem(object, 0); Validate.notNull(item, "item can't be null");
-        this.address = URI.create(this.item.getAddress().toString());
+        this.object = Validate.notNull(nodeObj, "nodeObj can't be null");
+        this.address = URI.create(this.object.getNodeHandler().getAddress().toString());
         this.id = strip(address.getPath(), "/");
     }
 
     public PoolNodeItem getItem()
     {
-        return item;
+        return new PoolNodeItem(this.object, System.currentTimeMillis());
     }
 
     public String getId()

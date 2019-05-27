@@ -18,10 +18,6 @@ package eu.openanalytics.rpooli;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.io.File.separatorChar;
-import static java.util.Arrays.asList;
-import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.quote;
-import static org.apache.commons.lang3.ArrayUtils.EMPTY_STRING_ARRAY;
 import static org.apache.commons.lang3.StringUtils.endsWithAny;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -31,24 +27,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.eclipse.statet.rj.RjInitFailedException;
 import org.eclipse.statet.rj.RjInvalidConfigurationException;
 import org.eclipse.statet.rj.server.util.RJContext;
 
 /**
- * Variant of <code>de.walware.rj.servi.webapp.ServletRJContext</code> that can locate RJ JARs in
- * the classpath and that supports Maven-versioned JARs.
- *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class RPooliContext extends RJContext
@@ -74,8 +64,9 @@ public class RPooliContext extends RJContext
     private final ServletContext servletContext;
     private final String propertiesDirPath;
 
-    public RPooliContext(final ServletContext servletContext)
+    public RPooliContext(final ServletContext servletContext) throws RjInitFailedException
     {
+        super(RJContext.detectRJLibPaths());
         this.servletContext = checkNotNull(servletContext, "servletContext can't be null");
         propertiesDirPath = initializePropertiesDirPath();
     }
@@ -109,53 +100,6 @@ public class RPooliContext extends RJContext
         return tempDir;
     }
 
-    @Override
-    protected String[] getLibDirPaths() throws RjInvalidConfigurationException
-    {
-        try
-        {
-            final URL rjResourceUrl = RPooliContext.class.getClassLoader().getResource(
-                RJContext.class.getName().replace('.', '/') + ".class");
-
-            LOGGER.info("rj resource URL: " + rjResourceUrl);
-
-            final String rjResourcePath = rjResourceUrl.getPath();
-            final int indexOfColon = rjResourcePath.indexOf(':');
-            final int indexOfBang = rjResourcePath.indexOf('!');
-
-            final String rjJarsPath = new File(rjResourcePath.substring(indexOfColon + 1, indexOfBang)).getParentFile()
-                .getCanonicalPath();
-
-            LOGGER.info("rj JARs path: " + rjJarsPath);
-
-            final String webInfLibPath = servletContext.getRealPath("WEB-INF/lib");
-
-            final Set<String> uniqueLibDirPaths = new HashSet<>(asList(rjJarsPath, webInfLibPath));
-            LOGGER.info("Collected lib dir paths: " + uniqueLibDirPaths);
-
-            return uniqueLibDirPaths.toArray(EMPTY_STRING_ARRAY);
-        }
-        catch (final IOException ioe)
-        {
-            throw new RjInvalidConfigurationException("Failed to collect lib dir paths", ioe);
-        }
-    }
-
-    @Override
-    protected PathEntry searchLib(final List<PathEntry> files, final String libId)
-    {
-        final Pattern pattern = compile(".*" + quote(File.separatorChar + libId) + "([-_]{1}.*)?\\.jar$");
-
-        for (final PathEntry entry : files)
-        {
-            if (pattern.matcher(entry.getPath()).matches())
-            {
-                return entry;
-            }
-        }
-
-        return null;
-    }
 
     @Override
     public String getServerPolicyFilePath() throws RjInvalidConfigurationException

@@ -190,7 +190,7 @@ public class ConfigResource extends AbstractRPooliServerAware implements Config
     private ConfNetResolvedJson buildNetConfig(final NetConfig config)
     {
         return (ConfNetResolvedJson) new ConfNetResolvedJson().withEffectiveHost(
-            config.getEffectiveHostaddress())
+            config.getEffectiveHostAddress())
             .withEffectivePort((long) config.getEffectiveRegistryPort())
             .withEnabledSsl(config.isSSLEnabled())
             .withHost(config.getHostAddress())
