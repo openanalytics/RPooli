@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.net.URI;
 
 import org.eclipse.statet.rj.servi.RServiUtil;
@@ -54,11 +55,13 @@ import eu.openanalytics.rpooli.api.spec.model.NodesJson;
  */
 public class ApiV1ITCase
 {
-    private static final String RMI_POOL_ADDRESS = "rmi://127.0.1.1/rpooli-pool";
+    private static String RMI_POOL_ADDRESS;
 
     @BeforeClass
     public static void configureRestAssured() throws Exception
     {
+        RMI_POOL_ADDRESS= "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/rpooli-pool";
+
         RestAssured.port = Integer.getInteger("api.server.port");
         RestAssured.basePath = System.getProperty("api.server.path") + "/api/v1";
     }
