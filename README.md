@@ -21,6 +21,8 @@ To produce a war that can be deployed on application servers, run:
 
 ## Integration test
 
+The test requires the R packages RSBXml and RSBJson.
+
     rm /tmp/*.properties
     mvn -Pit clean verify
 
