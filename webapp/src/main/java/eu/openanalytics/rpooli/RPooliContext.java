@@ -62,8 +62,14 @@ public class RPooliContext extends RJContext
         // any platform
         System.getProperty("user.home") + separatorChar + ".rpooli",
         // web-app embedded
-        "/WEB-INF/"
+        "/WEB-INF"
     };
+
+    private static boolean isWebAppPath(final String path)
+    {
+        return (path.equals("/WEB-INF") || path.startsWith("/WEB-INF/"));
+    }
+
 
     private final ServletContext servletContext;
     private final String propertiesDirPath;
@@ -78,14 +84,16 @@ public class RPooliContext extends RJContext
     {
         for (final String confDir : POOLI_CONFIGURATION_DIRECTORIES)
         {
-            if (new File(confDir).isDirectory())
+            if (isWebAppPath(confDir))
             {
-                return confDir;
+                String realPath = servletContext.getRealPath(confDir);
+                if (realPath != null && new File(realPath).isDirectory())
+                {
+                    return confDir;
+                }
             }
-            else
-            {
-                String contextRelativePath = servletContext.getRealPath(confDir);
-                if (contextRelativePath != null && new File(contextRelativePath).isDirectory())
+            else {
+                if (new File(confDir).isDirectory())
                 {
                     return confDir;
                 }
@@ -152,7 +160,7 @@ public class RPooliContext extends RJContext
     @Override
     public String getServerPolicyFilePath() throws RjInvalidConfigurationException
     {
-        String path = servletContext.getRealPath("WEB-INF/lib");
+        String path = servletContext.getRealPath("/WEB-INF/lib");
 
         if (isBlank(path) || !endsWithAny(path, "/", File.separator))
         {
@@ -171,26 +179,28 @@ public class RPooliContext extends RJContext
     @Override
     protected InputStream getInputStream(final String path) throws IOException
     {
-        // try first with a file path
-        final File file = new File(path);
-        if (file.isFile() && file.canRead())
+        final File file;
+
+        if (isWebAppPath(path))
         {
-            return new FileInputStream(file);
-        }
-        else
-        {
-            // fallback to web-app embedded files
             return this.servletContext.getResourceAsStream(path);
         }
+        else {
+            file = new File(path);
+        }
+
+        if (!file.exists()) {
+            return null;
+        }
+        return new FileInputStream(file);
     }
 
     @Override
     protected OutputStream getOutputStream(final String path) throws IOException
     {
-        // use a real file path if its parent exist and is a directory that is writable
-        File file = new File(path);
+        final File file;
 
-        if (!file.getParentFile().isDirectory() || !file.getParentFile().canWrite())
+        if (isWebAppPath(path))
         {
             final String realPath = this.servletContext.getRealPath(path);
             if (realPath == null)
@@ -198,6 +208,10 @@ public class RPooliContext extends RJContext
                 throw new IOException("Writing to '" + path + "' not supported.");
             }
             file = new File(realPath);
+        }
+        else
+        {
+            file = new File(path);
         }
 
         try
