@@ -16,6 +16,7 @@
  */
 package eu.openanalytics.rpooli;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,6 +37,7 @@ import org.eclipse.statet.rj.server.client.RClientGraphic;
 import org.eclipse.statet.rj.server.client.RClientGraphic.InitConfig;
 import org.eclipse.statet.rj.server.client.RClientGraphicActions;
 import org.eclipse.statet.rj.server.client.RClientGraphicDummy;
+import org.eclipse.statet.rj.server.client.RClientGraphicDummyFactory;
 import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
 
 
@@ -56,32 +58,7 @@ public class RPooliAppEnvironment extends BasicAppEnvironment implements Disposa
     {
         CommonsRuntime.init(this);
 
-        RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicFactory()
-        {
-            @Override
-            public Map<String, ? extends Object> getInitServerProperties()
-            {
-                return null;
-            }
-
-            @Override
-            public RClientGraphic newGraphic(final int devId,
-                                             final double w,
-                                             final double h,
-                                             final InitConfig config,
-                                             final boolean active,
-                                             final RClientGraphicActions actions,
-                                             final int options)
-            {
-                return new RClientGraphicDummy(devId, w, h);
-            }
-
-            @Override
-            public void closeGraphic(final RClientGraphic graphic)
-            {
-                // NOOP
-            }
-        });
+        RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicDummyFactory());
     }
 
 
