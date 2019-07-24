@@ -34,11 +34,11 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.URI;
 
-import com.jayway.restassured.RestAssured;
+import org.eclipse.statet.rj.servi.RServiUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.eclipse.statet.rj.servi.RServiUtils;
+import com.jayway.restassured.RestAssured;
 
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
@@ -53,13 +53,16 @@ import eu.openanalytics.rpooli.api.spec.model.NodesJson;
  *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
+
 public class ApiV1ITCase
 {
     private static String RMI_POOL_ADDRESS;
+    
 
     @BeforeClass
     public static void configureRestAssured() throws Exception
-    {
+    {	
+    	
         RMI_POOL_ADDRESS= "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/rpooli-pool";
 
         RestAssured.port = Integer.getInteger("api.server.port");
@@ -69,7 +72,7 @@ public class ApiV1ITCase
     @BeforeClass
     public static void ensureRpooliRmiRunning() throws Exception
     {
-        RServiUtils.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();
+    	RServiUtils.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();   
     }
 
     @Test
