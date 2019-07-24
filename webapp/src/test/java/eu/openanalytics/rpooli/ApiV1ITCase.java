@@ -16,15 +16,15 @@
  */
 package eu.openanalytics.rpooli;
 
-import static com.jayway.restassured.RestAssured.expect;
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.http.ContentType.JSON;
-import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -38,7 +38,6 @@ import org.eclipse.statet.rj.servi.RServiUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.jayway.restassured.RestAssured;
 
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
@@ -47,6 +46,7 @@ import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
+import io.restassured.RestAssured;
 
 /**
  * Run with: <code>mvn clean verify</code>
@@ -368,7 +368,7 @@ public class ApiV1ITCase
         // the schema validator doesn't understand extension so all we can check is that the config
         // object has been deserialized and some expected values are there
         assertThat(config, is(instanceOf(ConfNetResolvedJson.class)));
-        assertThat(config.getEffectiveHost(), not(isEmptyOrNullString()));
+        assertThat(config.getEffectiveHost(), not(emptyOrNullString()));
         assertThat(config.getStartEmbeddedRegistry(), is(true));
     }
 
