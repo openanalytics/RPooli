@@ -1,0 +1,10 @@
+version: '3'
+services:
+  api:
+    build: ./docker/apiv1
+    container_name: rpooli-api
+    ports:
+      - 8089:8080
+      - 1112:1100
+    volumes:
+      - ./target/rpooli-1.1.0.war:/opt/jetty/webapps/rpooli.war:ro
