@@ -31,15 +31,11 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.net.URI;
 
-import org.apache.derby.jdbc.ClientDriver;
-import org.arquillian.cube.CubeController;
+import org.arquillian.cube.containerobject.Cube;
 import org.arquillian.cube.docker.impl.requirement.RequiresDocker;
-import org.eclipse.statet.rj.servi.RServiUtils;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.arquillian.cube.requirement.ArquillianConditionalRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -52,6 +48,7 @@ import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
+import eu.openanalytics.rpooli.container.ApiV1Container;
 import io.restassured.RestAssured;
 
 /**
@@ -60,19 +57,14 @@ import io.restassured.RestAssured;
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 @Category(RequiresDocker.class)
-@RunWith(Arquillian.class)
+@RunWith(ArquillianConditionalRunner.class)
 public class ApiV1ITCase
 {
 	private static String RMI_POOL_ADDRESS;
-    
-//    @ArquillianResource
-//    private DockerClient docker;
-    
-//    @HostIp
-//    private String dockerHost;
-//    
-//    @HostPort(containerName = "rpooli-api", value = 8080);
-
+	
+	@Cube
+    ApiV1Container apiContainer;
+	
     @BeforeClass
     public static void configureRestAssured() throws Exception
     {	
@@ -80,8 +72,9 @@ public class ApiV1ITCase
     	RMI_POOL_ADDRESS= "rmi://" + "172.19.0.2/rpooli-pool";
         //RestAssured.port = Integer.getInteger("api.server.port");
         //RestAssured.basePath = System.getProperty("api.server.path") + "/api/v1";
-        RestAssured.port = 8089;
-        RestAssured.basePath = "/rpooli/api/v1";
+//    	RestAssured.port = apiContainer.getPort();
+//        RestAssured.basePath = "/rpooli/api/v1";
+//        RestAssured.baseURI = apiContainer.getDockerHost();
     }
 
     @BeforeClass
