@@ -31,11 +31,17 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import org.arquillian.cube.containerobject.Cube;
 import org.arquillian.cube.docker.impl.requirement.RequiresDocker;
 import org.arquillian.cube.requirement.ArquillianConditionalRunner;
+import org.eclipse.statet.rj.servi.RServiUtils;
+import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -56,38 +62,28 @@ import io.restassured.RestAssured;
  *
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
  */
-@Category(RequiresDocker.class)
-@RunWith(ArquillianConditionalRunner.class)
+@RunWith(Arquillian.class)
 public class ApiV1ITCase
 {
 	private static String RMI_POOL_ADDRESS;
 	
 	@Cube
-    ApiV1Container apiContainer;
+    ApiV1Container apiContainer; 
 	
-    @BeforeClass
-    public static void configureRestAssured() throws Exception
-    {	
-        //RMI_POOL_ADDRESS= "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/rpooli-pool";
-    	RMI_POOL_ADDRESS= "rmi://" + "172.19.0.2/rpooli-pool";
-        //RestAssured.port = Integer.getInteger("api.server.port");
-        //RestAssured.basePath = System.getProperty("api.server.path") + "/api/v1";
-//    	RestAssured.port = apiContainer.getPort();
-//        RestAssured.basePath = "/rpooli/api/v1";
-//        RestAssured.baseURI = apiContainer.getDockerHost();
-    }
-
-    @BeforeClass
-    public static void ensureRpooliRmiRunning() throws Exception
-    {
-    	//RServiUtils.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();   
-    }
-
-    @Test
-    public void shouldExposeCorrectPort() {
-    	//DockerJavaAssertions.assertThat(docker).container("rpooli-api").hasExposedPorts("8080/tcp");
-    }
+	@Before
+	public void configureRestAssured() throws UnknownHostException {
+		RestAssured.port = apiContainer.getPort();
+		RestAssured.basePath = "/rpooli/api/v1";
+		RestAssured.baseURI = "http://" + apiContainer.getDockerHost();
+		RMI_POOL_ADDRESS = "rmi://" + apiContainer.getCubeIp() + "/rpooli-pool";
+	}
     
+    @Before
+    public void ensureRpooliRmiRunning() throws Exception
+    {
+    	RServiUtils.getRServi(RMI_POOL_ADDRESS, "integration-tests").close();   
+    }
+	
     @Test
     public void getPool() throws Exception
     {

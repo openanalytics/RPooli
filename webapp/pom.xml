@@ -228,6 +228,11 @@
 		    <version>1.18.2</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.jboss.arquillian.container</groupId>
+		    <artifactId>arquillian-container-test-api</artifactId>
+		    <version>1.4.1.Final</version>
+		</dependency>
 		
 		<!--
 		
