@@ -15,4 +15,5 @@
    <extension qualifier="docker">
        <property name="serverUri">unix:///var/run/docker.sock</property>
    </extension>
-</arquillian>
+   
+ </arquillian>

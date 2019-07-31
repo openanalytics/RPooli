@@ -19,41 +19,57 @@ package eu.openanalytics.rpooli.container;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.arquillian.cube.CubeIp;
 import org.arquillian.cube.HostIp;
 import org.arquillian.cube.HostPort;
 import org.arquillian.cube.containerobject.Cube;
 import org.arquillian.cube.containerobject.CubeDockerFile;
 import org.arquillian.cube.containerobject.Image;
+import org.jboss.arquillian.test.api.ArquillianResource;
 
-@Cube(value = "api",
+import com.github.dockerjava.api.DockerClient;
+
+@Cube(value = "apiv1",
 		portBinding = {
 				ApiV1Container.HTTP_PORT + "->8080/tcp",
-				ApiV1Container.RMI_PORT + "->1100/tcp"})
-//@CubeDockerFile(value = "webapp/docker/apiv1")
-@Image("ubuntu:18.04")
+				ApiV1Container.RMI_PORT + "->1100/tcp"},
+		awaitPorts = 8080)
+@CubeDockerFile
 public class ApiV1Container {
-	static final int HTTP_PORT = 8087;
-	static final int RMI_PORT = 1113;
+	static final int HTTP_PORT = 8080;
+	static final int RMI_PORT = 1100;
 	
-	@HostIp
-	private String dockerHost;
-
-	@HostPort(8080)
-	private int port;
+	@ArquillianResource
+	DockerClient dockerClient;
+	
+//	@HostIp
+//	private String dockerHost;
+//
+//	@HostPort(8080)
+//	private int port;
+	
+	@CubeIp(containerName = "apiv1")
+	private String cubeIp;
+	
+	public String getCubeIp() {
+		return cubeIp;
+	}
 	
 	public URL getConnectionUrl() {
 		try {
-			return new URL("http://" + dockerHost + ":" + port);
+			return new URL("http://" + getDockerHost() + ":" + getPort());
 		} catch (MalformedURLException e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
 	
 	public String getDockerHost() {
-		return dockerHost;
+		//return dockerHost;
+		return "localhost";
 	}
 
 	public int getPort() {
-		return port;
+		//return port;
+		return 8080;
 	}
 }
