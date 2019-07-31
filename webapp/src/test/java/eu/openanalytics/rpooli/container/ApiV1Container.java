@@ -42,11 +42,11 @@ public class ApiV1Container {
 	@ArquillianResource
 	DockerClient dockerClient;
 	
-//	@HostIp
-//	private String dockerHost;
-//
-//	@HostPort(8080)
-//	private int port;
+	@HostIp
+	private String dockerHost;
+
+	@HostPort(8080)
+	private int port;
 	
 	@CubeIp(containerName = "apiv1")
 	private String cubeIp;
@@ -64,12 +64,10 @@ public class ApiV1Container {
 	}
 	
 	public String getDockerHost() {
-		//return dockerHost;
-		return "localhost";
+		return dockerHost;
 	}
 
 	public int getPort() {
-		//return port;
-		return 8080;
+		return port;
 	}
 }
