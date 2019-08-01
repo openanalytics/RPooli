@@ -19,6 +19,12 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<repositories>
+	  <repository>
+	    <id>thirdparty</id>
+	    <url>https://nexus.openanalytics.eu/nexus/content/repositories/thirdparty</url>
+	  </repository>
+	</repositories>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -225,7 +231,8 @@
 		<dependency>
 		    <groupId>org.arquillian.cube</groupId>
 		    <artifactId>arquillian-cube-docker</artifactId>
-		    <version>1.18.2</version>
+		    <version>1.18.2-BUGFIX</version>
+		    <classifier>BUGFIX</classifier>
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
@@ -278,6 +285,7 @@
                         <exclude>LICENSE</exclude>
                         <exclude>src/main/webapp/raml/ui/**</exclude>
                         <exclude>misc/config-examples/**</exclude>
+                        <exclude>**/**/Dockerfile</exclude>
                     </excludes>
                     <mapping>
                         <raml>SCRIPT_STYLE</raml>
@@ -559,52 +567,30 @@
             <id>it</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <version>${jetty-plugin.version}</version>
-                        <configuration>
-                            <webApp>
-                                <contextPath>${local.server.path}</contextPath>
-                            </webApp>
-                            <httpConnector>
-                                <port>${local.server.port}</port>
-                            </httpConnector>
-                            <stopKey>rpooli-jetty</stopKey>
-                            <stopPort>${local.server.stop-port}</stopPort>
-                            <stopWait>60</stopWait>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>start-jetty</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>deploy-war</goal>
-                                </goals>
-                                <configuration>
-                                    <daemon>true</daemon>
-                                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-jetty</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+                	<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>pre-integration-test</phase>
+									<configuration>
+										<target>
+										  <copy file="${project.build.directory}/${project.build.finalName}.war"
+										        tofile="${project.build.directory}/test-classes/eu/openanalytics/rpooli/container/ApiV1Container/rpooli.war" />
+										</target>
+									</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <version>2.17</version>
                         <configuration>
-	                        <systemPropertyVariables>
-	                            <api.server.port>${local.server.port}</api.server.port>
-	                            <api.server.path>${local.server.path}</api.server.path>
-	                        </systemPropertyVariables>
 	                        <includes>
 	                        	<include>**/ApiV1ITCase.java</include>
 	                        </includes>
@@ -615,7 +601,6 @@
                                     <goal>integration-test</goal>
                                     <goal>verify</goal>
                                 </goals>
-                                
                             </execution>
                         </executions>
                     </plugin>
