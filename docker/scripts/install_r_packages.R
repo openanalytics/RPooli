@@ -1,6 +1,0 @@
-.libPaths("/usr/lib/R/library")
-install.packages("XML", repos = "http://cloud.r-project.org/")
-install.packages("RSBXml", repos = "http://repos.openanalytics.eu", type = "source")
-install.packages("RJSONIO", repos = "http://cloud.r-project.org/")
-install.packages("RSBJson", repos = "http://repos.openanalytics.eu", type = "source")
-install.packages(c("rj", "rj.gd"), repos="https://download.walware.de/rj-4.0")
