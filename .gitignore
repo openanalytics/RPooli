@@ -11,3 +11,7 @@ MTOM*
 Ddo*
 /gmpush
 *.versionsBackup
+.attach_*
+.env
+.Rhistory
+*.war
