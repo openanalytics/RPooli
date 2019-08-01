@@ -1,4 +1,8 @@
 FROM openanalytics/r-base
+ENV http_proxy http://webproxy.openanalytics.eu:8080
+ENV https_proxy http://webproxy.openanalytics.eu:8080
+ENV no_proxy localhost,127.0.0.0,127.0.0.1,openanalytics.eu
+RUN echo 'Acquire::https::Proxy "http://webproxy.openanalytics.eu:8080";' >> /etc/apt/apt.conf
 RUN apt-get clean && apt-get update && apt-get install -y openjdk-8-jdk libxml2-dev
 COPY ./scripts /opt/rpooli/scripts
 RUN wget https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.19.v20190610/jetty-distribution-9.4.19.v20190610.tar.gz -O /opt/jetty.tar.gz
