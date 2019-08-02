@@ -31,20 +31,14 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.arquillian.cube.containerobject.Cube;
-import org.arquillian.cube.docker.impl.requirement.RequiresDocker;
-import org.arquillian.cube.requirement.ArquillianConditionalRunner;
 import org.eclipse.statet.rj.servi.RServiUtils;
-import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
@@ -72,7 +66,7 @@ public class ApiV1ITCase
 	
 	@Before
 	public void configureRestAssured() throws UnknownHostException {
-		RestAssured.port = apiContainer.getPort();
+		RestAssured.port = apiContainer.getHttpPort();
 		RestAssured.basePath = "/rpooli/api/v1";
 		RestAssured.baseURI = "http://" + apiContainer.getDockerHost();
 		RMI_POOL_ADDRESS = "rmi://" + apiContainer.getCubeIp() + "/rpooli-pool";

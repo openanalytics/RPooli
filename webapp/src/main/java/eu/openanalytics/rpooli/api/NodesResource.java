@@ -22,7 +22,6 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang3.Validate;
-
 import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
 
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;

@@ -24,7 +24,6 @@ import org.arquillian.cube.HostIp;
 import org.arquillian.cube.HostPort;
 import org.arquillian.cube.containerobject.Cube;
 import org.arquillian.cube.containerobject.CubeDockerFile;
-import org.arquillian.cube.containerobject.Image;
 import org.jboss.arquillian.test.api.ArquillianResource;
 
 import com.github.dockerjava.api.DockerClient;
@@ -36,7 +35,7 @@ import com.github.dockerjava.api.DockerClient;
 		awaitPorts = 8080)
 @CubeDockerFile
 public class ApiV1Container {
-	static final int HTTP_PORT = 8080;
+	static final int HTTP_PORT = 8087;
 	static final int RMI_PORT = 1100;
 	
 	@ArquillianResource
@@ -46,7 +45,10 @@ public class ApiV1Container {
 	private String dockerHost;
 
 	@HostPort(8080)
-	private int port;
+	private int httpPort;
+	
+	@HostPort(1100)
+	private int rmiPort;
 	
 	@CubeIp(containerName = "apiv1")
 	private String cubeIp;
@@ -57,7 +59,7 @@ public class ApiV1Container {
 	
 	public URL getConnectionUrl() {
 		try {
-			return new URL("http://" + getDockerHost() + ":" + getPort());
+			return new URL("http://" + getDockerHost() + ":" + getHttpPort());
 		} catch (MalformedURLException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -67,7 +69,11 @@ public class ApiV1Container {
 		return dockerHost;
 	}
 
-	public int getPort() {
-		return port;
+	public int getHttpPort() {
+		return httpPort;
+	}
+	
+	public int getRmiPort() {
+		return rmiPort;
 	}
 }

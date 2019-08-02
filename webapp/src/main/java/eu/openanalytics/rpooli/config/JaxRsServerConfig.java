@@ -19,6 +19,8 @@ package eu.openanalytics.rpooli.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.cxf.bus.spring.SpringBus;
+import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.spring.JAXRSServerFactoryBeanDefinitionParser.SpringJAXRSServerFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +53,12 @@ public class JaxRsServerConfig {
 	ConfigResource configResource;
 	
 	@Bean
-	public SpringJAXRSServerFactoryBean jaxRsServer() {
+	public SpringBus cxf() {
+		return new SpringBus();
+	}
+	
+	@Bean
+	public Server jaxRsServer() {
 		SpringJAXRSServerFactoryBean bean = new SpringJAXRSServerFactoryBean();
 		bean.setAddress("/v1/");
 		
@@ -66,7 +73,7 @@ public class JaxRsServerConfig {
 		providers.add(ThrowableExceptionMapper.class);
 		
 		bean.setProviders(providers);
-		
-		return bean;
+		Server server = bean.create();
+		return server;
 	}
 }
