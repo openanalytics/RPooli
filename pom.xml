@@ -46,7 +46,7 @@
     </organization>
 
     <properties>
-        <rj.version>4.0.0-SNAPSHOT</rj.version>
+        <rj.version>4.1.0-SNAPSHOT</rj.version>
     </properties>
 
     <distributionManagement>
