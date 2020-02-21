@@ -27,6 +27,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import javax.servlet.ServletContext;
@@ -34,9 +37,12 @@ import javax.servlet.ServletContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.eclipse.statet.jcommons.collections.ImCollections;
+import org.eclipse.statet.jcommons.runtime.bundle.BundleEntry;
 import org.eclipse.statet.rj.RjInitFailedException;
 import org.eclipse.statet.rj.RjInvalidConfigurationException;
 import org.eclipse.statet.rj.server.util.RJContext;
+import org.eclipse.statet.rj.server.util.ServerUtils;
 
 /**
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
@@ -105,12 +111,24 @@ public class RPooliContext extends RJContext
     public String getServerPolicyFilePath() throws RjInvalidConfigurationException
     {
         String path = servletContext.getRealPath("/WEB-INF/lib");
-
+        if (path == null) {
+            try {
+                final BundleEntry entry = resolveBundles(ImCollections.newList(ServerUtils.RJ_SERVER_SPEC)).get(0);
+                final Path parent = Paths.get(entry.getJClassPathString()).getParent();
+                final Path policyPath;
+                if (parent != null && parent.endsWith("WEB-INF/lib")
+                        && Files.isRegularFile((policyPath= parent.resolve("security.policy"))) ) {
+                    return policyPath.toUri().toString();
+                }
+            } catch (final Exception e) {
+                throw new RjInvalidConfigurationException("Failed find server policy file.", e);
+            }
+            throw new RjInvalidConfigurationException("Failed find server policy file.");
+        }
         if (isBlank(path) || !endsWithAny(path, "/", File.separator))
         {
             path = path + File.separatorChar;
         }
-
         return path + "security.policy";
     }
 
