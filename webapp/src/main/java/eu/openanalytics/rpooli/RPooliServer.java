@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.transform;
 import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
 import static org.apache.commons.collections4.CollectionUtils.collect;
-import static org.apache.commons.collections4.CollectionUtils.find;
+import static org.apache.commons.collections4.IterableUtils.find;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
