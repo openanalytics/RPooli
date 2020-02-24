@@ -18,13 +18,14 @@ package eu.openanalytics.rpooli.config;
 
 import javax.servlet.ServletContext;
 
-import org.eclipse.statet.rj.RjInitFailedException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+
+import org.eclipse.statet.rj.RjInitFailedException;
 
 import eu.openanalytics.rpooli.ClientSimulator;
 import eu.openanalytics.rpooli.RPooliAppEnvironment;
