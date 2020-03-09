@@ -19,6 +19,7 @@ package eu.openanalytics.rpooli.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.spring.JAXRSServerFactoryBeanDefinitionParser.SpringJAXRSServerFactoryBean;
@@ -29,8 +30,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-
 import eu.openanalytics.rpooli.api.ConfigResource;
 import eu.openanalytics.rpooli.api.NodesResource;
 import eu.openanalytics.rpooli.api.PoolResource;
@@ -38,8 +37,9 @@ import eu.openanalytics.rpooli.api.ThrowableExceptionMapper;
 
 @Configuration
 @ComponentScan("eu.openanalytics.rpooli")
-@ImportResource(value= {"classpath:META-INF/cxf/cxf.xml", 
-						"classpath:META-INF/cxf/cxf-servlet.xml"})
+@ImportResource(value= {
+		"classpath:META-INF/cxf/cxf.xml",
+		"classpath:META-INF/cxf/cxf-servlet.xml" })
 @Import(CoreBeansConfig.class)
 public class JaxRsServerConfig {
 	

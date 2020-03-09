@@ -16,26 +16,30 @@
  */
 package eu.openanalytics.rpooli;
 
-import static org.eclipse.statet.jcommons.status.Status.ERROR;
-import static org.eclipse.statet.jcommons.status.Status.INFO;
-import static org.eclipse.statet.jcommons.status.Status.WARNING;
-
+import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.eclipse.statet.jcommons.collections.ImList;
 import org.eclipse.statet.jcommons.lang.Disposable;
+import org.eclipse.statet.jcommons.lang.ObjectUtils.ToStringBuilder;
 import org.eclipse.statet.jcommons.runtime.AppEnvironment;
 import org.eclipse.statet.jcommons.runtime.BasicAppEnvironment;
 import org.eclipse.statet.jcommons.runtime.CommonsRuntime;
 import org.eclipse.statet.jcommons.status.Status;
+import org.eclipse.statet.jcommons.status.StatusPrinter;
+import org.eclipse.statet.jcommons.status.Statuses;
 import org.eclipse.statet.rj.server.RjsComConfig;
 import org.eclipse.statet.rj.server.client.RClientGraphic;
 import org.eclipse.statet.rj.server.client.RClientGraphic.InitConfig;
 import org.eclipse.statet.rj.server.client.RClientGraphicActions;
 import org.eclipse.statet.rj.server.client.RClientGraphicDummy;
+import org.eclipse.statet.rj.server.client.RClientGraphicDummyFactory;
 import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
+
 
 /**
  * The {@link AppEnvironment} implementation specific for RPooli.
@@ -44,38 +48,17 @@ import org.eclipse.statet.rj.server.client.RClientGraphicFactory;
  */
 public class RPooliAppEnvironment extends BasicAppEnvironment implements Disposable
 {
-    private static final Log LOGGER = LogFactory.getLog(RPooliAppEnvironment.class);
+    // example for AppEnvironment impl see org.eclipse.statet.rhelp.server.Application
+
+    private final ConcurrentHashMap<String, Log> logs= new ConcurrentHashMap<>();
+    private final StatusPrinter logStatusPrinter= new StatusPrinter();
+
 
     public RPooliAppEnvironment()
     {
         CommonsRuntime.init(this);
 
-        RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicFactory()
-        {
-            @Override
-            public Map<String, ? extends Object> getInitServerProperties()
-            {
-                return null;
-            }
-
-            @Override
-            public RClientGraphic newGraphic(final int devId,
-                                             final double w,
-                                             final double h,
-                                             final InitConfig config,
-                                             final boolean active,
-                                             final RClientGraphicActions actions,
-                                             final int options)
-            {
-                return new RClientGraphicDummy(devId, w, h);
-            }
-
-            @Override
-            public void closeGraphic(final RClientGraphic graphic)
-            {
-                // NOOP
-            }
-        });
+        RjsComConfig.setProperty("rj.servi.graphicFactory", new RClientGraphicDummyFactory());
     }
 
 
@@ -94,22 +77,44 @@ public class RPooliAppEnvironment extends BasicAppEnvironment implements Disposa
     @Override
     public void log(final Status status)
     {
-        switch (status.getSeverity())
-        {
-            case INFO :
-                LOGGER.info(status.getMessage(), status.getException());
-                break;
+        final Log log= this.logs.computeIfAbsent(status.getBundleId(),
+                (final String s) -> LogFactory.getLog(s) );
 
-            case WARNING :
-                LOGGER.warn(status.getMessage(), status.getException());
-                break;
+        final ToStringBuilder sb= new ToStringBuilder();
+        sb.append(Statuses.getSeverityString(status.getSeverity()));
+        sb.append(" ["); //$NON-NLS-1$
+        sb.append(status.getCode());
+        sb.append(']');
+        if (status.getMessage().length() <= 80 && status.getMessage().indexOf('\n') == -1) {
+            sb.append(' ');
+            sb.append(status.getMessage());
+        }
+        else {
+            sb.addProp("message", status.getMessage()); //$NON-NLS-1$
+        }
+        if (status.isMultiStatus()) {
+            final ImList<Status> children= status.getChildren();
+            if (children != null && !children.isEmpty()) {
+                final StringBuilder sb0= new StringBuilder();
+                sb0.append("Status:\n");
+                this.logStatusPrinter.print(children, sb0);
+                sb.addProp("children", sb0.toString()); //$NON-NLS-1$
+            }
+            else {
+                sb.addProp("children", "<none>"); //$NON-NLS-1$
+            }
+        }
 
-            case ERROR :
-                LOGGER.error(status.getMessage(), status.getException());
-                break;
-
-            default :
-                LOGGER.debug(status.getMessage(), status.getException());
+        switch (status.getSeverity()) {
+        case Status.ERROR:
+            log.error(sb.toString(), status.getException());
+            break;
+        case Status.WARNING:
+            log.warn(sb.toString(), status.getException());
+            break;
+        default:
+            log.info(sb.toString(), status.getException());
+            break;
         }
     }
 

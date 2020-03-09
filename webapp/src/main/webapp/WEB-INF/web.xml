@@ -22,12 +22,10 @@
 
     <display-name>R Pooli</display-name>
 
-	<context-param>
-		<param-name>contextClass</param-name>
-		<param-value>
-		    org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-		</param-value>
-  	</context-param>
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </context-param>
 
     <!-- Spring bootstrap -->
     <context-param>
@@ -65,15 +63,13 @@
         <servlet-name>CxfServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <init-param>
-			<param-name>contextClass</param-name>
-			<param-value>
-			    org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-			</param-value>
-      	</init-param>
-      	<init-param>
-      		<param-name>contextConfigLocation</param-name>
-      		<param-value>eu.openanalytics.rpooli.config.JaxRsServerConfig,eu.openanalytics.rpooli.config.CoreBeansConfig</param-value>
-      	</init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+        </init-param>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>eu.openanalytics.rpooli.config.JaxRsServerConfig,eu.openanalytics.rpooli.config.CoreBeansConfig</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
