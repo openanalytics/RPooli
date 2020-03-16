@@ -25,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import org.eclipse.statet.jcommons.status.StatusException;
 import org.eclipse.statet.rj.RjInitFailedException;
 
 import eu.openanalytics.rpooli.ClientSimulator;
@@ -44,8 +45,13 @@ public class CoreBeansConfig {
 	
 	@Bean(destroyMethod = "dispose")
 	public RPooliAppEnvironment environment() {
-		RPooliAppEnvironment environment = new RPooliAppEnvironment();
-		return environment;
+        try
+        {
+            return new RPooliAppEnvironment();
+        } catch (StatusException e)
+        {
+            throw new BeanCreationException(e.getMessage(), e);
+        }
 	}
 	
 	@Bean
@@ -55,7 +61,7 @@ public class CoreBeansConfig {
 			RPooliContext context = new RPooliContext(servletContext);
 			return context;
 		} catch (RjInitFailedException e) {
-			throw new BeanCreationException(e.getMessage());
+			throw new BeanCreationException(e.getMessage(), e);
 		}
 	}
 	
