@@ -20,11 +20,11 @@ import static io.restassured.RestAssured.expect;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -34,10 +34,11 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.URI;
 
-import org.eclipse.statet.rj.servi.RServiUtils;
+import io.restassured.RestAssured;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.eclipse.statet.rj.servi.RServiUtils;
 
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJson;
 import eu.openanalytics.rpooli.api.spec.model.ConfNetResolvedJsonParent;
@@ -46,7 +47,6 @@ import eu.openanalytics.rpooli.api.spec.model.ConfRJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.Node.State;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
-import io.restassured.RestAssured;
 
 /**
  * Run with: <code>mvn clean verify</code>
@@ -140,7 +140,7 @@ public class ApiV1ITCase
     @Test
     public void acquireReleaseAndKillTestNode() throws Exception
     {
-        assertThat(getActiveNodesCount(), is(1));
+        assertThat(getActiveNodesCount(), greaterThan(0));
 
         expect().statusCode(204).when().post("/nodes/test");
 
@@ -153,10 +153,29 @@ public class ApiV1ITCase
         // the node should not be lent anymore
         assertThat(getOneLentNode(), is(nullValue()));
 
-        given().expect().statusCode(204).when().delete("/nodes/" + lent.getId());
+        given().queryParam("kill", true)
+                .expect().statusCode(204)
+                .when().delete("/nodes/" + lent.getId());
 
         // the node should have been killed
-        assertThat(getActiveNodesCount(), is(1));
+        for (int i= 0;; i++)
+        {
+            Thread.sleep(250);
+            try {
+                expect().statusCode(404)
+                        .when().get("/nodes/" + lent.getId())
+                        .then().assertThat()
+                        .body(matchesJsonSchema(getSchemaUri("error")));
+                break;
+            }
+            catch (AssertionError e)
+            {
+                if (i >= 10)
+                {
+                    throw e;
+                }
+            }
+        }
     }
 
     @Test
