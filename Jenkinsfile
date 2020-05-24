@@ -20,7 +20,7 @@ pipeline {
                      
                      configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
                          
-                         sh 'mvn -s $MAVEN_SETTINGS_RSB -P-javax-dependencies clean package deploy'
+                         sh 'mvn -s $MAVEN_SETTINGS_RSB -P-javax-dependencies -U clean package deploy'
                          
                      }
                 }
