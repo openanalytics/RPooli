@@ -53,17 +53,17 @@
         <snapshotRepository>
             <id>oa-nexus-snapshots</id>
             <name>Open Analytics Snapshots Repository</name>
-            <url>http://nexus.openanalytics.eu:8080/nexus/content/repositories/snapshots</url>
+            <url>https://nexus.openanalytics.eu/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>oa-nexus-releases</id>
             <name>Open Analytics Releases Repository</name>
-            <url>http://nexus.openanalytics.eu:8080/nexus/content/repositories/releases</url>
+            <url>https://nexus.openanalytics.eu/nexus/content/repositories/releases</url>
         </repository>
         <site>
             <id>oa-nexus-docs</id>
             <name>Open Analytics Maven Docs Repository</name>
-            <url>dav:http://nexus.openanalytics.eu:8080/nexus/content/sites/docs/rpooli-parent/${project.version}</url>
+            <url>dav:https://nexus.openanalytics.eu/nexus/content/sites/docs/rpooli-parent/${project.version}</url>
         </site>
     </distributionManagement>
 
@@ -116,4 +116,7 @@
 	        </plugin>
     	</plugins>
     </reporting>
+
+    
+    
 </project>
