@@ -15,23 +15,14 @@ pipeline {
         stage('build and deploy to nexus'){
         
             steps {
-            
-                container('maven') {
-                    sh 'mvn -P-javax-dependencies -U clean package'
-                }
-                
-                container('rpooli-tests'){
-                    sh 'mvn verify -Pit'
-                }
-                
-                container('maven') {
+                container('rpooli-build') {
                     configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
-                         sh 'mvn -s $MAVEN_SETTINGS_RSB deploy'
+                        sh 'mvn -P-javax-dependencies -U clean package'
+                        sh 'mvn verify -Pit'
+                        sh 'mvn -s $MAVEN_SETTINGS_RSB deploy'
                     }
                 }
-                
             }
-
         }
     }
 }
