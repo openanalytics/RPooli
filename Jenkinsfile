@@ -7,7 +7,6 @@ pipeline {
     }
 
     options {
-        authorizationMatrix(['hudson.model.Item.Build:rsb', 'hudson.model.Item.Read:rsb'])
         buildDiscarder(logRotator(numToKeepStr: '3'))
     }
     
@@ -18,14 +17,21 @@ pipeline {
             steps {
             
                 container('maven') {
-                     
-                     configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
-                         
-                         sh 'mvn -s $MAVEN_SETTINGS_RSB -P-javax-dependencies -U clean package deploy'
-                         
-                     }
+                    sh 'mvn -P-javax-dependencies -U clean package'
                 }
+                
+                container('rpooli-tests'){
+                    sh 'mvn verify -Pit'
+                }
+                
+                container('maven') {
+                    configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
+                         sh 'mvn -s $MAVEN_SETTINGS_RSB deploy'
+                    }
+                }
+                
             }
+
         }
     }
 }
