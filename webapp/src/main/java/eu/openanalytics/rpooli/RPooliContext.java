@@ -72,7 +72,6 @@ public class RPooliContext extends RJContext
 
     public RPooliContext(final ServletContext servletContext) throws RjInitFailedException
     {
-        super(RJContext.detectRJLibPaths());
         this.servletContext = checkNotNull(servletContext, "servletContext can't be null");
         propertiesDirPath = initializePropertiesDirPath();
     }
