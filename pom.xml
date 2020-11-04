@@ -45,11 +45,13 @@
         <url>https://www.openanalytics.eu</url>
     </organization>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
-        <rj.version>4.2.0-SNAPSHOT</rj.version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<maven.compiler.release>11</maven.compiler.release>
+		
+		<rj.version>4.2.0-SNAPSHOT</rj.version>
+	</properties>
 
     <distributionManagement>
         <snapshotRepository>
@@ -104,7 +106,19 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
         <plugins>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
