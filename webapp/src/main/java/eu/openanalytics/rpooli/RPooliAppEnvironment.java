@@ -24,13 +24,13 @@ import java.nio.file.Path;
 
 import org.springframework.core.io.UrlResource;
 
+import org.eclipse.statet.jcommons.io.UriUtils;
 import org.eclipse.statet.jcommons.lang.Disposable;
 import org.eclipse.statet.jcommons.lang.NonNullByDefault;
 import org.eclipse.statet.jcommons.runtime.AppEnvironment;
 import org.eclipse.statet.jcommons.runtime.BasicAppEnvironment;
 import org.eclipse.statet.jcommons.runtime.ClassLoaderUtils;
 import org.eclipse.statet.jcommons.runtime.CommonsRuntime;
-import org.eclipse.statet.jcommons.runtime.UriUtils;
 import org.eclipse.statet.jcommons.runtime.bundle.BundleEntryProvider;
 import org.eclipse.statet.jcommons.runtime.bundle.BundleResolver;
 import org.eclipse.statet.jcommons.runtime.bundle.Bundles;
