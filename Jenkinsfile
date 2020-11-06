@@ -17,7 +17,7 @@ pipeline {
             steps {
                 container('rpooli-build') {
                     configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
-                        sh 'mvn clean verify -Pjavax-dependencies,it'
+                        sh 'mvn clean verify -Pjavax-dependencies,it -U'
                         sh 'mvn -s $MAVEN_SETTINGS_RSB deploy -Pjavax-dependencies'
                     }
                 }
