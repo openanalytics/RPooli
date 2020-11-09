@@ -58,7 +58,7 @@
 		<spring.version>5.2.10.RELEASE</spring.version>
 		<spring-security.version>5.3.5.RELEASE</spring-security.version>
 		
-		<jetty-plugin.version>9.4.26.v20200117</jetty-plugin.version>
+		<jetty-plugin.version>9.4.34.v20201102</jetty-plugin.version>
 		
 		<rest-assured.version>4.3.2</rest-assured.version>
 		
