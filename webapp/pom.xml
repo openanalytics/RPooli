@@ -51,14 +51,6 @@
     </issueManagement>
 
     <properties>
-        <spring.version>5.2.10.RELEASE</spring.version>
-        <spring-security.version>5.3.5.RELEASE</spring-security.version>
-        <cxf.version>3.3.7</cxf.version>
-        <jackson.version>2.11.3</jackson.version>
-        <rest-assured.version>4.3.2</rest-assured.version>
-
-        <jetty-plugin.version>9.4.26.v20200117</jetty-plugin.version>
-
         <local.server.port>8889</local.server.port>
         <local.server.path>/rpooli</local.server.path>
         <local.server.stop-port>8899</local.server.stop-port>
@@ -78,38 +70,32 @@
             <groupId>org.eclipse.statet.rj</groupId>
             <artifactId>org.eclipse.statet.rj.servi</artifactId>
         </dependency>
+		
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>jakarta.activation</artifactId>
+		</dependency>
 
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-jcl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <!-- Spring Security -->
@@ -133,17 +119,14 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-core</artifactId>
-            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -188,19 +171,25 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>json-schema-validator</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>${rest-assured.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.activation</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -502,7 +491,6 @@
                 <dependency>
                     <groupId>org.springframework.security</groupId>
                     <artifactId>spring-security-openid</artifactId>
-                    <version>${spring-security.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -513,7 +501,6 @@
                 <dependency>
                     <groupId>org.springframework.security</groupId>
                     <artifactId>spring-security-ldap</artifactId>
-                    <version>${spring-security.version}</version>
                 </dependency>
             </dependencies>
         </profile>
