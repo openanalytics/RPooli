@@ -55,7 +55,7 @@
         <spring-security.version>5.3.5.RELEASE</spring-security.version>
         <cxf.version>3.3.7</cxf.version>
         <jackson.version>2.11.3</jackson.version>
-        <rest-assured.version>4.0.0</rest-assured.version>
+        <rest-assured.version>4.3.2</rest-assured.version>
 
         <jetty-plugin.version>9.4.26.v20200117</jetty-plugin.version>
 
