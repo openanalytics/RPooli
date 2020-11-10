@@ -71,9 +71,15 @@
             <artifactId>org.eclipse.statet.rj.servi</artifactId>
         </dependency>
 		
+		<!-- Jakarta -->
 		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>jakarta.activation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
         <!-- Spring -->
@@ -179,15 +185,7 @@
             <artifactId>guava</artifactId>
             <version>28.0-jre</version>
         </dependency>
-
-        <!-- Provided goodness -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-
+		
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>io.rest-assured</groupId>
