@@ -207,16 +207,6 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-                <executions>
-                    <execution>
-                        <id>verify-license-headers</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <header>../LICENSE_HEADER</header>
                     <properties>
@@ -229,11 +219,16 @@
                         <exclude>src/main/webapp/raml/ui/**</exclude>
                         <exclude>misc/config-examples/**</exclude>
                     </excludes>
-                    <mapping>
-                        <raml>SCRIPT_STYLE</raml>
-                        <policy>DOUBLESLASH_STYLE</policy>
-                    </mapping>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>verify-license-headers</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -315,7 +310,6 @@
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
                 <executions>
                     <execution>
                         <id>copy-config-examples</id>
@@ -394,7 +388,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.6</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
@@ -407,7 +400,6 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty-plugin.version}</version>
                 <configuration>
                     <webApp>
                         <contextPath>${local.server.path}</contextPath>
@@ -428,7 +420,6 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-project-info-reports-plugin</artifactId>
-               <version>2.8</version>
                <reportSets>
                    <reportSet>
                        <reports>
@@ -445,12 +436,10 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-javadoc-plugin</artifactId>
-               <version>2.10.2</version>
            </plugin>
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-surefire-report-plugin</artifactId>
-               <version>2.22.2</version>
            </plugin>
            <plugin>
                <groupId>org.codehaus.mojo</groupId>
@@ -512,7 +501,6 @@
                     <plugin>
                         <groupId>org.eclipse.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
-                        <version>${jetty-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>start-jetty</id>
@@ -538,7 +526,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.22.2</version>
                         <configuration>
 	                        <systemPropertyVariables>
 	                            <api.server.port>${local.server.port}</api.server.port>
