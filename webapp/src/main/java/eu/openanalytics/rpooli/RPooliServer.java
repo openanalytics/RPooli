@@ -17,12 +17,10 @@
 
 package eu.openanalytics.rpooli;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.transform;
 import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.collect;
 import static org.apache.commons.collections4.IterableUtils.find;
-import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 import java.io.IOException;
@@ -30,10 +28,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import com.google.common.base.Function;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.logging.Log;
@@ -73,8 +71,8 @@ public final class RPooliServer implements Disposable
 
     public static RPooliServer create(final ServletContext servletContext, final RPooliContext context)
     {
-        checkNotNull(servletContext, "servletContext can't be null");
-        checkNotNull(context, "context can't be null");
+        requireNonNull(servletContext, "servletContext can't be null");
+        requireNonNull(context, "context can't be null");
 
         final String serverId = removeStart(servletContext.getContextPath(), "/");
         return new RPooliServer(serverId, context);
@@ -258,16 +256,12 @@ public final class RPooliServer implements Disposable
         {
             return config;
         }
-        else
-        {
-            final String reason = join(transform(messages, new Function<ValidationMessage, String>()
-            {
-                @Override
-                public String apply(final ValidationMessage vm)
-                {
-                    return vm == null ? "n/a" : vm.getPropertyId() + ": " + vm.getMessage();
-                }
-            }), ", ");
+        else {   
+            final String reason= messages.stream()
+                    .map((final var message) -> (message != null) ?
+                            message.getPropertyId() + ": " + message.getMessage() :
+                            "n/a" )
+                    .collect(Collectors.joining(", "));
 
             throw new IllegalArgumentException("Invalid configuration for " + config.getBeanId() + ": "
                                                + reason);
