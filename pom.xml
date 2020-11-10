@@ -322,6 +322,20 @@
 	</dependencyManagement>
 	
 	<build>
+		<extensions>
+			<!-- Workaround for classpath of jetty-maven-plugin (https://github.com/eclipse/jetty.project/issues/3186) -->
+			<extension>
+				<groupId>javax.annotation</groupId>
+				<artifactId>javax.annotation-api</artifactId>
+				<version>1.3.2</version>
+			</extension>
+			<extension>
+				<groupId>javax.annotation</groupId>
+				<artifactId>jsr250-api</artifactId>
+				<version>1.0</version>
+			</extension>
+		</extensions>
+		
 		<pluginManagement>
 			<plugins>
 				<plugin>
