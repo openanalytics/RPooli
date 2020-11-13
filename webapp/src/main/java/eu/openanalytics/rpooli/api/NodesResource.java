@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RPooli.
  *
  * RPooli is free software: you can redistribute it and/or modify
@@ -14,6 +14,7 @@
  * You should have received a copy of the Apache License
  * along with RPooli.  If not, see <http://www.apache.org/licenses/>.
  */
+
 package eu.openanalytics.rpooli.api;
 
 import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.withJsonOK;

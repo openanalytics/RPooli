@@ -332,8 +332,11 @@
 					<artifactId>license-maven-plugin</artifactId>
 					<version>3.0</version>
 					<configuration>
+						<strictCheck>false</strictCheck>
 						<mapping>
+							<java>SLASHSTAR_STYLE</java>
 							<raml>SCRIPT_STYLE</raml>
+							<wsdl>XML_STYLE</wsdl>
 							<policy>DOUBLESLASH_STYLE</policy>
 						</mapping>
 					</configuration>
