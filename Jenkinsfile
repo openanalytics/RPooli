@@ -1,3 +1,5 @@
+String packageProfiles= 'javax-dependencies';
+
 pipeline {
 
     agent {
@@ -17,9 +19,15 @@ pipeline {
             steps {
                 container('rpooli-build') {
                     configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
-                        sh 'mvn clean verify -P javax-dependencies,it -U'
-                        sh 'mvn -s $MAVEN_SETTINGS_RSB deploy -P javax-dependencies'
-                        sh 'mvn -s $MAVEN_SETTINGS_RSB -f webapp/ site'
+						sh "mvn clean verify \
+								-P ${packageProfiles},it -U \
+								--batch-mode"
+						sh "mvn deploy \
+								-P ${packageProfiles} \
+								--batch-mode -s $MAVEN_SETTINGS_RSB"
+						sh "mvn -f webapp/ site-deploy \
+								-P ${packageProfiles} \
+								--batch-mode -s $MAVEN_SETTINGS_RSB"
                     }
                 }
             }
