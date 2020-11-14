@@ -3,6 +3,6 @@
     "license": "Apache-2.0",
     "version": "1.0.0",
     "devDependencies": {
-        "raml2html": "*"
+        "raml2html": "3.0.1"
     }
 }

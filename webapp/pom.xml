@@ -56,13 +56,13 @@
         <local.server.stop-port>8899</local.server.stop-port>
     </properties>
 
-    <distributionManagement>
-        <site>
-            <id>oa-nexus-docs</id>
-            <name>Open Analytics Maven Docs Repository</name>
-            <url>dav:http://nexus.openanalytics.eu:8080/nexus/content/sites/docs/rpooli/${project.version}</url>
-        </site>
-    </distributionManagement>
+	<distributionManagement>
+		<site>
+			<id>oa-nexus-docs</id>
+			<name>Open Analytics Maven Docs Repository</name>
+			<url>dav:https://nexus.openanalytics.eu/repository/docs/rpooli/${project.version}</url>
+		</site>
+	</distributionManagement>
 
     <dependencies>
         <!-- Rj -->
@@ -298,11 +298,10 @@
                 </executions>
             </plugin>
 			-->
-
+			
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>3.1.12</version>
                 <executions>
                     <execution>
                         <id>spotbugs-check</id>
@@ -316,7 +315,25 @@
                     <fork>false</fork>
                 </configuration>
             </plugin>
-
+			
+			<!-- Testing -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <webApp>
+                        <contextPath>${local.server.path}</contextPath>
+                    </webApp>
+                    <httpConnector>
+                        <port>${local.server.port}</port>
+                    </httpConnector>
+                    <stopKey>rpooli-jetty</stopKey>
+                    <stopPort>${local.server.stop-port}</stopPort>
+                    <stopWait>60</stopWait>
+                </configuration>
+            </plugin>
+			
+			<!-- Site -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -358,42 +375,46 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.3.2</version>
-                <executions>
-                    <execution>
-                        <id>install-raml2html</id>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>npm</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>run-raml2html-v1</id>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${project.build.directory}/node_modules/.bin/raml2html</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                            <commandlineArgs>-s -i ${basedir}/src/main/webapp/raml/api_v1.raml -o
-                                ${project.build.directory}/site/api_v1.html</commandlineArgs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.10.3</version>
+				<configuration>
+					<nodeVersion>v8.17.0</nodeVersion>
+					<workingDirectory>${project.build.directory}</workingDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install-node-and-npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>pre-site</phase>
+					</execution>
+					<execution>
+						<id>install-raml2html</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>pre-site</phase>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>run-raml2html</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>npx</goal>
+						</goals>
+						<configuration>
+							<arguments>raml2html
+									-i ${basedir}/src/main/webapp/raml/api_v1.raml
+									-o ${project.build.directory}/site/api_v1.html</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -405,64 +426,39 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <webApp>
-                        <contextPath>${local.server.path}</contextPath>
-                    </webApp>
-                    <httpConnector>
-                        <port>${local.server.port}</port>
-                    </httpConnector>
-                    <stopKey>rpooli-jetty</stopKey>
-                    <stopPort>${local.server.stop-port}</stopPort>
-                    <stopWait>60</stopWait>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-    
-    <reporting>
-    	<plugins>
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-project-info-reports-plugin</artifactId>
-               <reportSets>
-                   <reportSet>
-                       <reports>
-                           <report>summary</report>
-                           <report>license</report>
-                           <report>scm</report>
-                           <report>dependencies</report>
-                           <report>plugins</report>
-                           <report>plugin-management</report>
-                       </reports>
-                   </reportSet>
-               </reportSets>
-           </plugin>
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-javadoc-plugin</artifactId>
-           </plugin>
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-surefire-report-plugin</artifactId>
-           </plugin>
-           <plugin>
-               <groupId>org.codehaus.mojo</groupId>
-               <artifactId>findbugs-maven-plugin</artifactId>
-               <version>3.0.0</version>
-           </plugin>
-           <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-jxr-plugin</artifactId>
-               <version>2.5</version>
-           </plugin>
-    	</plugins>
-    </reporting>
-
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>summary</report>
+							<report>licenses</report>
+							<report>scm</report>
+							<report>issue-management</report>
+							<report>dependencies</report>
+							<report>plugin-management</report>
+							<report>plugins</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+	
     <profiles>
         <profile>
             <id>javax-dependencies</id>

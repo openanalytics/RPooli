@@ -29,11 +29,9 @@ The test requires the R packages RSBXml and RSBJson.
 
 ## Site generation
 
-A recent version of `Node.js` must be installed and on path when generating the site.
+To generate the site for RPooli, run:
 
-If this pre-requisite is met, run:
-
-    mvn site
+    mvn -f webapp/ site
 
 
 ## Start
