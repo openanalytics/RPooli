@@ -18,12 +18,8 @@ pipeline {
 		stage('build + deploy artifacts') {
 			steps {
 				configFileProvider([configFile(fileId: 'maven-settings-rsb', variable: 'MAVEN_SETTINGS_RSB')]) {
-					sh "mvn clean verify\
+					sh "mvn clean package deploy\
 							-P ${packageProfiles},it -U\
-							--batch-mode\
-							-Dmaven.test.failure.ignore=true"
-					sh "mvn deploy\
-							-P ${packageProfiles}\
 							--batch-mode -s $MAVEN_SETTINGS_RSB\
 							-Dmaven.test.failure.ignore=true"
 				}
