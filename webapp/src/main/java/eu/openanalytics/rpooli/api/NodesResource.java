@@ -25,6 +25,7 @@ import javax.ws.rs.WebApplicationException;
 import org.apache.commons.lang3.Validate;
 
 import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
+import org.eclipse.statet.rj.servi.pool.PoolNodeState;
 
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.ClientSimulator;
@@ -34,6 +35,7 @@ import eu.openanalytics.rpooli.api.spec.model.ErrorJson;
 import eu.openanalytics.rpooli.api.spec.model.Node;
 import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 import eu.openanalytics.rpooli.api.spec.resource.Nodes;
+
 
 /**
  * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
@@ -135,9 +137,28 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
             .withCreationTime(pni.getCreationTime())
             .withLentCount(pni.getUsageCount())
             .withLentDuration(pni.getUsageDuration())
-            .withState(Node.State.fromValue(rpn.getItem().getState().toString()))
+            .withState(convertState(rpn.getItem().getState()))
             .withStateTime(pni.getStateTime())
             .withConsoleEnabled(pni.isConsoleEnabled());
     }
-
+	
+	private static Node.State convertState(final PoolNodeState state) {
+		switch (state) {
+		case INITIALIZING:
+			return Node.State.INITIALIZING;
+		case CHECKING:
+			return Node.State.CHECKING;
+		case IDLING:
+			return Node.State.IDLING;
+		case ALLOCATED:
+			return Node.State.ALLOCATED;
+		case DISPOSING:
+			return Node.State.EVICTING;
+		case DISPOSED:
+			return Node.State.DISPOSED;
+		default:
+			throw new IllegalArgumentException(state.toString());
+		}
+	}
+	
 }
