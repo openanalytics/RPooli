@@ -201,6 +201,10 @@
 						<groupId>*</groupId>
 						<artifactId>javax.activation</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>javax.activation</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
