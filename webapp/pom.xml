@@ -73,6 +73,10 @@
 		
 		<!-- Jakarta -->
 		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.activation</groupId>
 			<artifactId>jakarta.activation</artifactId>
 		</dependency>

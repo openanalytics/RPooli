@@ -113,6 +113,11 @@
 			
 			<!-- Jakarta -->
 			<dependency>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>1.3.5</version>
+			</dependency>
+			<dependency>
 				<groupId>com.sun.activation</groupId>
 				<artifactId>jakarta.activation</artifactId>
 				<version>1.2.2</version>
@@ -195,6 +200,10 @@
 				<exclusions>
 					<exclusion>
 						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
 					</exclusion>
 					<exclusion>
@@ -214,6 +223,10 @@
 				<exclusions>
 					<exclusion>
 						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
 					</exclusion>
 					<exclusion>
@@ -227,6 +240,10 @@
 				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 				<version>${cxf.version}</version>
 				<exclusions>
+					<exclusion>
+						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
@@ -244,6 +261,10 @@
 				<exclusions>
 					<exclusion>
 						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
 					</exclusion>
 					<exclusion>
@@ -259,6 +280,10 @@
 				<exclusions>
 					<exclusion>
 						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
 					</exclusion>
 					<exclusion>
@@ -272,6 +297,10 @@
 				<artifactId>cxf-rt-rs-extension-providers</artifactId>
 				<version>${cxf.version}</version>
 				<exclusions>
+					<exclusion>
+						<groupId>*</groupId>
+						<artifactId>javax.annotation-api</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>*</groupId>
 						<artifactId>jakarta.activation-api</artifactId>
@@ -339,9 +368,9 @@
 		<extensions>
 			<!-- Workaround for classpath of jetty-maven-plugin (https://github.com/eclipse/jetty.project/issues/3186) -->
 			<extension>
-				<groupId>javax.annotation</groupId>
-				<artifactId>javax.annotation-api</artifactId>
-				<version>1.3.2</version>
+				<groupId>jakarta.annotation</groupId>
+				<artifactId>jakarta.annotation-api</artifactId>
+				<version>1.3.5</version>
 			</extension>
 			<extension>
 				<groupId>javax.annotation</groupId>
