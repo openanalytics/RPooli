@@ -40,6 +40,10 @@ pipeline {
 	
 	post {
 		always {
+			archiveArtifacts(
+					artifacts: '**/target/dependency-*.txt',
+					fingerprint: true )
+			
 			junit '**/target/failsafe-reports/*.xml'
 		}
 	}

@@ -455,6 +455,23 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>list</goal>
+						</goals>
+						<configuration>
+							<sort>true</sort>
+							<outputFile>${project.build.directory}/dependency-list.txt</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<dependencies>
 					<dependency>
