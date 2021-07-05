@@ -28,7 +28,7 @@ import eu.openanalytics.rpooli.api.spec.model.PoolJson;
 import eu.openanalytics.rpooli.api.spec.resource.Pool;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class PoolResource extends AbstractRPooliServerAware implements Pool
 {

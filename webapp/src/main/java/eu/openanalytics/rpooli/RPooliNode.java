@@ -29,7 +29,7 @@ import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
 import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class RPooliNode
 {

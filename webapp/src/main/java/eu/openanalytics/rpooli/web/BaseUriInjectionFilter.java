@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class BaseUriInjectionFilter implements Filter
 {

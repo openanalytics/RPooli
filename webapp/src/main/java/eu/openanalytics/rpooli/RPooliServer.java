@@ -50,7 +50,7 @@ import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
 /**
  * The actual server that bootstraps R nodes.
  *
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public final class RPooliServer implements Disposable
 {

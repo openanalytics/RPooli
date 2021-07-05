@@ -52,7 +52,7 @@ import eu.openanalytics.rpooli.api.spec.model.NodesJson;
 /**
  * Run with: <code>mvn clean verify</code>
  *
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 
 public class ApiV1ITCase

@@ -20,7 +20,7 @@ package eu.openanalytics.rpooli;
 import org.apache.commons.lang3.Validate;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public abstract class AbstractRPooliServerAware
 {

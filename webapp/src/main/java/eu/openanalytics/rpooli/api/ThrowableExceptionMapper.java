@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import eu.openanalytics.rpooli.api.spec.model.ErrorJson;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class ThrowableExceptionMapper implements ExceptionMapper<Throwable>
 {

@@ -46,7 +46,7 @@ import org.eclipse.statet.rj.server.util.RJContext;
 import org.eclipse.statet.rj.server.util.ServerUtils;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class RPooliContext extends RJContext
 {

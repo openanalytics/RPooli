@@ -39,7 +39,7 @@ import eu.openanalytics.rpooli.api.spec.model.EnvironmentVariable;
 import eu.openanalytics.rpooli.api.spec.resource.Config;
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class ConfigResource extends AbstractRPooliServerAware implements Config
 {

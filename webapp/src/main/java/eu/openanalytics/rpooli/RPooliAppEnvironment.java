@@ -46,7 +46,7 @@ import org.eclipse.statet.rj.server.client.RClientGraphicDummyFactory;
 /**
  * The {@link AppEnvironment} implementation specific for RPooli.
  * 
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 @NonNullByDefault
 public class RPooliAppEnvironment extends BasicAppEnvironment implements Disposable

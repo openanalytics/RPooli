@@ -38,7 +38,7 @@ import eu.openanalytics.rpooli.api.spec.resource.Nodes;
 
 
 /**
- * @author "OpenAnalytics &lt;rsb.development@openanalytics.eu&gt;"
+ * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
  */
 public class NodesResource extends AbstractRPooliServerAware implements Nodes
 {
