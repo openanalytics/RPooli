@@ -54,7 +54,7 @@
 		<rj.version>4.4.1.202108191400-r</rj.version>
 		
 		<jackson.version>2.11.4</jackson.version>
-		<cxf.version>3.4.4</cxf.version>
+		<cxf.version>3.4.5</cxf.version>
 		
 		<spring-framework.version>5.3.10</spring-framework.version>
 		<spring-security.version>5.5.2</spring-security.version>
