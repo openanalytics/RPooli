@@ -22,11 +22,12 @@ import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToStrin
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 import java.net.URI;
-
-import org.apache.commons.lang3.Validate;
+import java.time.Instant;
 
 import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
 import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
+
+import org.apache.commons.lang3.Validate;
 
 /**
  * @author "Open Analytics &lt;rsb.development@openanalytics.eu&gt;"
@@ -41,27 +42,26 @@ public class RPooliNode
     {
         this.object = Validate.notNull(nodeObj, "nodeObj can't be null");
         this.address = URI.create(this.object.getNodeHandler().getAddress().toString());
-        this.id = strip(address.getPath(), "/");
+        this.id = strip(this.address.getPath(), "/");
     }
 
-    public PoolNodeItem getItem()
-    {
-        return new PoolNodeItem(this.object, System.currentTimeMillis());
-    }
-
+	public PoolNodeItem getItem() {
+		return new PoolNodeItem(this.object, Instant.now());
+	}
+	
     public String getId()
     {
-        return id;
+        return this.id;
     }
 
     public URI getAddress()
     {
-        return address;
+        return this.address;
     }
 
     public PoolNodeObject getObject()
     {
-        return object;
+        return this.object;
     }
 
     @Override

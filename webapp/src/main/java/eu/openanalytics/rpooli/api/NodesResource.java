@@ -17,15 +17,16 @@
 
 package eu.openanalytics.rpooli.api;
 
-import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.withJsonOK;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
+import static eu.openanalytics.rpooli.api.spec.resource.Nodes.GetNodesByNodeIdResponse.withJsonOK;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.commons.lang3.Validate;
-
 import org.eclipse.statet.rj.servi.pool.PoolNodeItem;
 import org.eclipse.statet.rj.servi.pool.PoolNodeState;
+
+import org.apache.commons.lang3.Validate;
 
 import eu.openanalytics.rpooli.AbstractRPooliServerAware;
 import eu.openanalytics.rpooli.ClientSimulator;
@@ -57,7 +58,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     {
         final NodesJson nodes = new NodesJson();
 
-        for (final RPooliNode rpn : server.getNodes())
+        for (final RPooliNode rpn : this.server.getNodes())
         {
             nodes.getNodes().add(buildNode(rpn));
         }
@@ -68,21 +69,21 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     @Override
     public GetNodesByNodeIdResponse getNodesByNodeId(final String nodeId) throws Exception
     {
-        final RPooliNode rpn = server.findNodeById(nodeId);
+        final RPooliNode rpn = this.server.findNodeById(nodeId);
         return rpn == null
                           ? GetNodesByNodeIdResponse.withJsonNotFound(new ErrorJson().withError("Node not found: "
                                                                                                 + nodeId))
                           : withJsonOK(buildNode(rpn));
     }
 
-    @Override
-    public DeleteNodesByNodeIdResponse deleteNodesByNodeId(final String nodeId, final boolean kill)
-        throws Exception
-    {
-        getNodeOrDie(nodeId).getObject().evict(kill ? 0L : server.getConfig().getEvictionTimeout());
-
-        return DeleteNodesByNodeIdResponse.withNoContent();
-    }
+	@Override
+	public DeleteNodesByNodeIdResponse deleteNodesByNodeId(final String nodeId, final boolean kill)
+			throws Exception {
+		getNodeOrDie(nodeId).getObject().evict(
+				(kill) ? null : this.server.getConfig().getEvictionTimeout() );
+		
+		return DeleteNodesByNodeIdResponse.withNoContent();
+	}
 
     @Override
     public PostNodesByNodeIdConsoleResponse postNodesByNodeIdConsole(final String nodeId) throws Exception
@@ -104,7 +105,7 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     @Override
     public PostNodesTestResponse postNodesTest() throws Exception
     {
-        clientSimulator.acquireNode();
+        this.clientSimulator.acquireNode();
 
         return PostNodesTestResponse.withNoContent();
     }
@@ -112,35 +113,50 @@ public class NodesResource extends AbstractRPooliServerAware implements Nodes
     @Override
     public DeleteNodesTestResponse deleteNodesTest() throws Exception
     {
-        clientSimulator.releaseAllNodes();
+        this.clientSimulator.releaseAllNodes();
 
         return DeleteNodesTestResponse.withNoContent();
     }
 
     private RPooliNode getNodeOrDie(final String nodeId)
     {
-        final RPooliNode rpn = server.findNodeById(nodeId);
+        final RPooliNode rpn = this.server.findNodeById(nodeId);
         if (rpn == null)
         {
             throw new WebApplicationException(NOT_FOUND);
         }
         return rpn;
     }
-
-    private static Node buildNode(final RPooliNode rpn)
-    {
-        final PoolNodeItem pni = rpn.getItem();
-
-        return new Node().withId(rpn.getId())
-            .withAddress(rpn.getAddress())
-            .withClientLabel(pni.getCurrentClientLabel())
-            .withCreationTime(pni.getCreationTime())
-            .withLentCount(pni.getUsageCount())
-            .withLentDuration(pni.getUsageDuration())
-            .withState(convertState(rpn.getItem().getState()))
-            .withStateTime(pni.getStateTime())
-            .withConsoleEnabled(pni.isConsoleEnabled());
-    }
+	
+	private static Node buildNode(final RPooliNode rpn) {
+		final PoolNodeItem nodeItem= rpn.getItem();
+		
+		return new Node().withId(rpn.getId())
+				.withAddress(rpn.getAddress())
+				.withClientLabel(nodeItem.getCurrentClientLabel())
+				.withCreationTime(toCreationTime(nodeItem))
+				.withLentCount(nodeItem.getUsageCount())
+				.withLentDuration(toLentDuration(nodeItem))
+				.withState(convertState(rpn.getItem().getState()))
+				.withStateTime(toStateTime(nodeItem))
+				.withConsoleEnabled(nodeItem.isConsoleEnabled());
+	}
+	
+	
+	private static long toCreationTime(final PoolNodeItem nodeItem) {
+		final var stamp= nodeItem.getCreationTime();
+		return (stamp != null) ? stamp.toEpochMilli() : -1;
+	}
+	
+	private static long toStateTime(final PoolNodeItem nodeItem) {
+		final var stamp= nodeItem.getStateTime();
+		return (stamp != null) ? stamp.toEpochMilli() : -1;
+	}
+	
+	private static long toLentDuration(final PoolNodeItem nodeItem) {
+		final var duration= nodeItem.getUsageDuration();
+		return (duration != null) ? duration.toMillis() : -1;
+	}
 	
 	private static Node.State convertState(final PoolNodeState state) {
 		switch (state) {
