@@ -24,7 +24,7 @@
     <parent>
         <groupId>eu.openanalytics</groupId>
         <artifactId>rpooli-parent</artifactId>
-        <version>1.4.2-SNAPSHOT</version>
+        <version>1.4.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>rpooli</artifactId>

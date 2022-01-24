@@ -23,7 +23,7 @@
     <groupId>eu.openanalytics</groupId>
     <artifactId>rpooli-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <name>RPooli Parent</name>
     <url>https://www.openanalytics.eu</url>
 
@@ -50,7 +50,7 @@
 		
 		<maven.compiler.release>11</maven.compiler.release>
 		
-		<rpooli.version>1.4.2-SNAPSHOT</rpooli.version>
+		<rpooli.version>1.4.3-SNAPSHOT</rpooli.version>
 		<rj.version>4.4.1.202108191400-r</rj.version>
 		
 		<jackson.version>2.11.4</jackson.version>
