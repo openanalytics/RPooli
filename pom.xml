@@ -57,9 +57,9 @@
 		<jackson.version>2.11.4</jackson.version>
 		<cxf.version>3.4.5</cxf.version>
 		
-		<spring-framework.version>5.3.15</spring-framework.version>
-		<spring-security.version>5.5.4</spring-security.version>
-		<spring-integration.version>5.5.8</spring-integration.version>
+		<spring-framework.version>5.3.16</spring-framework.version>
+		<spring-security.version>5.5.5</spring-security.version>
+		<spring-integration.version>5.5.9</spring-integration.version>
 		
 		<log4j.version>2.17.1</log4j.version>
 		
