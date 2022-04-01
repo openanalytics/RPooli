@@ -65,7 +65,7 @@
 		
 		<jetty-plugin.version>9.4.36.v20210114</jetty-plugin.version>
 		
-		<rest-assured.version>4.3.2</rest-assured.version>
+		<rest-assured.version>4.5.1</rest-assured.version>
 		<trimStackTrace>false</trimStackTrace>
 	</properties>
 	
