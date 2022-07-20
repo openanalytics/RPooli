@@ -54,7 +54,7 @@
 		<rj.version>4.6.0-SNAPSHOT</rj.version>
 		<commons-pool.version>2.11.1</commons-pool.version>
 		
-		<jackson.version>2.12.6</jackson.version>
+		<jackson.version>2.12.7</jackson.version>
 		<cxf.version>3.4.8</cxf.version>
 		
 		<spring-framework.version>5.3.22</spring-framework.version>
@@ -193,7 +193,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}.1</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<!-- JAXB -->
 			<dependency>
