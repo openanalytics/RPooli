@@ -17,11 +17,11 @@
 
 package eu.openanalytics.rpooli;
 
-import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.collections4.CollectionUtils.collect;
-import static org.apache.commons.collections4.IterableUtils.find;
+
 import static org.apache.commons.lang3.StringUtils.removeStart;
+
+import static eu.openanalytics.rpooli.RPooliServer.ConfigAction.APPLY_AND_SAVE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,12 +32,10 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.collections4.Predicate;
-import org.apache.commons.collections4.Transformer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.eclipse.statet.jcommons.collections.ImCollections;
 import org.eclipse.statet.jcommons.lang.Disposable;
+
+import org.eclipse.statet.internal.rj.servi.PoolManager;
 import org.eclipse.statet.rj.RjInvalidConfigurationException;
 import org.eclipse.statet.rj.servi.node.PropertiesBean;
 import org.eclipse.statet.rj.servi.node.PropertiesBean.ValidationMessage;
@@ -45,7 +43,10 @@ import org.eclipse.statet.rj.servi.node.RServiNodeConfig;
 import org.eclipse.statet.rj.servi.pool.JMPoolServer;
 import org.eclipse.statet.rj.servi.pool.NetConfig;
 import org.eclipse.statet.rj.servi.pool.PoolConfig;
-import org.eclipse.statet.rj.servi.pool.PoolNodeObject;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * The actual server that bootstraps R nodes.
@@ -86,14 +87,14 @@ public final class RPooliServer implements Disposable
         {
             LOGGER.info("RPooli properties file location: " + context.getPropertiesDirPath());
             LOGGER.info("Initializing: " + JMPoolServer.class.getSimpleName());
-            server = new JMPoolServer(id, context);
-            LOGGER.info("Starting: " + server);
-            server.start();
+            this.server = new JMPoolServer(id, context);
+            LOGGER.info("Starting: " + this.server);
+            this.server.start();
 
-            config = getDefaultPoolConfig();
-            server.getPoolConfig(config);
+            this.config = getDefaultPoolConfig();
+            this.server.getPoolConfig(this.config);
 
-            LOGGER.info("Started with pool address: " + server.getPoolAddress());
+            LOGGER.info("Started with pool address: " + this.server.getPoolAddress());
         }
         catch (final Exception e)
         {
@@ -106,11 +107,11 @@ public final class RPooliServer implements Disposable
     {
         try
         {
-            if (server != null)
+            if (this.server != null)
             {
-                LOGGER.info("Shutting down server: " + server);
-                server.shutdown();
-                server.waitForDisposal(0);
+                LOGGER.info("Shutting down server: " + this.server);
+                this.server.shutdown();
+                this.server.waitForDisposal(0);
             }
         }
         catch (final Exception e)
@@ -121,43 +122,35 @@ public final class RPooliServer implements Disposable
 
     public PoolConfig getConfig()
     {
-        return config;
+        return this.config;
     }
 
     public JMPoolServer getServer()
     {
-        return server;
+        return this.server;
     }
-
-    public Collection<RPooliNode> getNodes()
-    {
-        return collect(server.getManager().getPoolNodeObjects(),
-            new Transformer<PoolNodeObject, RPooliNode>()
-            {
-                @Override
-                public RPooliNode transform(final PoolNodeObject nodeObj)
-                {
-                    return new RPooliNode(nodeObj);
-                }
-            });
-    }
-
-    public RPooliNode findNodeById(final String nodeId)
-    {
-        return find(getNodes(), new Predicate<RPooliNode>()
-        {
-            @Override
-            public boolean evaluate(final RPooliNode node)
-            {
-                return node.getId().equals(nodeId);
-            }
-        });
-    }
+	
+	public Collection<RPooliNode> getNodes() {
+		final PoolManager manager= this.server.getManager();
+		if (manager == null) {
+			return ImCollections.emptyList();
+		}
+		return ImCollections.toList(manager.getPoolNodeObjects()).map(RPooliNode::new).toList();
+	}
+	
+	public RPooliNode findNodeById(final String nodeId) {
+		for (final var node : getNodes()) {
+			if (node.getId().equals(nodeId)) {
+				return node;
+			}
+		}
+		return null;
+	}
 
     public RServiNodeConfig getCurrentRConfig()
     {
         final RServiNodeConfig config = getDefaultRConfig();
-        server.getNodeConfig(config);
+        this.server.getNodeConfig(config);
         return validate(config);
     }
 
@@ -173,7 +166,7 @@ public final class RPooliServer implements Disposable
             @Override
             public void apply(final RServiNodeConfig config) throws RjInvalidConfigurationException
             {
-                server.setNodeConfig(config);
+                RPooliServer.this.server.setNodeConfig(config);
             }
         }, action);
     }
@@ -181,7 +174,7 @@ public final class RPooliServer implements Disposable
     public PoolConfig getCurrentPoolConfig()
     {
         final PoolConfig config = getDefaultPoolConfig();
-        server.getPoolConfig(config);
+        this.server.getPoolConfig(config);
         return validate(config);
     }
 
@@ -197,7 +190,7 @@ public final class RPooliServer implements Disposable
             @Override
             public void apply(final PoolConfig config) throws RjInvalidConfigurationException
             {
-                server.setPoolConfig(config);
+                RPooliServer.this.server.setPoolConfig(config);
             }
         }, action);
     }
@@ -205,7 +198,7 @@ public final class RPooliServer implements Disposable
     public NetConfig getCurrentNetConfig()
     {
         final NetConfig config = getDefaultNetConfig();
-        server.getNetConfig(config);
+        this.server.getNetConfig(config);
         return validate(config);
     }
 
@@ -221,7 +214,7 @@ public final class RPooliServer implements Disposable
             @Override
             public void apply(final NetConfig config) throws RjInvalidConfigurationException
             {
-                server.setNetConfig(config);
+                RPooliServer.this.server.setNetConfig(config);
             }
         }, action);
     }
@@ -272,6 +265,6 @@ public final class RPooliServer implements Disposable
     {
         final Properties properties = new Properties();
         bean.save(properties);
-        server.getRJContext().saveProperties(bean.getBeanId(), properties);
+        this.server.getRJContext().saveProperties(bean.getBeanId(), properties);
     }
 }
