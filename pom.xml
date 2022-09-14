@@ -63,7 +63,7 @@
 		
 		<log4j.version>2.17.2</log4j.version>
 		
-		<jetty-plugin.version>9.4.36.v20210114</jetty-plugin.version>
+		<jetty-plugin.version>9.4.49.v20220914</jetty-plugin.version>
 		
 		<rest-assured.version>4.5.1</rest-assured.version>
 		<trimStackTrace>false</trimStackTrace>
