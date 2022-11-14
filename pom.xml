@@ -55,7 +55,7 @@
 		<commons-pool.version>2.11.1</commons-pool.version>
 		
 		<jackson.version>2.12.7</jackson.version>
-		<cxf.version>3.4.8</cxf.version>
+		<cxf.version>3.4.9</cxf.version>
 		
 		<spring-framework.version>5.3.23</spring-framework.version>
 		<spring-security.version>5.5.8</spring-security.version>
