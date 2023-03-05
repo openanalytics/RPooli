@@ -62,7 +62,7 @@
 		<spring-security.version>5.5.8</spring-security.version>
 		<spring-integration.version>5.5.16</spring-integration.version>
 		
-		<log4j.version>2.17.2</log4j.version>
+		<log4j.version>2.20.0</log4j.version>
 		
 		<jetty-plugin.version>9.4.49.v20220914</jetty-plugin.version>
 		
@@ -328,7 +328,7 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.32</version>
+				<version>1.7.36</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
