@@ -56,7 +56,7 @@
 		
 		<jackson.version>2.13.5</jackson.version>
 		<cxf.version>3.5.5</cxf.version>
-		<jettison.version>1.5.3</jettison.version>
+		<jettison.version>1.5.4</jettison.version>
 		
 		<spring-framework.version>5.3.27</spring-framework.version>
 		<spring-security.version>5.5.8</spring-security.version>
