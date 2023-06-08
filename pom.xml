@@ -66,6 +66,7 @@
 		
 		<jetty-plugin.version>9.4.49.v20220914</jetty-plugin.version>
 		
+		<junit-jupiter.version>5.9.3</junit-jupiter.version>
 		<rest-assured.version>4.5.1</rest-assured.version>
 		<trimStackTrace>false</trimStackTrace>
 	</properties>
@@ -351,7 +352,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.9.3</version>
+				<version>${junit-jupiter.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
