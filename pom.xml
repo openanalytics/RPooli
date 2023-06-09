@@ -57,6 +57,7 @@
 		<jackson.version>2.14.3</jackson.version>
 		<cxf.version>3.5.6</cxf.version>
 		<jettison.version>1.5.4</jettison.version>
+		<glassfish-jaxb.version>2.3.8</glassfish-jaxb.version>
 		
 		<spring-framework.version>5.3.27</spring-framework.version>
 		<spring-security.version>5.5.8</spring-security.version>
@@ -298,6 +299,13 @@
 						<artifactId>jakarta.activation-api</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jaxb</groupId>
+				<artifactId>jaxb-bom</artifactId>
+				<version>${glassfish-jaxb.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.jettison</groupId>
