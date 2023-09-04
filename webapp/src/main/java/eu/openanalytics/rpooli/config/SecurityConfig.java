@@ -26,40 +26,43 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
 @Configuration
 @ComponentScan("eu.openanalytics.rpooli")
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("guest").password("guest").authorities("ROLE_GUEST");
-		auth.inMemoryAuthentication().withUser("user").password("user").authorities("ROLE_API_USER");
+	public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("guest").password("guest")
+				.authorities("ROLE_GUEST");
+		auth.inMemoryAuthentication().withUser("user").password("user")
+				.authorities("ROLE_API_USER");
 	}
 	
 	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/login.html*")
-		.antMatchers("/logout.html*")
-		.antMatchers("/openid.html*")
-		.antMatchers("/images/**")
-		.antMatchers("/css/**")
-		.antMatchers("/js/**");
+	public void configure(final WebSecurity web) throws Exception {
 	}
 	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception{
+	protected void configure(final HttpSecurity http) throws Exception{
 		http
 			.authorizeRequests()
-			.antMatchers("/**")
-			.access("isAuthenticated() and hasRole('ROLE_API_USER')")
-			.and()
+				.antMatchers(
+						"/login.html*", "/logout.html*", "/openid.html*",
+						"/images/**", "/css/**",
+						"/js/**" )
+					.permitAll()
+				.anyRequest()
+					.access("isAuthenticated() and hasRole('ROLE_API_USER')")
+				.and()
 			.logout()
-			.logoutUrl("/logout")
-			.logoutSuccessUrl("/logout.html")
-			.invalidateHttpSession(true)
-			.and()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/logout.html")
+				.invalidateHttpSession(true)
+				.and()
 			.httpBasic();
 	}
-
+	
 }
