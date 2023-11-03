@@ -63,7 +63,7 @@
 		<spring-security.version>5.5.8</spring-security.version>
 		<spring-integration.version>5.5.19</spring-integration.version>
 		
-		<log4j.version>2.20.0</log4j.version>
+		<log4j.version>2.21.1</log4j.version>
 		
 		<jetty-plugin.version>9.4.49.v20220914</jetty-plugin.version>
 		
@@ -343,6 +343,12 @@
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-web</artifactId>
 				<version>${log4j.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-test</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			
 			<!-- Testing -->
