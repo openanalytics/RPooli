@@ -59,7 +59,7 @@
 		<jettison.version>1.5.4</jettison.version>
 		<glassfish-jaxb.version>2.3.9</glassfish-jaxb.version>
 		
-		<spring-framework.version>5.3.37</spring-framework.version>
+		<spring-framework.version>6.1.14</spring-framework.version>
 		<spring-security.version>5.5.8</spring-security.version>
 		<spring-integration.version>5.5.20</spring-integration.version>
 		
